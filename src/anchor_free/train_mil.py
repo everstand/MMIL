@@ -101,7 +101,7 @@ def train(args, split, save_path):
             f'Val Spearman cur/best: {val_spearman:.4f}/{best_val_spearman:.4f}'
         )
 
-    return best_val_fscore
+    return best_val_fscore, best_val_spearman
 
 
 def infer_single_dataset_name(keys):

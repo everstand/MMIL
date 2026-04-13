@@ -52,28 +52,37 @@ def main() -> None:
     validate_splits(splits, args.dataset)
 
     fscore_list: List[float] = []
+    spearman_list: List[float] = []
 
     for split_idx, split in enumerate(splits):
         save_path = model_dir / f'best_model_split{split_idx}.pth'
         logger.info('Running split %d / %d', split_idx + 1, len(splits))
 
-        best_fscore = mil_trainer.train(
+        best_fscore, best_spearman = mil_trainer.train(
             args=args,
             split=split,
             save_path=save_path,
         )
         fscore_list.append(float(best_fscore))
+        spearman_list.append(float(best_spearman))
 
         logger.info(
-            'Finished split %d / %d | best_fscore=%.4f | checkpoint=%s',
+            'Finished split %d / %d | best_fscore=%.4f | best_spearman=%.4f | checkpoint=%s',
             split_idx + 1,
             len(splits),
             best_fscore,
+            best_spearman,
             str(save_path),
         )
 
     mean_fscore = sum(fscore_list) / len(fscore_list)
-    logger.info('All splits finished | mean_fscore=%.4f', mean_fscore)
+    mean_spearman = sum(spearman_list) / len(spearman_list)
+
+    logger.info(
+        'All splits finished | mean_fscore=%.4f | mean_spearman=%.4f',
+        mean_fscore,
+        mean_spearman,
+    )
 
 
 def load_all_splits(split_paths: List[str]) -> List[Dict]:

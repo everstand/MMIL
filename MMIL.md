@@ -26,3 +26,6 @@ chmod +x scripts/train_mil_summe.sh
 ## 启动脚本
 ./scripts/train_mil_tvsum.sh
 ./scripts/train_mil_summe.sh
+
+## 快速看每个 split 的最佳 F-score,Spearman
+grep "Finished split\|All splits finished" models/mil/summe_run/log_mil.txt
