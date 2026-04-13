@@ -1,0 +1,539 @@
+dataset: tvsum
+hard_label_rule: '[缺失/待确认]'
+label_key_contract: h5_key
+num_classes: 60
+num_videos: 50
+openclip_model: ViT-L-14
+openclip_pretrained: dfn2b
+prompt_path: /data01/chim/code/DSNet/prompts/tvsum_prompt_vocabulary.txt
+sample_rate: 15
+soft_top_ratio: 0.15
+temporal_radius: 1
+time_axis_contract: raw_video_sampling_only_not_aligned_to_training_h5
+videos:
+  video_1:
+    decode_failures: 0
+    expected_sampled_frames: 707
+    num_sampled_frames: 707
+    raw_video_file: custom_data/videos/TVSum/AwmHb44_ouw.mp4
+    raw_video_name: AwmHb44_ouw
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 707
+    valid_sampled_frames: 707
+  video_10:
+    decode_failures: 0
+    expected_sampled_frames: 267
+    num_sampled_frames: 267
+    raw_video_file: custom_data/videos/TVSum/akI8YFjEmUw.mp4
+    raw_video_name: akI8YFjEmUw
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 267
+    valid_sampled_frames: 267
+  video_11:
+    decode_failures: 0
+    expected_sampled_frames: 314
+    num_sampled_frames: 314
+    raw_video_file: custom_data/videos/TVSum/i3wAGJaaktw.mp4
+    raw_video_name: i3wAGJaaktw
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 314
+    valid_sampled_frames: 314
+  video_12:
+    decode_failures: 0
+    expected_sampled_frames: 901
+    num_sampled_frames: 901
+    raw_video_file: custom_data/videos/TVSum/Bhxk-O1Y7Ho.mp4
+    raw_video_name: Bhxk-O1Y7Ho
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 901
+    valid_sampled_frames: 901
+  video_13:
+    decode_failures: 0
+    expected_sampled_frames: 236
+    num_sampled_frames: 236
+    raw_video_file: custom_data/videos/TVSum/0tmA_C6XwfM.mp4
+    raw_video_name: 0tmA_C6XwfM
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 236
+    valid_sampled_frames: 236
+  video_14:
+    decode_failures: 0
+    expected_sampled_frames: 324
+    num_sampled_frames: 324
+    raw_video_file: custom_data/videos/TVSum/3eYKfiOEJNs.mp4
+    raw_video_name: 3eYKfiOEJNs
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 324
+    valid_sampled_frames: 324
+  video_15:
+    decode_failures: 0
+    expected_sampled_frames: 289
+    num_sampled_frames: 289
+    raw_video_file: custom_data/videos/TVSum/xxdtq8mxegs.mp4
+    raw_video_name: xxdtq8mxegs
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 289
+    valid_sampled_frames: 289
+  video_16:
+    decode_failures: 0
+    expected_sampled_frames: 636
+    num_sampled_frames: 636
+    raw_video_file: custom_data/videos/TVSum/WG0MBPpPC6I.mp4
+    raw_video_name: WG0MBPpPC6I
+    review_notes:
+      h5_len: 9534
+      issues:
+      - 帧数不完全匹配 (误差 1 帧)
+      top3_candidates:
+      - - WG0MBPpPC6I
+        - 9535
+        - 1
+      - - HT5vyqe0Xaw
+        - 9671
+        - 137
+      - - Yi4Ij2NM7U4
+        - 9731
+        - 197
+    review_status: REVIEW
+    sampled_picks_shape: 636
+    valid_sampled_frames: 636
+  video_17:
+    decode_failures: 0
+    expected_sampled_frames: 390
+    num_sampled_frames: 390
+    raw_video_file: custom_data/videos/TVSum/Hl-__g2gn_A.mp4
+    raw_video_name: Hl-__g2gn_A
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 390
+    valid_sampled_frames: 390
+  video_18:
+    decode_failures: 0
+    expected_sampled_frames: 649
+    num_sampled_frames: 649
+    raw_video_file: custom_data/videos/TVSum/Yi4Ij2NM7U4.mp4
+    raw_video_name: Yi4Ij2NM7U4
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 649
+    valid_sampled_frames: 649
+  video_19:
+    decode_failures: 0
+    expected_sampled_frames: 383
+    num_sampled_frames: 383
+    raw_video_file: custom_data/videos/TVSum/37rzWOQsNIw.mp4
+    raw_video_name: 37rzWOQsNIw
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 383
+    valid_sampled_frames: 383
+  video_2:
+    decode_failures: 0
+    expected_sampled_frames: 313
+    num_sampled_frames: 313
+    raw_video_file: custom_data/videos/TVSum/98MoyGZKHXc.mp4
+    raw_video_name: 98MoyGZKHXc
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 313
+    valid_sampled_frames: 313
+  video_20:
+    decode_failures: 0
+    expected_sampled_frames: 417
+    num_sampled_frames: 417
+    raw_video_file: custom_data/videos/TVSum/LRw_obCPUt0.mp4
+    raw_video_name: LRw_obCPUt0
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 417
+    valid_sampled_frames: 417
+  video_21:
+    decode_failures: 0
+    expected_sampled_frames: 1294
+    num_sampled_frames: 1294
+    raw_video_file: custom_data/videos/TVSum/cjibtmSLxQ4.mp4
+    raw_video_name: cjibtmSLxQ4
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 1294
+    valid_sampled_frames: 1294
+  video_22:
+    decode_failures: 0
+    expected_sampled_frames: 378
+    num_sampled_frames: 378
+    raw_video_file: custom_data/videos/TVSum/b626MiF1ew4.mp4
+    raw_video_name: b626MiF1ew4
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 378
+    valid_sampled_frames: 378
+  video_23:
+    decode_failures: 0
+    expected_sampled_frames: 376
+    num_sampled_frames: 376
+    raw_video_file: custom_data/videos/TVSum/XkqCExn6_Us.mp4
+    raw_video_name: XkqCExn6_Us
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 376
+    valid_sampled_frames: 376
+  video_24:
+    decode_failures: 0
+    expected_sampled_frames: 291
+    num_sampled_frames: 291
+    raw_video_file: custom_data/videos/TVSum/GsAD1KT1xo8.mp4
+    raw_video_name: GsAD1KT1xo8
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 291
+    valid_sampled_frames: 291
+  video_25:
+    decode_failures: 0
+    expected_sampled_frames: 439
+    num_sampled_frames: 439
+    raw_video_file: custom_data/videos/TVSum/PJrm840pAUI.mp4
+    raw_video_name: PJrm840pAUI
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 439
+    valid_sampled_frames: 439
+  video_26:
+    decode_failures: 0
+    expected_sampled_frames: 221
+    num_sampled_frames: 221
+    raw_video_file: custom_data/videos/TVSum/91IHQYk1IQM.mp4
+    raw_video_name: 91IHQYk1IQM
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 221
+    valid_sampled_frames: 221
+  video_27:
+    decode_failures: 0
+    expected_sampled_frames: 728
+    num_sampled_frames: 728
+    raw_video_file: custom_data/videos/TVSum/RBCABdttQmI.mp4
+    raw_video_name: RBCABdttQmI
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 728
+    valid_sampled_frames: 728
+  video_28:
+    decode_failures: 0
+    expected_sampled_frames: 553
+    num_sampled_frames: 553
+    raw_video_file: custom_data/videos/TVSum/z_6gVvQb2d0.mp4
+    raw_video_name: z_6gVvQb2d0
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 553
+    valid_sampled_frames: 553
+  video_29:
+    decode_failures: 0
+    expected_sampled_frames: 1169
+    num_sampled_frames: 1169
+    raw_video_file: custom_data/videos/TVSum/fWutDQy1nnY.mp4
+    raw_video_name: fWutDQy1nnY
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 1169
+    valid_sampled_frames: 1169
+  video_3:
+    decode_failures: 0
+    expected_sampled_frames: 935
+    num_sampled_frames: 935
+    raw_video_file: custom_data/videos/TVSum/J0nA4VgnoCo.mp4
+    raw_video_name: J0nA4VgnoCo
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 935
+    valid_sampled_frames: 935
+  video_30:
+    decode_failures: 0
+    expected_sampled_frames: 267
+    num_sampled_frames: 267
+    raw_video_file: custom_data/videos/TVSum/4wU_LUjG5Ic.mp4
+    raw_video_name: 4wU_LUjG5Ic
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 267
+    valid_sampled_frames: 267
+  video_31:
+    decode_failures: 0
+    expected_sampled_frames: 361
+    num_sampled_frames: 361
+    raw_video_file: custom_data/videos/TVSum/VuWGsYPqAX8.mp4
+    raw_video_name: VuWGsYPqAX8
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 361
+    valid_sampled_frames: 361
+  video_32:
+    decode_failures: 0
+    expected_sampled_frames: 254
+    num_sampled_frames: 254
+    raw_video_file: custom_data/videos/TVSum/JKpqYvAdIsw.mp4
+    raw_video_name: JKpqYvAdIsw
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 254
+    valid_sampled_frames: 254
+  video_33:
+    decode_failures: 0
+    expected_sampled_frames: 891
+    num_sampled_frames: 891
+    raw_video_file: custom_data/videos/TVSum/xmEERLqJ2kU.mp4
+    raw_video_name: xmEERLqJ2kU
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 891
+    valid_sampled_frames: 891
+  video_34:
+    decode_failures: 0
+    expected_sampled_frames: 247
+    num_sampled_frames: 247
+    raw_video_file: custom_data/videos/TVSum/byxOvuiIJV0.mp4
+    raw_video_name: byxOvuiIJV0
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 247
+    valid_sampled_frames: 247
+  video_35:
+    decode_failures: 0
+    expected_sampled_frames: 298
+    num_sampled_frames: 298
+    raw_video_file: custom_data/videos/TVSum/_xMr-HKMfVA.mp4
+    raw_video_name: _xMr-HKMfVA
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 298
+    valid_sampled_frames: 298
+  video_36:
+    decode_failures: 0
+    expected_sampled_frames: 531
+    num_sampled_frames: 531
+    raw_video_file: custom_data/videos/TVSum/WxtbjNsCQ8A.mp4
+    raw_video_name: WxtbjNsCQ8A
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 531
+    valid_sampled_frames: 531
+  video_37:
+    decode_failures: 0
+    expected_sampled_frames: 268
+    num_sampled_frames: 268
+    raw_video_file: custom_data/videos/TVSum/uGu_10sucQo.mp4
+    raw_video_name: uGu_10sucQo
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 268
+    valid_sampled_frames: 268
+  video_38:
+    decode_failures: 0
+    expected_sampled_frames: 197
+    num_sampled_frames: 197
+    raw_video_file: custom_data/videos/TVSum/EE-bNr36nyA.mp4
+    raw_video_name: EE-bNr36nyA
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 197
+    valid_sampled_frames: 197
+  video_39:
+    decode_failures: 0
+    expected_sampled_frames: 278
+    num_sampled_frames: 278
+    raw_video_file: custom_data/videos/TVSum/Se3oxnaPsz0.mp4
+    raw_video_name: Se3oxnaPsz0
+    review_notes:
+      h5_len: 4165
+      issues:
+      - 帧数不完全匹配 (误差 1 帧)
+      top3_candidates:
+      - - Se3oxnaPsz0
+        - 4166
+        - 1
+      - - JgHubY5Vw3Y
+        - 4304
+        - 139
+      - - uGu_10sucQo
+        - 4009
+        - 156
+    review_status: REVIEW
+    sampled_picks_shape: 278
+    valid_sampled_frames: 278
+  video_4:
+    decode_failures: 0
+    expected_sampled_frames: 481
+    num_sampled_frames: 481
+    raw_video_file: custom_data/videos/TVSum/gzDbaEs1Rlg.mp4
+    raw_video_name: gzDbaEs1Rlg
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 481
+    valid_sampled_frames: 481
+  video_40:
+    decode_failures: 0
+    expected_sampled_frames: 761
+    num_sampled_frames: 761
+    raw_video_file: custom_data/videos/TVSum/oDXZc0tZe04.mp4
+    raw_video_name: oDXZc0tZe04
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 761
+    valid_sampled_frames: 761
+  video_41:
+    decode_failures: 0
+    expected_sampled_frames: 539
+    num_sampled_frames: 539
+    raw_video_file: custom_data/videos/TVSum/qqR6AEXwxoQ.mp4
+    raw_video_name: qqR6AEXwxoQ
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 539
+    valid_sampled_frames: 539
+  video_42:
+    decode_failures: 0
+    expected_sampled_frames: 396
+    num_sampled_frames: 396
+    raw_video_file: custom_data/videos/TVSum/EYqVtI9YWJA.mp4
+    raw_video_name: EYqVtI9YWJA
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 396
+    valid_sampled_frames: 396
+  video_43:
+    decode_failures: 0
+    expected_sampled_frames: 329
+    num_sampled_frames: 329
+    raw_video_file: custom_data/videos/TVSum/eQu1rNs0an0.mp4
+    raw_video_name: eQu1rNs0an0
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 329
+    valid_sampled_frames: 329
+  video_44:
+    decode_failures: 0
+    expected_sampled_frames: 287
+    num_sampled_frames: 287
+    raw_video_file: custom_data/videos/TVSum/JgHubY5Vw3Y.mp4
+    raw_video_name: JgHubY5Vw3Y
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 287
+    valid_sampled_frames: 287
+  video_45:
+    decode_failures: 0
+    expected_sampled_frames: 167
+    num_sampled_frames: 167
+    raw_video_file: custom_data/videos/TVSum/iVt07TCkFM0.mp4
+    raw_video_name: iVt07TCkFM0
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 167
+    valid_sampled_frames: 167
+  video_46:
+    decode_failures: 0
+    expected_sampled_frames: 1021
+    num_sampled_frames: 1021
+    raw_video_file: custom_data/videos/TVSum/E11zDS9XGzg.mp4
+    raw_video_name: E11zDS9XGzg
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 1021
+    valid_sampled_frames: 1021
+  video_47:
+    decode_failures: 0
+    expected_sampled_frames: 316
+    num_sampled_frames: 316
+    raw_video_file: custom_data/videos/TVSum/NyBmCxDoHJU.mp4
+    raw_video_name: NyBmCxDoHJU
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 316
+    valid_sampled_frames: 316
+  video_48:
+    decode_failures: 0
+    expected_sampled_frames: 260
+    num_sampled_frames: 260
+    raw_video_file: custom_data/videos/TVSum/kLxoNp-UchI.mp4
+    raw_video_name: kLxoNp-UchI
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 260
+    valid_sampled_frames: 260
+  video_49:
+    decode_failures: 0
+    expected_sampled_frames: 399
+    num_sampled_frames: 399
+    raw_video_file: custom_data/videos/TVSum/jcoYJXDG9sw.mp4
+    raw_video_name: jcoYJXDG9sw
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 399
+    valid_sampled_frames: 399
+  video_5:
+    decode_failures: 0
+    expected_sampled_frames: 222
+    num_sampled_frames: 222
+    raw_video_file: custom_data/videos/TVSum/XzYM3PfTM4w.mp4
+    raw_video_name: XzYM3PfTM4w
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 222
+    valid_sampled_frames: 222
+  video_50:
+    decode_failures: 0
+    expected_sampled_frames: 461
+    num_sampled_frames: 461
+    raw_video_file: custom_data/videos/TVSum/-esJrBWj2d8.mp4
+    raw_video_name: -esJrBWj2d8
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 461
+    valid_sampled_frames: 461
+  video_6:
+    decode_failures: 0
+    expected_sampled_frames: 645
+    num_sampled_frames: 645
+    raw_video_file: custom_data/videos/TVSum/HT5vyqe0Xaw.mp4
+    raw_video_name: HT5vyqe0Xaw
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 645
+    valid_sampled_frames: 645
+  video_7:
+    decode_failures: 0
+    expected_sampled_frames: 298
+    num_sampled_frames: 298
+    raw_video_file: custom_data/videos/TVSum/sTEELN-vY30.mp4
+    raw_video_name: sTEELN-vY30
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 298
+    valid_sampled_frames: 298
+  video_8:
+    decode_failures: 0
+    expected_sampled_frames: 658
+    num_sampled_frames: 658
+    raw_video_file: custom_data/videos/TVSum/vdmoEJ5YbrQ.mp4
+    raw_video_name: vdmoEJ5YbrQ
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 658
+    valid_sampled_frames: 658
+  video_9:
+    decode_failures: 0
+    expected_sampled_frames: 468
+    num_sampled_frames: 468
+    raw_video_file: custom_data/videos/TVSum/xwqBXPGE9pQ.mp4
+    raw_video_name: xwqBXPGE9pQ
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 468
+    valid_sampled_frames: 468

@@ -1,0 +1,263 @@
+dataset: summe
+hard_label_rule: '[缺失/待确认]'
+label_key_contract: h5_key
+num_classes: 15
+num_videos: 25
+openclip_model: ViT-L-14
+openclip_pretrained: dfn2b
+prompt_path: /data01/chim/code/DSNet/prompts/summe_prompt_vocabulary.txt
+sample_rate: 15
+soft_top_ratio: 0.15
+temporal_radius: 1
+time_axis_contract: raw_video_sampling_only_not_aligned_to_training_h5
+videos:
+  video_1:
+    decode_failures: 0
+    expected_sampled_frames: 300
+    num_sampled_frames: 300
+    raw_video_file: custom_data/videos/SumMe/Air_Force_One.mp4
+    raw_video_name: Air_Force_One
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 300
+    valid_sampled_frames: 300
+  video_10:
+    decode_failures: 0
+    expected_sampled_frames: 649
+    num_sampled_frames: 649
+    raw_video_file: custom_data/videos/SumMe/Excavators river crossing.mp4
+    raw_video_name: Excavators river crossing
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 649
+    valid_sampled_frames: 649
+  video_11:
+    decode_failures: 0
+    expected_sampled_frames: 108
+    num_sampled_frames: 108
+    raw_video_file: custom_data/videos/SumMe/Fire Domino.mp4
+    raw_video_name: Fire Domino
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 108
+    valid_sampled_frames: 108
+  video_12:
+    decode_failures: 0
+    expected_sampled_frames: 64
+    num_sampled_frames: 64
+    raw_video_file: custom_data/videos/SumMe/Jumps.mp4
+    raw_video_name: Jumps
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 64
+    valid_sampled_frames: 64
+  video_13:
+    decode_failures: 0
+    expected_sampled_frames: 213
+    num_sampled_frames: 213
+    raw_video_file: custom_data/videos/SumMe/Kids_playing_in_leaves.mp4
+    raw_video_name: Kids_playing_in_leaves
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 213
+    valid_sampled_frames: 213
+  video_14:
+    decode_failures: 0
+    expected_sampled_frames: 308
+    num_sampled_frames: 308
+    raw_video_file: custom_data/videos/SumMe/Notre_Dame.mp4
+    raw_video_name: Notre_Dame
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 308
+    valid_sampled_frames: 308
+  video_15:
+    decode_failures: 0
+    expected_sampled_frames: 407
+    num_sampled_frames: 407
+    raw_video_file: custom_data/videos/SumMe/Paintball.mp4
+    raw_video_name: Paintball
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 407
+    valid_sampled_frames: 407
+  video_16:
+    decode_failures: 0
+    expected_sampled_frames: 205
+    num_sampled_frames: 205
+    raw_video_file: custom_data/videos/SumMe/Playing_on_water_slide.mp4
+    raw_video_name: Playing_on_water_slide
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 205
+    valid_sampled_frames: 205
+  video_17:
+    decode_failures: 0
+    expected_sampled_frames: 446
+    num_sampled_frames: 446
+    raw_video_file: custom_data/videos/SumMe/Saving dolphines.mp4
+    raw_video_name: Saving dolphines
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 446
+    valid_sampled_frames: 446
+  video_18:
+    decode_failures: 0
+    expected_sampled_frames: 149
+    num_sampled_frames: 149
+    raw_video_file: custom_data/videos/SumMe/Scuba.mp4
+    raw_video_name: Scuba
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 149
+    valid_sampled_frames: 149
+  video_19:
+    decode_failures: 0
+    expected_sampled_frames: 117
+    num_sampled_frames: 117
+    raw_video_file: custom_data/videos/SumMe/St Maarten Landing.mp4
+    raw_video_name: St Maarten Landing
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 117
+    valid_sampled_frames: 117
+  video_2:
+    decode_failures: 0
+    expected_sampled_frames: 316
+    num_sampled_frames: 316
+    raw_video_file: custom_data/videos/SumMe/Base jumping.mp4
+    raw_video_name: Base jumping
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 316
+    valid_sampled_frames: 316
+  video_20:
+    decode_failures: 0
+    expected_sampled_frames: 258
+    num_sampled_frames: 258
+    raw_video_file: custom_data/videos/SumMe/Statue of Liberty.mp4
+    raw_video_name: Statue of Liberty
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 258
+    valid_sampled_frames: 258
+  video_21:
+    decode_failures: 0
+    expected_sampled_frames: 528
+    num_sampled_frames: 528
+    raw_video_file: custom_data/videos/SumMe/Uncut_Evening_Flight.mp4
+    raw_video_name: Uncut_Evening_Flight
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 528
+    valid_sampled_frames: 528
+  video_22:
+    decode_failures: 0
+    expected_sampled_frames: 346
+    num_sampled_frames: 346
+    raw_video_file: custom_data/videos/SumMe/Valparaiso_Downhill.mp4
+    raw_video_name: Valparaiso_Downhill
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 346
+    valid_sampled_frames: 346
+  video_23:
+    decode_failures: 0
+    expected_sampled_frames: 293
+    num_sampled_frames: 293
+    raw_video_file: custom_data/videos/SumMe/car_over_camera.mp4
+    raw_video_name: car_over_camera
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 293
+    valid_sampled_frames: 293
+  video_24:
+    decode_failures: 0
+    expected_sampled_frames: 172
+    num_sampled_frames: 172
+    raw_video_file: custom_data/videos/SumMe/paluma_jump.mp4
+    raw_video_name: paluma_jump
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 172
+    valid_sampled_frames: 172
+  video_25:
+    decode_failures: 0
+    expected_sampled_frames: 208
+    num_sampled_frames: 208
+    raw_video_file: custom_data/videos/SumMe/playing_ball.mp4
+    raw_video_name: playing_ball
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 208
+    valid_sampled_frames: 208
+  video_3:
+    decode_failures: 0
+    expected_sampled_frames: 223
+    num_sampled_frames: 223
+    raw_video_file: custom_data/videos/SumMe/Bearpark_climbing.mp4
+    raw_video_name: Bearpark_climbing
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 223
+    valid_sampled_frames: 223
+  video_4:
+    decode_failures: 0
+    expected_sampled_frames: 205
+    num_sampled_frames: 205
+    raw_video_file: custom_data/videos/SumMe/Bike Polo.mp4
+    raw_video_name: Bike Polo
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 205
+    valid_sampled_frames: 205
+  video_5:
+    decode_failures: 0
+    expected_sampled_frames: 343
+    num_sampled_frames: 343
+    raw_video_file: custom_data/videos/SumMe/Bus_in_Rock_Tunnel.mp4
+    raw_video_name: Bus_in_Rock_Tunnel
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 343
+    valid_sampled_frames: 343
+  video_6:
+    decode_failures: 0
+    expected_sampled_frames: 339
+    num_sampled_frames: 339
+    raw_video_file: custom_data/videos/SumMe/Car_railcrossing.mp4
+    raw_video_name: Car_railcrossing
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 339
+    valid_sampled_frames: 339
+  video_7:
+    decode_failures: 0
+    expected_sampled_frames: 604
+    num_sampled_frames: 604
+    raw_video_file: custom_data/videos/SumMe/Cockpit_Landing.mp4
+    raw_video_name: Cockpit_Landing
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 604
+    valid_sampled_frames: 604
+  video_8:
+    decode_failures: 0
+    expected_sampled_frames: 86
+    num_sampled_frames: 86
+    raw_video_file: custom_data/videos/SumMe/Cooking.mp4
+    raw_video_name: Cooking
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 86
+    valid_sampled_frames: 86
+  video_9:
+    decode_failures: 0
+    expected_sampled_frames: 332
+    num_sampled_frames: 332
+    raw_video_file: custom_data/videos/SumMe/Eiffel Tower.mp4
+    raw_video_name: Eiffel Tower
+    review_notes: null
+    review_status: SAFE
+    sampled_picks_shape: 332
+    valid_sampled_frames: 332
