@@ -1,0 +1,54 @@
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+PROMPTS_DIR = PROJECT_ROOT / 'prompts'
+PSEUDO_LABELS_DIR = PROJECT_ROOT / 'pseudo_labels'
+META_DIR = PROJECT_ROOT / 'meta'
+
+
+def normalize_dataset_name(dataset_name: str) -> str:
+    name = dataset_name.strip().lower()
+    if name not in {'tvsum', 'summe'}:
+        raise ValueError(f'Invalid dataset name: {dataset_name}')
+    return name
+
+
+def get_prompt_path(dataset_name: str) -> Path:
+    dataset_name = normalize_dataset_name(dataset_name)
+    return PROMPTS_DIR / f'{dataset_name}_prompt_vocabulary.txt'
+
+
+def get_dataset_pseudo_dir(dataset_name: str) -> Path:
+    dataset_name = normalize_dataset_name(dataset_name)
+    return PSEUDO_LABELS_DIR / dataset_name
+
+
+def get_frame_text_scores_path(dataset_name: str) -> Path:
+    return get_dataset_pseudo_dir(dataset_name) / 'frame_text_scores.npy'
+
+
+def get_soft_labels_path(dataset_name: str) -> Path:
+    return get_dataset_pseudo_dir(dataset_name) / 'soft_labels.npy'
+
+
+def get_hard_labels_path(dataset_name: str) -> Path:
+    return get_dataset_pseudo_dir(dataset_name) / 'hard_labels.npy'
+
+
+def get_meta_path(dataset_name: str) -> Path:
+    dataset_name = normalize_dataset_name(dataset_name)
+    return get_dataset_pseudo_dir(dataset_name) / 'meta.yaml'
+
+
+def get_canonical_keys_path(dataset_name: str) -> Path:
+    dataset_name = normalize_dataset_name(dataset_name)
+    return META_DIR / f'{dataset_name}_canonical_keys.yaml'
+
+
+def ensure_dataset_layout(dataset_name: str) -> None:
+    dataset_dir = get_dataset_pseudo_dir(dataset_name)
+    dataset_dir.mkdir(parents=True, exist_ok=True)
+    META_DIR.mkdir(parents=True, exist_ok=True)
+    PROMPTS_DIR.mkdir(parents=True, exist_ok=True)
