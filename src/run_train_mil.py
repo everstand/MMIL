@@ -25,7 +25,11 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--model-dir', type=str, required=True)
     parser.add_argument('--log-file', type=str, default='log_mil.txt')
     parser.add_argument('--lr', type=float, default=5e-5)
-    parser.add_argument('--weight-decay', type=float, default=1e-5)
+    parser.add_argument('--weight-decay', type=float, default=0.0)
+
+    # 消融1:平滑损失
+    parser.add_argument('--lambda-smooth', type=float, default=1e-3)
+     # end 
 
     parser.add_argument('--base-model', type=str, default='attention',
                         choices=['attention', 'lstm', 'linear', 'bilstm', 'gcn'])
@@ -52,36 +56,50 @@ def main() -> None:
     validate_splits(splits, args.dataset)
 
     fscore_list: List[float] = []
-    spearman_list: List[float] = []
+    spearman_at_best_fscore_list: List[float] = []
+    max_spearman_list: List[float] = []
+    fscore_at_max_spearman_list: List[float] = []
 
     for split_idx, split in enumerate(splits):
         save_path = model_dir / f'best_model_split{split_idx}.pth'
         logger.info('Running split %d / %d', split_idx + 1, len(splits))
 
-        best_fscore, best_spearman = mil_trainer.train(
+        best_fscore, spearman_at_best_fscore, max_spearman, fscore_at_max_spearman = mil_trainer.train(
             args=args,
             split=split,
             save_path=save_path,
         )
         fscore_list.append(float(best_fscore))
-        spearman_list.append(float(best_spearman))
+        spearman_at_best_fscore_list.append(float(spearman_at_best_fscore))
+        max_spearman_list.append(float(max_spearman))
 
         logger.info(
-            'Finished split %d / %d | best_fscore=%.4f | best_spearman=%.4f | checkpoint=%s',
+            'Finished split %d / %d | best_fscore=%.4f | spearman_at_best_fscore=%.4f | max_spearman=%.4f | fscore_at_max_spearman=%.4f | checkpoint=%s',
             split_idx + 1,
             len(splits),
             best_fscore,
-            best_spearman,
+            spearman_at_best_fscore,
+            max_spearman,
+            fscore_at_max_spearman,
             str(save_path),
         )
+        fscore_at_max_spearman_list.append(float(fscore_at_max_spearman))
 
     mean_fscore = sum(fscore_list) / len(fscore_list)
-    mean_spearman = sum(spearman_list) / len(spearman_list)
+    mean_spearman_at_best_fscore = (
+        sum(spearman_at_best_fscore_list) / len(spearman_at_best_fscore_list)
+    )
+    mean_max_spearman = sum(max_spearman_list) / len(max_spearman_list)
+    mean_fscore_at_max_spearman = (
+        sum(fscore_at_max_spearman_list) / len(fscore_at_max_spearman_list)
+    )
 
     logger.info(
-        'All splits finished | mean_fscore=%.4f | mean_spearman=%.4f',
+        'All splits finished | mean_fscore=%.4f | mean_spearman_at_best_fscore=%.4f | mean_max_spearman=%.4f | mean_fscore_at_max_spearman=%.4f',
         mean_fscore,
-        mean_spearman,
+        mean_spearman_at_best_fscore,
+        mean_max_spearman,
+        mean_fscore_at_max_spearman,
     )
 
 

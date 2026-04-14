@@ -44,14 +44,28 @@ def train(args, split, save_path):
     train_loader = data_helper.DataLoader(train_set, shuffle=True)
     val_loader = data_helper.DataLoader(val_set, shuffle=False)
 
+    save_path = str(save_path)
+    if save_path.endswith('.pth'):
+        spearman_save_path = save_path[:-4] + '_max_spearman.pth'
+    else:
+        spearman_save_path = save_path + '_max_spearman.pth'
+
     best_val_fscore = -1.0
-    best_val_spearman = 0.0
+    spearman_at_best_fscore = 0.0
+
+    max_val_spearman = -1.0
+    fscore_at_max_spearman = 0.0
 
     for epoch in range(args.max_epoch):
         model.train()
         stats = data_helper.AverageMeter(
             'loss',
             'bag_loss',
+
+            ## 消融1:平滑损失 ,
+            'smooth_loss',
+            ## end 
+    
             'num_effective',
         )
 
@@ -62,14 +76,24 @@ def train(args, split, save_path):
             normalized_target, is_effective = normalize_soft_label(soft_label_tensor)
 
             if not is_effective:
-                stats.update(loss=0.0, bag_loss=0.0, num_effective=0.0)
+                stats.update(
+                  loss=0.0, 
+                  bag_loss=0.0, 
+                  # 消融1:平滑损失
+                  smooth_loss=0.0, 
+                  # end
+                  num_effective=0.0)
                 continue
 
             _, _, attn_weights, bag_logits = model(seq_tensor)
 
             bag_scores = torch.sigmoid(bag_logits)
             bag_loss = F.smooth_l1_loss(bag_scores, normalized_target)
-            loss = bag_loss
+            # loss = bag_loss
+            # 消融1:平滑损失
+            smooth_loss = compute_attention_smoothness_loss(attn_weights)
+            loss = bag_loss + args.lambda_smooth * smooth_loss
+            # end
 
             optimizer.zero_grad()
             loss.backward()
@@ -78,6 +102,9 @@ def train(args, split, save_path):
             stats.update(
                 loss=float(loss.item()),
                 bag_loss=float(bag_loss.item()),
+                # 消融1:平滑损失
+                smooth_loss=float(smooth_loss.item()),
+                # end
                 num_effective=1.0,
             )
 
@@ -87,21 +114,36 @@ def train(args, split, save_path):
             device=args.device,
         )
 
+        if val_spearman > max_val_spearman:
+            max_val_spearman = val_spearman
+            fscore_at_max_spearman = val_fscore
+            torch.save(model.state_dict(), spearman_save_path)
+
         if val_fscore > best_val_fscore:
             best_val_fscore = val_fscore
-            best_val_spearman = val_spearman
-            torch.save(model.state_dict(), str(save_path))
+            spearman_at_best_fscore = val_spearman
+            torch.save(model.state_dict(), save_path)
 
         logger.info(
             f'Epoch: {epoch}/{args.max_epoch} '
             f'Loss: {stats.loss:.4f} '
             f'BagLoss: {stats.bag_loss:.4f} '
+            # 消融1:平滑损失
+            f'SmoothLoss: {stats.smooth_loss:.4f} '
+            # end
             f'EffectiveSamples: {stats.num_effective:.4f} '
             f'Val F-score cur/best: {val_fscore:.4f}/{best_val_fscore:.4f} '
-            f'Val Spearman cur/best: {val_spearman:.4f}/{best_val_spearman:.4f}'
+            f'Val Spearman cur/max: {val_spearman:.4f}/{max_val_spearman:.4f} '
+            f'Spearman@BestF: {spearman_at_best_fscore:.4f} '
+            f'Fscore@MaxS: {fscore_at_max_spearman:.4f}'
         )
 
-    return best_val_fscore, best_val_spearman
+    return (
+        best_val_fscore,
+        spearman_at_best_fscore,
+        max_val_spearman,
+        fscore_at_max_spearman,
+    )
 
 
 def infer_single_dataset_name(keys):
@@ -141,3 +183,17 @@ def normalize_soft_label(soft_label: torch.Tensor, eps: float = 1e-8):
 
     normalized = (soft_label - label_min) / (label_range + eps)
     return normalized, True
+
+ # 消融1:平滑损失 
+def compute_attention_smoothness_loss(attn_weights: torch.Tensor) -> torch.Tensor:
+    if attn_weights.ndim != 1:
+        raise ValueError(
+            f'Expected attn_weights with shape [T], got {tuple(attn_weights.shape)}'
+        )
+
+    if attn_weights.shape[0] < 2:
+        return attn_weights.new_zeros(())
+
+    diff = attn_weights[1:] - attn_weights[:-1]
+    return diff.abs().mean()
+    # end

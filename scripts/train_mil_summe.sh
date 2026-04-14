@@ -19,6 +19,7 @@ python src/run_train_mil.py \
   --splits "${SPLIT_FILE}" \
   --device "${DEVICE}" \
   --seed "${SEED}" \
+  --lambda-smooth "${LAMBDA_SMOOTH}" \
   --max-epoch "${MAX_EPOCH}" \
   --model-dir "${MODEL_DIR}" \
   --lr "${LR}" \
