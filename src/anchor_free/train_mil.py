@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def train(args, split, save_path):
+    logger.info(f'lambda_smooth={args.lambda_smooth}, lambda_seg={args.lambda_seg}')
     train_keys = split['train_keys']
     val_keys = split['test_keys']
 
@@ -61,11 +62,14 @@ def train(args, split, save_path):
         stats = data_helper.AverageMeter(
             'loss',
             'bag_loss',
-
             ## 消融1:平滑损失 ,
             'smooth_loss',
             ## end 
-    
+            ## 消融2:segment consistency 
+            'weighted_smooth_loss',
+            'seg_loss',
+            'weighted_seg_loss',
+            ## end
             'num_effective',
         )
 
@@ -82,6 +86,11 @@ def train(args, split, save_path):
                   # 消融1:平滑损失
                   smooth_loss=0.0, 
                   # end
+                  # 消融2:segment consistency
+                  weighted_smooth_loss=0.0,
+                  seg_loss=0.0,
+                  weighted_seg_loss=0.0,
+                  # end
                   num_effective=0.0)
                 continue
 
@@ -92,8 +101,19 @@ def train(args, split, save_path):
             # loss = bag_loss
             # 消融1:平滑损失
             smooth_loss = compute_attention_smoothness_loss(attn_weights)
-            loss = bag_loss + args.lambda_smooth * smooth_loss
             # end
+            # 消融2:segment consistency
+            weighted_smooth_loss = args.lambda_smooth * smooth_loss
+
+            seg_loss = compute_segment_consistency_loss(
+                attn_weights=attn_weights,
+                cps=cps,
+                picks=picks,
+                n_frames=n_frames,
+            )
+            weighted_seg_loss = args.lambda_seg * seg_loss
+            # end
+            loss = bag_loss + weighted_smooth_loss + weighted_seg_loss
 
             optimizer.zero_grad()
             loss.backward()
@@ -104,6 +124,11 @@ def train(args, split, save_path):
                 bag_loss=float(bag_loss.item()),
                 # 消融1:平滑损失
                 smooth_loss=float(smooth_loss.item()),
+                # end
+                # 消融2:segment consistency
+                weighted_smooth_loss=float(weighted_smooth_loss.item()),
+                seg_loss=float(seg_loss.item()),
+                weighted_seg_loss=float(weighted_seg_loss.item()),
                 # end
                 num_effective=1.0,
             )
@@ -130,6 +155,11 @@ def train(args, split, save_path):
             f'BagLoss: {stats.bag_loss:.4f} '
             # 消融1:平滑损失
             f'SmoothLoss: {stats.smooth_loss:.4f} '
+            # end
+            # 消融2:segment consistency
+            f'WeightedSmoothLoss: {stats.weighted_smooth_loss:.4f} '
+            f'SegLoss: {stats.seg_loss:.8e} '
+            f'WeightedSegLoss: {stats.weighted_seg_loss:.8e} '
             # end
             f'EffectiveSamples: {stats.num_effective:.4f} '
             f'Val F-score cur/best: {val_fscore:.4f}/{best_val_fscore:.4f} '
@@ -197,3 +227,60 @@ def compute_attention_smoothness_loss(attn_weights: torch.Tensor) -> torch.Tenso
     diff = attn_weights[1:] - attn_weights[:-1]
     return diff.abs().mean()
     # end
+
+# 消融2:segment consistency
+def compute_segment_consistency_loss(attn_weights: torch.Tensor,
+                                     cps,
+                                     picks,
+                                     n_frames) -> torch.Tensor:
+    if attn_weights.ndim != 1:
+        raise ValueError(
+            f'Expected attn_weights with shape [T], got {tuple(attn_weights.shape)}'
+        )
+
+    picks_np = np.asarray(picks, dtype=np.int64).reshape(-1)
+    cps_np = np.asarray(cps, dtype=np.int64)
+    n_frames_int = int(np.asarray(n_frames).item())
+
+    if cps_np.ndim != 2 or cps_np.shape[1] != 2:
+        raise ValueError(f'Expected cps shape [S, 2], got {cps_np.shape}')
+
+    if picks_np.shape[0] != attn_weights.shape[0]:
+        raise ValueError(
+            f'Length mismatch: len(picks)={picks_np.shape[0]} '
+            f'vs len(attn_weights)={attn_weights.shape[0]}'
+        )
+
+    if n_frames_int <= 0:
+        raise ValueError(f'Invalid n_frames: {n_frames_int}')
+
+    interval_lo = picks_np
+    interval_hi = np.empty_like(interval_lo)
+    interval_hi[:-1] = picks_np[1:] - 1
+    interval_hi[-1] = n_frames_int - 1
+
+    seg_lo = cps_np[:, 0][:, None]
+    seg_hi = cps_np[:, 1][:, None]
+    int_lo = interval_lo[None, :]
+    int_hi = interval_hi[None, :]
+
+    overlap = np.minimum(seg_hi, int_hi) - np.maximum(seg_lo, int_lo) + 1
+    overlap = np.clip(overlap, a_min=0, a_max=None).astype(np.float32)
+
+    overlap_t = torch.tensor(
+        overlap,
+        dtype=attn_weights.dtype,
+        device=attn_weights.device,
+    )
+
+    seg_mass = overlap_t.sum(dim=1)
+    valid = seg_mass > 0
+
+    if not torch.any(valid):
+        return attn_weights.new_zeros(())
+
+    seg_mean = (overlap_t @ attn_weights) / seg_mass.clamp_min(1e-8)
+    deviation = attn_weights.unsqueeze(0) - seg_mean.unsqueeze(1)
+    seg_var = (overlap_t * deviation.pow(2)).sum(dim=1) / seg_mass.clamp_min(1e-8)
+
+    return seg_var[valid].mean()
