@@ -27,14 +27,6 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--lr', type=float, default=5e-5)
     parser.add_argument('--weight-decay', type=float, default=1e-5)
 
-    # 消融1:平滑损失
-    parser.add_argument('--lambda-smooth', type=float, default=0.0)
-    # end 
-
-    # 消融2:segment consistency
-    parser.add_argument('--lambda-seg', type=float, default=0.0)
-    # end
-
     parser.add_argument('--base-model', type=str, default='attention',
                         choices=['attention', 'lstm', 'linear', 'bilstm', 'gcn'])
     parser.add_argument('--num-head', type=int, default=8)

@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -6,11 +7,15 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 PROMPTS_DIR = PROJECT_ROOT / 'prompts'
 PSEUDO_LABELS_DIR = PROJECT_ROOT / 'pseudo_labels'
 META_DIR = PROJECT_ROOT / 'meta'
+FEATURES_DIR = PROJECT_ROOT / 'features'
+CAPTIONS_DIR = PROJECT_ROOT / 'captions'
 
 
 def normalize_dataset_name(dataset_name: str) -> str:
     name = dataset_name.strip().lower()
-    if name not in {'tvsum', 'summe'}:
+    name = re.sub(r'[^a-z0-9_]+', '_', name)
+    name = re.sub(r'_+', '_', name).strip('_')
+    if not name:
         raise ValueError(f'Invalid dataset name: {dataset_name}')
     return name
 
@@ -52,3 +57,16 @@ def ensure_dataset_layout(dataset_name: str) -> None:
     dataset_dir.mkdir(parents=True, exist_ok=True)
     META_DIR.mkdir(parents=True, exist_ok=True)
     PROMPTS_DIR.mkdir(parents=True, exist_ok=True)
+    FEATURES_DIR.mkdir(parents=True, exist_ok=True)
+    CAPTIONS_DIR.mkdir(parents=True, exist_ok=True)
+
+# 改进1
+def get_openclip_feature_store_path(dataset_name: str) -> Path:
+    dataset_name = normalize_dataset_name(dataset_name)
+    return FEATURES_DIR / f'openclip_{dataset_name}.h5'
+
+
+def get_dense_caption_json_path(dataset_name: str) -> Path:
+    dataset_name = normalize_dataset_name(dataset_name)
+    return CAPTIONS_DIR / f'{dataset_name}_dense_captions.json'
+# end

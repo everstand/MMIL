@@ -1,3 +1,4 @@
+### baseline -------------------------------
 ## 生成伪标签
 src/
 ├── make_video_pseudo_labels.py
@@ -29,3 +30,15 @@ chmod +x scripts/train_mil_summe.sh
 
 ## 快速看每个 split 的最佳 F-score,Spearman
 grep "Finished split\|All splits finished" models/mil/summe_run/log_mil.txt
+
+
+### 改进 1 ------------------------------- tumx --chim_MMIL --gemini
+## 生成 SumMe-24 特征
+python src/make_openclip_features.py --dataset summe --video-dir custom_data/videos/SumMe --h5-path datasets/eccv16_dataset_summe_google_pool5.h5 --openclip-model ViT-L-14 --openclip-pretrained dfn2b --output-h5 features/openclip_summe24.h5
+## 生成 TVSum 特征
+python src/make_openclip_features.py --dataset tvsum --video-dir custom_data/videos/TVSum --h5-path datasets/eccv16_dataset_tvsum_google_pool5.h5 --openclip-model ViT-L-14 --openclip-pretrained dfn2b
+
+## 生成 SumMe-24 caption
+python tools/generate_dense_captions_gemini.py --dataset summe --video-dir custom_data/videos/SumMe --h5-path datasets/eccv16_dataset_summe_google_pool5.h5 --out-structured captions_raw/summe24_dense_captions_structured.json --out-simple captions/summe24_dense_captions.json
+## 生成 TVSum caption
+python tools/generate_dense_captions_gemini.py --dataset tvsum --video-dir custom_data/videos/TVSum --h5-path datasets/eccv16_dataset_tvsum_google_pool5.h5 --out-structured captions_raw/tvsum_dense_captions_structured.json --out-simple captions/tvsum_dense_captions.json

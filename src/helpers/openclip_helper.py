@@ -16,6 +16,21 @@ def build_openclip_model(model_name: str,
     model = model.eval().to(device)
     return model, preprocess, tokenizer
 
+# 改进1
+@torch.no_grad()
+def encode_texts(model: torch.nn.Module,
+                 tokenizer,
+                 texts: List[str],
+                 device: str
+                 ) -> torch.Tensor:
+    if not texts:
+        raise ValueError('encode_texts received an empty text list.')
+
+    tokens = tokenizer(texts).to(device)
+    text_features = model.encode_text(tokens)
+    text_features = _l2_normalize(text_features)
+    return text_features
+# end
 
 @torch.no_grad()
 def encode_prompts(model: torch.nn.Module,
@@ -23,10 +38,12 @@ def encode_prompts(model: torch.nn.Module,
                    prompts: List[str],
                    device: str
                    ) -> torch.Tensor:
-    tokens = tokenizer(prompts).to(device)
-    text_features = model.encode_text(tokens)
-    text_features = _l2_normalize(text_features)
-    return text_features
+    return encode_texts(
+        model=model,
+        tokenizer=tokenizer,
+        texts=prompts,
+        device=device,
+    )
 
 
 @torch.no_grad()
@@ -50,3 +67,4 @@ def compute_similarity(image_features: torch.Tensor,
 
 def _l2_normalize(x: torch.Tensor, eps: float = 1e-12) -> torch.Tensor:
     return x / x.norm(dim=-1, keepdim=True).clamp_min(eps)
+

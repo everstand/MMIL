@@ -1,0 +1,3477 @@
+{
+  "video_1": {
+    "sample_meta": {
+      "total_frames": 10597,
+      "fps": 29.97002997002997,
+      "width": 540,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:32",
+        "caption": "A close-up shot shows a large black tire attached to a yellow machine."
+      },
+      {
+        "start_mmss": "00:32",
+        "end_mmss": "01:04",
+        "caption": "A man with a mustache speaks to the camera in front of a wooden fence."
+      },
+      {
+        "start_mmss": "01:04",
+        "end_mmss": "01:36",
+        "caption": "A car tire is shown resting on a concrete surface."
+      },
+      {
+        "start_mmss": "01:36",
+        "end_mmss": "02:09",
+        "caption": "A tire and rim lie on the ground next to a white spray bottle."
+      },
+      {
+        "start_mmss": "02:09",
+        "end_mmss": "02:41",
+        "caption": "A person's foot presses down on the edge of the tire."
+      },
+      {
+        "start_mmss": "02:41",
+        "end_mmss": "03:13",
+        "caption": "A metal tool is used to pry the tire bead away from the rim."
+      },
+      {
+        "start_mmss": "03:13",
+        "end_mmss": "03:45",
+        "caption": "A hand pulls the rubber edge of the tire away from the metal rim."
+      },
+      {
+        "start_mmss": "03:45",
+        "end_mmss": "04:17",
+        "caption": "A black inner tube is pulled out from the inside of the tire."
+      },
+      {
+        "start_mmss": "04:17",
+        "end_mmss": "04:49",
+        "caption": "A finger points to a hole on the inner part of the metal rim."
+      },
+      {
+        "start_mmss": "04:49",
+        "end_mmss": "05:21",
+        "caption": "Liquid is sprayed from a bottle onto the tire and rim interface."
+      },
+      {
+        "start_mmss": "05:21",
+        "end_mmss": "05:54",
+        "caption": "The man with the mustache speaks to the camera outdoors."
+      },
+      {
+        "start_mmss": "05:54",
+        "end_mmss": "06:25",
+        "caption": "The man continues talking with a house and car in the background."
+      }
+    ]
+  },
+  "video_2": {
+    "sample_meta": {
+      "total_frames": 4688,
+      "fps": 25.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:17",
+        "caption": "A title card displays the text \"How to use a tyre repair kit\" on a white background."
+      },
+      {
+        "start_mmss": "00:17",
+        "end_mmss": "00:34",
+        "caption": "The car's dashboard shows illuminated hazard and passenger airbag warning lights."
+      },
+      {
+        "start_mmss": "00:34",
+        "end_mmss": "00:51",
+        "caption": "A person kneels beside a flat tyre on a white car parked on a street with fallen leaves."
+      },
+      {
+        "start_mmss": "00:51",
+        "end_mmss": "01:08",
+        "caption": "A person holds a black air compressor in one hand and a bottle of tyre sealant in the other."
+      },
+      {
+        "start_mmss": "01:08",
+        "end_mmss": "01:25",
+        "caption": "Hands connect the black hose from the compressor to the orange nozzle of the sealant bottle."
+      },
+      {
+        "start_mmss": "01:25",
+        "end_mmss": "01:42",
+        "caption": "A hand inserts the compressor's power plug into the car's interior 12V accessory socket."
+      },
+      {
+        "start_mmss": "01:42",
+        "end_mmss": "01:59",
+        "caption": "The white car remains parked on the street as the tyre is being inflated."
+      },
+      {
+        "start_mmss": "01:59",
+        "end_mmss": "02:16",
+        "caption": "The white car pulls away from the curb and begins driving down a city street."
+      },
+      {
+        "start_mmss": "02:16",
+        "end_mmss": "02:33",
+        "caption": "The white car drives past a dark brick building on a paved city road."
+      },
+      {
+        "start_mmss": "02:33",
+        "end_mmss": "02:50",
+        "caption": "The white car travels along a road surrounded by lush green trees."
+      },
+      {
+        "start_mmss": "02:50",
+        "end_mmss": "03:07",
+        "caption": "A graphic displays the brand logo and information about tyre guides and trials."
+      }
+    ]
+  },
+  "video_3": {
+    "sample_meta": {
+      "total_frames": 14019,
+      "fps": 23.976023976023978,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:53",
+        "caption": "A man wearing sunglasses drives a vehicle while looking toward the camera."
+      },
+      {
+        "start_mmss": "00:53",
+        "end_mmss": "01:46",
+        "caption": "A small metallic object lies on a grey asphalt surface."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "02:39",
+        "caption": "A man in a white t-shirt stands outdoors near a road and smiles."
+      },
+      {
+        "start_mmss": "02:39",
+        "end_mmss": "03:33",
+        "caption": "A view of an empty sidewalk and a road with a car approaching in the distance."
+      },
+      {
+        "start_mmss": "03:33",
+        "end_mmss": "04:26",
+        "caption": "A person wearing a white shirt bends down toward the ground in a parking area."
+      },
+      {
+        "start_mmss": "04:26",
+        "end_mmss": "05:19",
+        "caption": "A close-up shows a hand holding a small white round object between two fingers."
+      },
+      {
+        "start_mmss": "05:19",
+        "end_mmss": "06:12",
+        "caption": "A man in a white shirt and blue jeans stands next to the rear wheel of a grey car."
+      },
+      {
+        "start_mmss": "06:12",
+        "end_mmss": "07:05",
+        "caption": "The camera pans across a parking lot area during the evening."
+      },
+      {
+        "start_mmss": "07:05",
+        "end_mmss": "07:58",
+        "caption": "A woman stands by an open car door while talking on a mobile phone."
+      },
+      {
+        "start_mmss": "07:58",
+        "end_mmss": "08:52",
+        "caption": "A man stands behind a car with its trunk open in a dimly lit parking lot."
+      },
+      {
+        "start_mmss": "08:52",
+        "end_mmss": "09:45",
+        "caption": "A man sits at a white table in an outdoor restaurant at night."
+      },
+      {
+        "start_mmss": "09:45",
+        "end_mmss": "10:30",
+        "caption": "The man looks toward the camera while sitting at the restaurant table."
+      }
+    ]
+  },
+  "video_4": {
+    "sample_meta": {
+      "total_frames": 7210,
+      "fps": 25.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:26",
+        "caption": "The video begins with a black screen followed by a man standing in front of a car."
+      },
+      {
+        "start_mmss": "00:26",
+        "end_mmss": "00:52",
+        "caption": "The man speaks to the camera while standing next to a dark-colored vehicle."
+      },
+      {
+        "start_mmss": "00:52",
+        "end_mmss": "01:19",
+        "caption": "A close-up shot shows a hand pointing at the spokes of a car's alloy wheel."
+      },
+      {
+        "start_mmss": "01:19",
+        "end_mmss": "01:45",
+        "caption": "A hand holds a small white container near the tire's air valve."
+      },
+      {
+        "start_mmss": "01:45",
+        "end_mmss": "02:11",
+        "caption": "Hands are shown connecting a white nozzle to the tire valve stem."
+      },
+      {
+        "start_mmss": "02:11",
+        "end_mmss": "02:37",
+        "caption": "A person attaches a clear hose from a kit to the car tire's valve."
+      },
+      {
+        "start_mmss": "02:37",
+        "end_mmss": "03:04",
+        "caption": "A man in an orange safety vest holds a blue air compressor unit."
+      },
+      {
+        "start_mmss": "03:04",
+        "end_mmss": "03:30",
+        "caption": "The man in the safety vest kneels on the ground next to the car tire."
+      },
+      {
+        "start_mmss": "03:30",
+        "end_mmss": "03:56",
+        "caption": "A close-up view shows hands removing a hose from the tire valve."
+      },
+      {
+        "start_mmss": "03:56",
+        "end_mmss": "04:22",
+        "caption": "A white screen displays text about driving at a maximum speed of 50mph."
+      },
+      {
+        "start_mmss": "04:22",
+        "end_mmss": "04:48",
+        "caption": "The man is seen sitting inside the car and talking to the camera."
+      },
+      {
+        "start_mmss": "04:48",
+        "end_mmss": "04:59",
+        "caption": "The video ends with a transition to a black screen."
+      }
+    ]
+  },
+  "video_5": {
+    "sample_meta": {
+      "total_frames": 3327,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:10",
+        "caption": "A man in a white GMC shirt stands in front of a dark blue pickup truck."
+      },
+      {
+        "start_mmss": "00:10",
+        "end_mmss": "00:20",
+        "caption": "An inset video shows a mechanic lifting a tire onto a vehicle in a garage."
+      },
+      {
+        "start_mmss": "00:20",
+        "end_mmss": "00:30",
+        "caption": "The man in the white shirt continues speaking with the truck behind him."
+      },
+      {
+        "start_mmss": "00:30",
+        "end_mmss": "00:40",
+        "caption": "The man remains positioned in front of the blue GMC truck."
+      },
+      {
+        "start_mmss": "00:40",
+        "end_mmss": "00:50",
+        "caption": "A split-screen graphic compares a tire with good tread to one with bad tread."
+      },
+      {
+        "start_mmss": "00:50",
+        "end_mmss": "01:01",
+        "caption": "A hand uses a tread depth gauge to measure the grooves on a tire."
+      },
+      {
+        "start_mmss": "01:01",
+        "end_mmss": "01:11",
+        "caption": "The man in the white shirt returns to the screen in front of the truck."
+      },
+      {
+        "start_mmss": "01:11",
+        "end_mmss": "01:21",
+        "caption": "A close-up shows a wheel being rotated on a balancing machine."
+      },
+      {
+        "start_mmss": "01:21",
+        "end_mmss": "01:31",
+        "caption": "The man in the white shirt continues his explanation in front of the truck."
+      },
+      {
+        "start_mmss": "01:31",
+        "end_mmss": "01:41",
+        "caption": "The man speaks while standing before the dark blue GMC pickup."
+      },
+      {
+        "start_mmss": "01:41",
+        "end_mmss": "01:51",
+        "caption": "A banner with a website URL appears at the bottom of the screen."
+      },
+      {
+        "start_mmss": "01:51",
+        "end_mmss": "01:55",
+        "caption": "The video concludes with a black screen."
+      }
+    ]
+  },
+  "video_6": {
+    "sample_meta": {
+      "total_frames": 9671,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:29",
+        "caption": "A black screen fades into a view of a cloudy sky over a dense forest."
+      },
+      {
+        "start_mmss": "00:29",
+        "end_mmss": "00:59",
+        "caption": "A white box truck sits on a narrow dirt path surrounded by thick vegetation."
+      },
+      {
+        "start_mmss": "00:59",
+        "end_mmss": "01:28",
+        "caption": "The camera moves quickly through the woods, capturing blurred images of trees."
+      },
+      {
+        "start_mmss": "01:28",
+        "end_mmss": "01:57",
+        "caption": "A blue and white truck is positioned at an angle on a dirt road in the forest."
+      },
+      {
+        "start_mmss": "01:57",
+        "end_mmss": "02:27",
+        "caption": "The front of the blue and white Isuzu truck is shown in a close-up shot."
+      },
+      {
+        "start_mmss": "02:27",
+        "end_mmss": "02:56",
+        "caption": "A red crane arm is seen reaching up toward the forest canopy."
+      },
+      {
+        "start_mmss": "02:56",
+        "end_mmss": "03:25",
+        "caption": "A man wearing a dark shirt and light shorts walks across the dirt path."
+      },
+      {
+        "start_mmss": "03:25",
+        "end_mmss": "03:55",
+        "caption": "A person in an orange shirt stands near a large red crane parked on the road."
+      },
+      {
+        "start_mmss": "03:55",
+        "end_mmss": "04:24",
+        "caption": "The red crane arm is attached to the tilted blue and white truck."
+      },
+      {
+        "start_mmss": "04:24",
+        "end_mmss": "04:53",
+        "caption": "The crane begins to lift and stabilize the truck on the narrow forest road."
+      },
+      {
+        "start_mmss": "04:53",
+        "end_mmss": "05:23",
+        "caption": "The camera pans across green foliage on the ground before the screen turns black."
+      }
+    ]
+  },
+  "video_7": {
+    "sample_meta": {
+      "total_frames": 4468,
+      "fps": 30.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:14",
+        "caption": "A graphic with the text NEW DETAILS appears over a rotating circular background."
+      },
+      {
+        "start_mmss": "00:14",
+        "end_mmss": "00:27",
+        "caption": "A map displays a highlighted train route through Douglasville."
+      },
+      {
+        "start_mmss": "00:27",
+        "end_mmss": "00:41",
+        "caption": "A reporter in a vest and tie speaks into a microphone at night."
+      },
+      {
+        "start_mmss": "00:41",
+        "end_mmss": "00:54",
+        "caption": "A camera pans across a dark road near a railroad crossing at night."
+      },
+      {
+        "start_mmss": "00:54",
+        "end_mmss": "01:08",
+        "caption": "Workers in high-visibility vests inspect a train car on a gravel track."
+      },
+      {
+        "start_mmss": "01:08",
+        "end_mmss": "01:21",
+        "caption": "An aerial shot shows a black locomotive pushing a red car down the tracks."
+      },
+      {
+        "start_mmss": "01:21",
+        "end_mmss": "01:35",
+        "caption": "A tan minivan crosses a set of railroad tracks on a paved road."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:48",
+        "caption": "A solid red screen transitions between video segments."
+      },
+      {
+        "start_mmss": "01:48",
+        "end_mmss": "02:02",
+        "caption": "A yellow school bus drives over a railroad crossing during the day."
+      },
+      {
+        "start_mmss": "02:02",
+        "end_mmss": "02:15",
+        "caption": "A man wearing a black baseball cap and hoodie speaks to an off-camera interviewer."
+      },
+      {
+        "start_mmss": "02:15",
+        "end_mmss": "02:29",
+        "caption": "A woman with long blonde hair speaks while standing near a road."
+      },
+      {
+        "start_mmss": "02:29",
+        "end_mmss": "02:42",
+        "caption": "The reporter concludes his segment while standing on a dark street."
+      }
+    ]
+  },
+  "video_8": {
+    "sample_meta": {
+      "total_frames": 9870,
+      "fps": 29.97002997002997,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:20",
+        "caption": "Several people wearing winter clothing stand near a car in a snowy forest."
+      },
+      {
+        "start_mmss": "00:20",
+        "end_mmss": "00:45",
+        "caption": "A person in a blue jacket walks across a wide, snow-covered field."
+      },
+      {
+        "start_mmss": "00:45",
+        "end_mmss": "01:15",
+        "caption": "Three individuals walk away from the camera through the snow toward a fence."
+      },
+      {
+        "start_mmss": "01:15",
+        "end_mmss": "01:45",
+        "caption": "A light-colored car drives along a path through bare trees and snow."
+      },
+      {
+        "start_mmss": "01:45",
+        "end_mmss": "02:15",
+        "caption": "A person wearing a maroon balaclava stands outdoors with others in the background."
+      },
+      {
+        "start_mmss": "02:15",
+        "end_mmss": "02:45",
+        "caption": "The camera focuses on a person in a dark jacket and a maroon face mask."
+      },
+      {
+        "start_mmss": "02:45",
+        "end_mmss": "03:15",
+        "caption": "A car moves slowly along a snow-covered road surrounded by trees."
+      },
+      {
+        "start_mmss": "03:15",
+        "end_mmss": "03:45",
+        "caption": "The view from inside the vehicle shows the snowy landscape passing by."
+      },
+      {
+        "start_mmss": "03:45",
+        "end_mmss": "04:15",
+        "caption": "A hand reaches out to move the gear shift lever inside the car."
+      },
+      {
+        "start_mmss": "04:15",
+        "end_mmss": "04:45",
+        "caption": "The car drives across a snowy field with visible tire tracks."
+      },
+      {
+        "start_mmss": "04:45",
+        "end_mmss": "05:15",
+        "caption": "A tall, slender structure stands against a cloudy sky."
+      },
+      {
+        "start_mmss": "05:15",
+        "end_mmss": "05:30",
+        "caption": "Two people sit inside the car, one with a dark face covering."
+      }
+    ]
+  },
+  "video_9": {
+    "sample_meta": {
+      "total_frames": 7010,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:21",
+        "caption": "The video opens with a close-up of a motorcycle tire and a white fender."
+      },
+      {
+        "start_mmss": "00:21",
+        "end_mmss": "00:43",
+        "caption": "A man in a black jacket walks past a white, pod-like vehicle in a cluttered workshop."
+      },
+      {
+        "start_mmss": "00:43",
+        "end_mmss": "01:04",
+        "caption": "A man with glasses speaks while standing next to the white vehicle."
+      },
+      {
+        "start_mmss": "01:04",
+        "end_mmss": "01:25",
+        "caption": "The camera captures the interior of the vehicle, showing pedals and various wires."
+      },
+      {
+        "start_mmss": "01:25",
+        "end_mmss": "01:46",
+        "caption": "The man continues his explanation while standing beside the white vehicle."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "02:08",
+        "caption": "A digital animation shows the internal components of the vehicle, including the battery and motors."
+      },
+      {
+        "start_mmss": "02:08",
+        "end_mmss": "02:29",
+        "caption": "The man speaks again, framed against the white exterior of the vehicle."
+      },
+      {
+        "start_mmss": "02:29",
+        "end_mmss": "02:50",
+        "caption": "The white vehicle is shown driving on a city street and leaning into a turn."
+      },
+      {
+        "start_mmss": "02:50",
+        "end_mmss": "03:11",
+        "caption": "A close-up shot highlights the front headlight and wheel of the white vehicle."
+      },
+      {
+        "start_mmss": "03:11",
+        "end_mmss": "03:33",
+        "caption": "A woman in a grey dress approaches the vehicle and opens its side door."
+      },
+      {
+        "start_mmss": "03:33",
+        "end_mmss": "03:54",
+        "caption": "The white vehicle drives along a road with other cars in the background."
+      },
+      {
+        "start_mmss": "03:54",
+        "end_mmss": "04:00",
+        "caption": "The video ends with a black screen."
+      }
+    ]
+  },
+  "video_10": {
+    "sample_meta": {
+      "total_frames": 3995,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:12",
+        "caption": "Animated graphics transition to a news anchor sitting at a desk."
+      },
+      {
+        "start_mmss": "00:12",
+        "end_mmss": "00:24",
+        "caption": "The anchor speaks while a split-screen shows an electric car and a charging nozzle."
+      },
+      {
+        "start_mmss": "00:24",
+        "end_mmss": "00:36",
+        "caption": "A close-up shot shows a digital screen with charging statistics and Korean characters."
+      },
+      {
+        "start_mmss": "00:36",
+        "end_mmss": "00:48",
+        "caption": "A man in a suit and glasses is interviewed in front of a white car."
+      },
+      {
+        "start_mmss": "00:48",
+        "end_mmss": "01:01",
+        "caption": "The interviewee continues speaking with a charging station visible behind him."
+      },
+      {
+        "start_mmss": "01:01",
+        "end_mmss": "01:13",
+        "caption": "A screen displays a green 3D frequency graph with various data points."
+      },
+      {
+        "start_mmss": "01:13",
+        "end_mmss": "01:25",
+        "caption": "Two men in suits talk to each other in a large, brightly lit exhibition hall."
+      },
+      {
+        "start_mmss": "01:25",
+        "end_mmss": "01:37",
+        "caption": "A man in a grey suit stands before an EV Korea 2012 sign and speaks."
+      },
+      {
+        "start_mmss": "01:37",
+        "end_mmss": "01:49",
+        "caption": "A miniature green electric bus drives along a track on the floor of an exhibition."
+      },
+      {
+        "start_mmss": "01:49",
+        "end_mmss": "02:01",
+        "caption": "A group of people in a conference room take notes while looking at documents."
+      },
+      {
+        "start_mmss": "02:01",
+        "end_mmss": "02:13",
+        "caption": "A woman demonstrates a white electronic kiosk to two men in an exhibition booth."
+      }
+    ]
+  },
+  "video_11": {
+    "sample_meta": {
+      "total_frames": 4700,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:14",
+        "caption": "The exterior of the Pet Joy grooming salon storefront is shown."
+      },
+      {
+        "start_mmss": "00:14",
+        "end_mmss": "00:28",
+        "caption": "A woman with curly hair points to a wooden floor inside a metal cage."
+      },
+      {
+        "start_mmss": "00:28",
+        "end_mmss": "00:43",
+        "caption": "A golden retriever stands on a black grooming table in a grooming area."
+      },
+      {
+        "start_mmss": "00:43",
+        "end_mmss": "00:57",
+        "caption": "The woman stands behind the dog on the table and speaks."
+      },
+      {
+        "start_mmss": "00:57",
+        "end_mmss": "01:11",
+        "caption": "Another woman in a blue shirt helps adjust the grooming table."
+      },
+      {
+        "start_mmss": "01:11",
+        "end_mmss": "01:26",
+        "caption": "The woman with curly hair pets the golden retriever's head."
+      },
+      {
+        "start_mmss": "01:26",
+        "end_mmss": "01:40",
+        "caption": "The woman rests her hands on the dog's back while talking."
+      },
+      {
+        "start_mmss": "01:40",
+        "end_mmss": "01:54",
+        "caption": "A close-up shot shows the woman talking in front of metal cages."
+      },
+      {
+        "start_mmss": "01:54",
+        "end_mmss": "02:08",
+        "caption": "Various bags of pet food are displayed on a wire shelf."
+      },
+      {
+        "start_mmss": "02:08",
+        "end_mmss": "02:23",
+        "caption": "The woman continues to talk while standing in the cage area."
+      },
+      {
+        "start_mmss": "02:23",
+        "end_mmss": "02:37",
+        "caption": "The woman looks at the camera and speaks in front of the metal cages."
+      },
+      {
+        "start_mmss": "02:37",
+        "end_mmss": "02:41",
+        "caption": "The storefront is shown again with address and phone number text."
+      }
+    ]
+  },
+  "video_12": {
+    "sample_meta": {
+      "total_frames": 13511,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:41",
+        "caption": "A person's hand strokes the white fur of a dog."
+      },
+      {
+        "start_mmss": "00:41",
+        "end_mmss": "01:22",
+        "caption": "A woman with long dark hair speaks to the camera in a kitchen."
+      },
+      {
+        "start_mmss": "01:22",
+        "end_mmss": "02:03",
+        "caption": "Two bottles of pet grooming solution are shown in a close-up shot."
+      },
+      {
+        "start_mmss": "02:03",
+        "end_mmss": "02:44",
+        "caption": "A white fluffy dog stands on a white countertop near a banana and a blue bottle."
+      },
+      {
+        "start_mmss": "02:44",
+        "end_mmss": "03:25",
+        "caption": "The dog moves along the counter while a person's hand is visible nearby."
+      },
+      {
+        "start_mmss": "03:25",
+        "end_mmss": "04:06",
+        "caption": "A bright, blurry outdoor scene transitions into a view of a sidewalk."
+      },
+      {
+        "start_mmss": "04:06",
+        "end_mmss": "04:47",
+        "caption": "The woman walks along a brick path outdoors while talking."
+      },
+      {
+        "start_mmss": "04:47",
+        "end_mmss": "05:28",
+        "caption": "A hand uses a brush to groom the white dog's fur indoors."
+      },
+      {
+        "start_mmss": "05:28",
+        "end_mmss": "06:09",
+        "caption": "The white dog stands on a striped towel on a counter as it is being brushed."
+      },
+      {
+        "start_mmss": "06:09",
+        "end_mmss": "06:50",
+        "caption": "The dog walks and turns on a brown carpeted floor."
+      },
+      {
+        "start_mmss": "06:50",
+        "end_mmss": "07:31",
+        "caption": "The woman speaks to the camera again in the kitchen area."
+      },
+      {
+        "start_mmss": "07:31",
+        "end_mmss": "07:35",
+        "caption": "The video ends with a black screen."
+      }
+    ]
+  },
+  "video_13": {
+    "sample_meta": {
+      "total_frames": 3532,
+      "fps": 25.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:13",
+        "caption": "A woman in a blue shirt speaks to the camera against a plain white background."
+      },
+      {
+        "start_mmss": "00:13",
+        "end_mmss": "00:26",
+        "caption": "A man sits on a sofa and pets a large, grey and white long-haired dog."
+      },
+      {
+        "start_mmss": "00:26",
+        "end_mmss": "00:39",
+        "caption": "A man sits on a wooden floor and strokes a small white dog next to a couch."
+      },
+      {
+        "start_mmss": "00:39",
+        "end_mmss": "00:51",
+        "caption": "A person's hands hold the paw of a long-haired dog to inspect its claws."
+      },
+      {
+        "start_mmss": "00:51",
+        "end_mmss": "01:04",
+        "caption": "A pair of pliers-style nail clippers is used to trim a dog's claw."
+      },
+      {
+        "start_mmss": "01:04",
+        "end_mmss": "01:17",
+        "caption": "A close-up shot shows the nail clipper being positioned around a single claw on a dog's paw."
+      },
+      {
+        "start_mmss": "01:17",
+        "end_mmss": "01:30",
+        "caption": "A person uses scissor-style clippers to trim the hair and nails on a dog's paw."
+      },
+      {
+        "start_mmss": "01:30",
+        "end_mmss": "01:43",
+        "caption": "A man holds a small white dog's paw while the dog licks its mouth near a toy."
+      },
+      {
+        "start_mmss": "01:43",
+        "end_mmss": "01:56",
+        "caption": "Two different types of pet nail clippers are displayed side-by-side on a white background."
+      },
+      {
+        "start_mmss": "01:56",
+        "end_mmss": "02:08",
+        "caption": "The woman holds a nail clipper while speaking directly to the camera."
+      },
+      {
+        "start_mmss": "02:08",
+        "end_mmss": "02:21",
+        "caption": "The woman continues her presentation with contact information appearing at the bottom of the screen."
+      },
+      {
+        "start_mmss": "02:21",
+        "end_mmss": "02:30",
+        "caption": "A logo for a pet brand and a website address are shown on a white background."
+      }
+    ]
+  },
+  "video_14": {
+    "sample_meta": {
+      "total_frames": 4853,
+      "fps": 25.0,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:18",
+        "caption": "A title card for The Argentina Independent is displayed over a collage of various scenes."
+      },
+      {
+        "start_mmss": "00:18",
+        "end_mmss": "00:35",
+        "caption": "A woman in a blue tracksuit walks two small dogs on leashes along a city sidewalk."
+      },
+      {
+        "start_mmss": "00:35",
+        "end_mmss": "00:53",
+        "caption": "A man in a grey jacket speaks to the camera while holding a small white dog on a street corner."
+      },
+      {
+        "start_mmss": "00:53",
+        "end_mmss": "01:11",
+        "caption": "A groomer in a red apron brushes a large yellow dog standing on a grooming table."
+      },
+      {
+        "start_mmss": "01:11",
+        "end_mmss": "01:28",
+        "caption": "A bald man in a grey polo shirt speaks in a room filled with bird cages."
+      },
+      {
+        "start_mmss": "01:28",
+        "end_mmss": "01:46",
+        "caption": "A close-up shot shows a white fluffy dog's face as it is being groomed."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "02:04",
+        "caption": "The bald man continues to speak and gesture in front of the bird cages."
+      },
+      {
+        "start_mmss": "02:04",
+        "end_mmss": "02:21",
+        "caption": "The bald man is interviewed while standing in a pet shop environment."
+      },
+      {
+        "start_mmss": "02:21",
+        "end_mmss": "02:39",
+        "caption": "A woman with glasses and a pink scarf speaks in front of shelves of pet supplies."
+      },
+      {
+        "start_mmss": "02:39",
+        "end_mmss": "02:56",
+        "caption": "The man in the grey jacket talks while holding the white dog on the sidewalk."
+      },
+      {
+        "start_mmss": "02:56",
+        "end_mmss": "03:10",
+        "caption": "A small brown dog with long hair looks up at the camera from a tiled floor."
+      },
+      {
+        "start_mmss": "03:10",
+        "end_mmss": "03:14",
+        "caption": "The video concludes with a black screen."
+      }
+    ]
+  },
+  "video_15": {
+    "sample_meta": {
+      "total_frames": 4324,
+      "fps": 30.0,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:13",
+        "caption": "A white screen displays the text \"How to...\" along with a company logo."
+      },
+      {
+        "start_mmss": "00:13",
+        "end_mmss": "00:26",
+        "caption": "A man wearing a white lab coat kneels on the floor beside a golden retriever."
+      },
+      {
+        "start_mmss": "00:26",
+        "end_mmss": "00:39",
+        "caption": "The man holds up a small white bottle of ear cleansing solution while gesturing toward the dog."
+      },
+      {
+        "start_mmss": "00:39",
+        "end_mmss": "00:52",
+        "caption": "The man continues to speak to the camera while keeping one hand on the dog's neck."
+      },
+      {
+        "start_mmss": "00:52",
+        "end_mmss": "01:06",
+        "caption": "A woman in blue scrubs enters the frame and kneels behind the dog to hold it steady."
+      },
+      {
+        "start_mmss": "01:06",
+        "end_mmss": "01:19",
+        "caption": "The man lifts the dog's ear flap to reveal the ear canal while the woman assists."
+      },
+      {
+        "start_mmss": "01:19",
+        "end_mmss": "01:32",
+        "caption": "A close-up shot shows the man's hands using a cotton ball to wipe the inside of the dog's ear."
+      },
+      {
+        "start_mmss": "01:32",
+        "end_mmss": "01:45",
+        "caption": "The man holds a used cotton ball and the bottle of solution while the dog sits calmly."
+      },
+      {
+        "start_mmss": "01:45",
+        "end_mmss": "01:58",
+        "caption": "A text slide appears on screen listing four tips for cleaning a dog's ears."
+      },
+      {
+        "start_mmss": "01:58",
+        "end_mmss": "02:11",
+        "caption": "The man stands in front of a window with blinds, holding the ear cleansing solution bottle."
+      },
+      {
+        "start_mmss": "02:11",
+        "end_mmss": "02:24",
+        "caption": "A graphic displays the product bottle next to the text \"EAR CLEANSING SOLUTION\" and a logo."
+      }
+    ]
+  },
+  "video_16": {
+    "sample_meta": {
+      "total_frames": 9535,
+      "fps": 23.976023976023978,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:36",
+        "caption": "A woman in a floral top stands in a kitchen and speaks to the camera."
+      },
+      {
+        "start_mmss": "00:36",
+        "end_mmss": "01:12",
+        "caption": "The woman continues talking while gesturing with her hands in the kitchen."
+      },
+      {
+        "start_mmss": "01:12",
+        "end_mmss": "01:48",
+        "caption": "The woman prepares ingredients like cheese and tomatoes on a wooden cutting board."
+      },
+      {
+        "start_mmss": "01:48",
+        "end_mmss": "02:25",
+        "caption": "The woman whisks eggs in a stainless steel bowl on the kitchen counter."
+      },
+      {
+        "start_mmss": "02:25",
+        "end_mmss": "03:01",
+        "caption": "The woman coats pieces of meat in egg wash and breadcrumbs."
+      },
+      {
+        "start_mmss": "03:01",
+        "end_mmss": "03:37",
+        "caption": "A large pot filled with oil sits on a lit stove burner next to a kettle."
+      },
+      {
+        "start_mmss": "03:37",
+        "end_mmss": "04:13",
+        "caption": "The woman uses a utensil to submerge breaded meat into the hot oil in the pot."
+      },
+      {
+        "start_mmss": "04:13",
+        "end_mmss": "04:49",
+        "caption": "The woman spreads a dark bean paste onto a halved bread roll on a plate."
+      },
+      {
+        "start_mmss": "04:49",
+        "end_mmss": "05:25",
+        "caption": "The woman layers fried meat, tomato slices, and avocado onto the bread roll."
+      },
+      {
+        "start_mmss": "05:25",
+        "end_mmss": "06:01",
+        "caption": "A close-up shows a hand pulling a pickled pepper from an orange can of jalapeños."
+      },
+      {
+        "start_mmss": "06:01",
+        "end_mmss": "06:38",
+        "caption": "A completed sandwich with multiple layers sits on a yellow plate."
+      },
+      {
+        "start_mmss": "06:38",
+        "end_mmss": "06:50",
+        "caption": "An end screen displays social media information and links to other videos."
+      }
+    ]
+  },
+  "video_17": {
+    "sample_meta": {
+      "total_frames": 5846,
+      "fps": 23.976023976023978,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:22",
+        "caption": "A woman stands in a kitchen with several food items on a black countertop."
+      },
+      {
+        "start_mmss": "00:22",
+        "end_mmss": "00:44",
+        "caption": "The woman speaks while standing in front of a refrigerator covered in magnets."
+      },
+      {
+        "start_mmss": "00:44",
+        "end_mmss": "01:06",
+        "caption": "She holds two slices of brown bread in her hands."
+      },
+      {
+        "start_mmss": "01:06",
+        "end_mmss": "01:29",
+        "caption": "She places slices of meat and cheese onto a plate to build a sandwich."
+      },
+      {
+        "start_mmss": "01:29",
+        "end_mmss": "01:51",
+        "caption": "She picks up a bottle of ketchup from the counter."
+      },
+      {
+        "start_mmss": "01:51",
+        "end_mmss": "02:13",
+        "caption": "A person uses a spoon to mix red and white sauces in a small yellow bowl."
+      },
+      {
+        "start_mmss": "02:13",
+        "end_mmss": "02:35",
+        "caption": "A knife spreads a creamy mixture onto the top slice of a sandwich."
+      },
+      {
+        "start_mmss": "02:35",
+        "end_mmss": "02:57",
+        "caption": "Hands place the sandwich into a black frying pan on a stovetop."
+      },
+      {
+        "start_mmss": "02:57",
+        "end_mmss": "03:19",
+        "caption": "A toasted sandwich sits on a white plate with a black rim."
+      },
+      {
+        "start_mmss": "03:19",
+        "end_mmss": "03:42",
+        "caption": "The woman stands in the kitchen with the sandwich on the counter."
+      },
+      {
+        "start_mmss": "03:42",
+        "end_mmss": "04:04",
+        "caption": "She points down at the sandwich while looking at the camera."
+      }
+    ]
+  },
+  "video_18": {
+    "sample_meta": {
+      "total_frames": 9731,
+      "fps": 24.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:37",
+        "caption": "A man wearing sunglasses and a skull-print shirt sits in front of a green screen."
+      },
+      {
+        "start_mmss": "00:37",
+        "end_mmss": "01:14",
+        "caption": "The man gestures with his hands while speaking directly to the camera."
+      },
+      {
+        "start_mmss": "01:14",
+        "end_mmss": "01:51",
+        "caption": "The man puts on a grey padded glove and continues his monologue."
+      },
+      {
+        "start_mmss": "01:51",
+        "end_mmss": "02:27",
+        "caption": "The man holds a small silver device while gesturing with his other hand."
+      },
+      {
+        "start_mmss": "02:27",
+        "end_mmss": "03:04",
+        "caption": "A person uses a large knife to slice an onion on a white cutting board."
+      },
+      {
+        "start_mmss": "03:04",
+        "end_mmss": "03:41",
+        "caption": "The man, now wearing clear glasses and a cap, speaks in a kitchen setting."
+      },
+      {
+        "start_mmss": "03:41",
+        "end_mmss": "04:18",
+        "caption": "An empty black frying pan is placed on a white electric stove burner."
+      },
+      {
+        "start_mmss": "04:18",
+        "end_mmss": "04:55",
+        "caption": "Four hot dogs are placed into a pan already filled with thick red sauce."
+      },
+      {
+        "start_mmss": "04:55",
+        "end_mmss": "05:32",
+        "caption": "A metal lid is lifted from the pan to reveal hot dogs and onions simmering."
+      },
+      {
+        "start_mmss": "05:32",
+        "end_mmss": "06:09",
+        "caption": "The man stands in the kitchen and looks down toward the cooking food."
+      },
+      {
+        "start_mmss": "06:09",
+        "end_mmss": "06:45",
+        "caption": "The man holds a prepared hot dog on a plate and takes a large bite."
+      },
+      {
+        "start_mmss": "06:45",
+        "end_mmss": "07:00",
+        "caption": "The screen fades to black with production credits appearing at the bottom."
+      }
+    ]
+  },
+  "video_19": {
+    "sample_meta": {
+      "total_frames": 5742,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:17",
+        "caption": "A man walks along a sidewalk past a shop with a blue awning labeled Saigon Sandwich."
+      },
+      {
+        "start_mmss": "00:17",
+        "end_mmss": "00:35",
+        "caption": "Trays of packaged green desserts and stacks of canned goods sit on a store counter."
+      },
+      {
+        "start_mmss": "00:35",
+        "end_mmss": "00:52",
+        "caption": "A person holds a long sandwich filled with shredded carrots and green herbs wrapped in white paper."
+      },
+      {
+        "start_mmss": "00:52",
+        "end_mmss": "01:10",
+        "caption": "A man eats the sandwich while sitting outdoors near a pigeon on the pavement."
+      },
+      {
+        "start_mmss": "01:10",
+        "end_mmss": "01:27",
+        "caption": "A close-up view shows the interior of the sandwich with cilantro, pickled carrots, and meat."
+      },
+      {
+        "start_mmss": "01:27",
+        "end_mmss": "01:44",
+        "caption": "Several pigeons gather on the ground near the person holding the partially eaten sandwich."
+      },
+      {
+        "start_mmss": "01:44",
+        "end_mmss": "02:02",
+        "caption": "A Corgi wearing a harness sniffs the ground near a person's feet."
+      },
+      {
+        "start_mmss": "02:02",
+        "end_mmss": "02:19",
+        "caption": "A person uses a spoon to stir a drink in a clear plastic cup."
+      },
+      {
+        "start_mmss": "02:19",
+        "end_mmss": "02:37",
+        "caption": "Hands carefully peel back a green leaf and plastic film from a food item."
+      },
+      {
+        "start_mmss": "02:37",
+        "end_mmss": "02:54",
+        "caption": "A square-shaped white rice cake is held in its leaf wrapping."
+      },
+      {
+        "start_mmss": "02:54",
+        "end_mmss": "03:12",
+        "caption": "A person holds a white plastic spoon while sitting near a black bag on the ground."
+      }
+    ]
+  },
+  "video_20": {
+    "sample_meta": {
+      "total_frames": 6241,
+      "fps": 23.976023976023978,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:24",
+        "caption": "A person uses a large knife to cut a fried chicken sandwich in half on a wooden board."
+      },
+      {
+        "start_mmss": "00:24",
+        "end_mmss": "00:47",
+        "caption": "A bearded man in a grey sweatshirt sits at a restaurant table and gestures while speaking."
+      },
+      {
+        "start_mmss": "00:47",
+        "end_mmss": "01:11",
+        "caption": "The man in the grey sweatshirt continues to talk and use hand gestures in the restaurant."
+      },
+      {
+        "start_mmss": "01:11",
+        "end_mmss": "01:35",
+        "caption": "A man wearing a dark blue shirt stands in a kitchen and looks down."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:58",
+        "caption": "The man in the blue shirt stands with his hands on his hips in a kitchen."
+      },
+      {
+        "start_mmss": "01:58",
+        "end_mmss": "02:22",
+        "caption": "A piece of crispy fried chicken is placed onto a bottom bun coated with white sauce."
+      },
+      {
+        "start_mmss": "02:22",
+        "end_mmss": "02:46",
+        "caption": "Thinly sliced radishes are added on top of the fried chicken inside the sandwich."
+      },
+      {
+        "start_mmss": "02:46",
+        "end_mmss": "03:09",
+        "caption": "The man in the blue shirt leans on a kitchen counter while talking."
+      },
+      {
+        "start_mmss": "03:09",
+        "end_mmss": "03:33",
+        "caption": "The bearded man in the grey sweatshirt gestures with both hands while sitting at the table."
+      },
+      {
+        "start_mmss": "03:33",
+        "end_mmss": "03:57",
+        "caption": "A wooden serving board with toast and greens is shown next to a bowl of cauliflower salad."
+      },
+      {
+        "start_mmss": "03:57",
+        "end_mmss": "04:20",
+        "caption": "A hand presses the top bun onto the assembled fried chicken sandwich."
+      },
+      {
+        "start_mmss": "04:20",
+        "end_mmss": "04:30",
+        "caption": "A purple screen displays social media contact information in white text."
+      }
+    ]
+  },
+  "video_21": {
+    "sample_meta": {
+      "total_frames": 19406,
+      "fps": 29.97002997002997,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:10",
+        "caption": "A title card displays Allonnes Parkour 72 with silhouettes of people jumping over buildings."
+      },
+      {
+        "start_mmss": "00:10",
+        "end_mmss": "00:59",
+        "caption": "A man in a black shirt and light-colored pants vaults over a low concrete wall."
+      },
+      {
+        "start_mmss": "00:59",
+        "end_mmss": "01:58",
+        "caption": "A man wearing a black long-sleeved shirt and light pants crouches on the edge of a concrete ledge."
+      },
+      {
+        "start_mmss": "01:58",
+        "end_mmss": "02:57",
+        "caption": "A person climbs a tall, angled wall featuring various geometric indentations and handholds."
+      },
+      {
+        "start_mmss": "02:57",
+        "end_mmss": "03:55",
+        "caption": "Three young men stand together outdoors, with one wearing a white beanie and another a blue bandana."
+      },
+      {
+        "start_mmss": "03:55",
+        "end_mmss": "04:54",
+        "caption": "A man wearing a blue bandana speaks while standing in a paved area surrounded by buildings."
+      },
+      {
+        "start_mmss": "04:54",
+        "end_mmss": "05:53",
+        "caption": "A silver van travels along a narrow city street lined with multi-story buildings."
+      },
+      {
+        "start_mmss": "05:53",
+        "end_mmss": "06:52",
+        "caption": "A man in a black sweatshirt walks across a courtyard where several children are standing."
+      },
+      {
+        "start_mmss": "06:52",
+        "end_mmss": "07:51",
+        "caption": "A sepia-toned photograph shows a group of children posing with a man on a beach."
+      },
+      {
+        "start_mmss": "07:51",
+        "end_mmss": "08:50",
+        "caption": "A man performs a backflip from a concrete ledge onto the ground below."
+      },
+      {
+        "start_mmss": "08:50",
+        "end_mmss": "09:49",
+        "caption": "A man in a black shirt and white pants runs across the rim of a large circular rooftop structure."
+      },
+      {
+        "start_mmss": "09:49",
+        "end_mmss": "10:47",
+        "caption": "A man walks through a public square with several other people visible in the background."
+      }
+    ]
+  },
+  "video_22": {
+    "sample_meta": {
+      "total_frames": 5661,
+      "fps": 24.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:15",
+        "caption": "A man with a beard speaks to the camera in front of a stone pillar."
+      },
+      {
+        "start_mmss": "00:15",
+        "end_mmss": "00:35",
+        "caption": "The man continues his speech while standing outdoors."
+      },
+      {
+        "start_mmss": "00:35",
+        "end_mmss": "00:55",
+        "caption": "A man in a green shirt jumps over a series of low brick walls."
+      },
+      {
+        "start_mmss": "00:55",
+        "end_mmss": "01:15",
+        "caption": "The man in the green shirt vaults over a brick wall near a building."
+      },
+      {
+        "start_mmss": "01:15",
+        "end_mmss": "01:35",
+        "caption": "Several men walk around an outdoor patio with green umbrellas and tables."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:55",
+        "caption": "A close-up shows people's feet walking and running on a grassy field."
+      },
+      {
+        "start_mmss": "01:55",
+        "end_mmss": "02:15",
+        "caption": "A group of people perform crawling exercises on the grass."
+      },
+      {
+        "start_mmss": "02:15",
+        "end_mmss": "02:35",
+        "caption": "People continue training on the lawn, seen from a low camera angle."
+      },
+      {
+        "start_mmss": "02:35",
+        "end_mmss": "02:55",
+        "caption": "A man in a green shirt sits on the grass while others stand nearby."
+      },
+      {
+        "start_mmss": "02:55",
+        "end_mmss": "03:15",
+        "caption": "Three young men stand in a parking lot and talk to each other."
+      },
+      {
+        "start_mmss": "03:15",
+        "end_mmss": "03:35",
+        "caption": "A man in black jumps and lands on a metal handrail in front of a brick building."
+      },
+      {
+        "start_mmss": "03:35",
+        "end_mmss": "03:55",
+        "caption": "A group of men stand on stone pedestals in a courtyard and interact."
+      },
+      {
+        "start_mmss": "03:55",
+        "end_mmss": "04:17",
+        "caption": "The video ends with a white logo displayed on a black screen."
+      }
+    ]
+  },
+  "video_23": {
+    "sample_meta": {
+      "total_frames": 5631,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:10",
+        "caption": "A man sits on the floor in a room with dark wooden cabinets."
+      },
+      {
+        "start_mmss": "00:10",
+        "end_mmss": "00:25",
+        "caption": "The man performs a split on the floor while putting on a light blue shirt."
+      },
+      {
+        "start_mmss": "00:25",
+        "end_mmss": "00:40",
+        "caption": "The man walks through a doorway and enters a hallway."
+      },
+      {
+        "start_mmss": "00:40",
+        "end_mmss": "00:55",
+        "caption": "The man walks along a sidewalk next to a road with a backpack."
+      },
+      {
+        "start_mmss": "00:55",
+        "end_mmss": "01:10",
+        "caption": "The man scratches his head while walking past a line of trees."
+      },
+      {
+        "start_mmss": "01:10",
+        "end_mmss": "01:25",
+        "caption": "The man climbs over a blue metal fence in a grassy area."
+      },
+      {
+        "start_mmss": "01:25",
+        "end_mmss": "01:40",
+        "caption": "The man runs across a paved courtyard toward a multi-story building."
+      },
+      {
+        "start_mmss": "01:40",
+        "end_mmss": "01:55",
+        "caption": "The man runs through an open area with low stone walls."
+      },
+      {
+        "start_mmss": "01:55",
+        "end_mmss": "02:10",
+        "caption": "The man runs down a flight of outdoor stairs with metal railings."
+      },
+      {
+        "start_mmss": "02:10",
+        "end_mmss": "02:25",
+        "caption": "The man adjusts a dark blue tie while walking through a white hallway."
+      },
+      {
+        "start_mmss": "02:25",
+        "end_mmss": "02:40",
+        "caption": "The man puts on a pair of glasses while walking outside."
+      },
+      {
+        "start_mmss": "02:40",
+        "end_mmss": "02:55",
+        "caption": "The man walks away from the camera toward a building entrance."
+      },
+      {
+        "start_mmss": "02:55",
+        "end_mmss": "03:15",
+        "caption": "The man approaches an elevator as the doors open."
+      }
+    ]
+  },
+  "video_24": {
+    "sample_meta": {
+      "total_frames": 4356,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:13",
+        "caption": "Three young men sit on a park bench in front of a fence and flower beds."
+      },
+      {
+        "start_mmss": "00:13",
+        "end_mmss": "00:26",
+        "caption": "A young man in a grey shirt sits in the back of a car and eats from a white bowl."
+      },
+      {
+        "start_mmss": "00:26",
+        "end_mmss": "00:40",
+        "caption": "Several bicycles are parked next to a large tree in a shaded outdoor area."
+      },
+      {
+        "start_mmss": "00:40",
+        "end_mmss": "00:53",
+        "caption": "A person on a skateboard rides down a concrete ramp in an urban plaza."
+      },
+      {
+        "start_mmss": "00:53",
+        "end_mmss": "01:06",
+        "caption": "A man in a blue shirt performs a flip over a low stone wall in a park."
+      },
+      {
+        "start_mmss": "01:06",
+        "end_mmss": "01:19",
+        "caption": "A person climbs up the side of a building while several people watch from below."
+      },
+      {
+        "start_mmss": "01:19",
+        "end_mmss": "01:32",
+        "caption": "A shirtless man performs acrobatic moves on a grassy area in front of a building."
+      },
+      {
+        "start_mmss": "01:32",
+        "end_mmss": "01:46",
+        "caption": "A person reaches down from a stone step to dip an object into a river."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "01:59",
+        "caption": "A man in a blue shirt jumps from a concrete platform in front of a building."
+      },
+      {
+        "start_mmss": "01:59",
+        "end_mmss": "02:12",
+        "caption": "A man in a blue shirt jumps over a black metal railing on a paved walkway."
+      },
+      {
+        "start_mmss": "02:12",
+        "end_mmss": "02:25",
+        "caption": "The screen transitions to a solid black background at the end of the footage."
+      }
+    ]
+  },
+  "video_25": {
+    "sample_meta": {
+      "total_frames": 6580,
+      "fps": 24.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:25",
+        "caption": "The video begins with a black screen that transitions to a group of people standing outside."
+      },
+      {
+        "start_mmss": "00:25",
+        "end_mmss": "00:50",
+        "caption": "A man wearing an orange jacket stands in a crowd near a white wall and green foliage."
+      },
+      {
+        "start_mmss": "00:50",
+        "end_mmss": "01:15",
+        "caption": "A man in a purple shirt sits on a grassy hill while holding a piece of food."
+      },
+      {
+        "start_mmss": "01:15",
+        "end_mmss": "01:40",
+        "caption": "People walk through a wide city square featuring a monument and several large buildings."
+      },
+      {
+        "start_mmss": "01:40",
+        "end_mmss": "02:05",
+        "caption": "A view through a chain-link fence shows people walking on a path in a residential area."
+      },
+      {
+        "start_mmss": "02:05",
+        "end_mmss": "02:30",
+        "caption": "Colorful buildings with graffiti on their lower walls line a narrow street viewed from above."
+      },
+      {
+        "start_mmss": "02:30",
+        "end_mmss": "02:54",
+        "caption": "Several large ships are visible on the calm blue ocean behind a wooden railing."
+      },
+      {
+        "start_mmss": "02:54",
+        "end_mmss": "03:19",
+        "caption": "A large group of people gathers on a sandy beach with tall white buildings in the background."
+      },
+      {
+        "start_mmss": "03:19",
+        "end_mmss": "03:44",
+        "caption": "Shirtless men stand on the sand near a rocky wall with modern apartment complexes behind them."
+      },
+      {
+        "start_mmss": "03:44",
+        "end_mmss": "04:09",
+        "caption": "A person walks through a dark outdoor setting at night with blurred lights in the distance."
+      },
+      {
+        "start_mmss": "04:09",
+        "end_mmss": "04:34",
+        "caption": "People move around concrete walls covered in graffiti in an open outdoor area before the screen turns black."
+      }
+    ]
+  },
+  "video_26": {
+    "sample_meta": {
+      "total_frames": 3312,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:05",
+        "caption": "The video begins with a black screen."
+      },
+      {
+        "start_mmss": "00:05",
+        "end_mmss": "00:15",
+        "caption": "A black sign on a white tiled pillar displays the words Canal Street."
+      },
+      {
+        "start_mmss": "00:15",
+        "end_mmss": "00:25",
+        "caption": "Several people hold onto the vertical bars of a metal fence."
+      },
+      {
+        "start_mmss": "00:25",
+        "end_mmss": "00:35",
+        "caption": "A crowd of people stands behind metal barriers on a city street."
+      },
+      {
+        "start_mmss": "00:35",
+        "end_mmss": "00:45",
+        "caption": "People in a parade walk past storefronts while carrying a large red banner."
+      },
+      {
+        "start_mmss": "00:45",
+        "end_mmss": "00:55",
+        "caption": "Red flags wave in the background behind a person with pink flower hair accessories."
+      },
+      {
+        "start_mmss": "00:55",
+        "end_mmss": "01:05",
+        "caption": "A yellow and black lion dance costume performs in front of a Cathay Bank sign."
+      },
+      {
+        "start_mmss": "01:05",
+        "end_mmss": "01:15",
+        "caption": "A performer in a red jacket does a handstand on a street covered in confetti."
+      },
+      {
+        "start_mmss": "01:15",
+        "end_mmss": "01:25",
+        "caption": "A young boy wearing a grey cap stands in a crowd on a confetti-strewn street."
+      },
+      {
+        "start_mmss": "01:25",
+        "end_mmss": "01:35",
+        "caption": "The camera shows red brick buildings with fire escapes and various commercial signs."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:45",
+        "caption": "A white sanitation truck sweeps colorful confetti from the asphalt of a street."
+      },
+      {
+        "start_mmss": "01:45",
+        "end_mmss": "01:50",
+        "caption": "White and yellow text is displayed on a black background at the end of the video."
+      }
+    ]
+  },
+  "video_27": {
+    "sample_meta": {
+      "total_frames": 10917,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:33",
+        "caption": "A group of women in white outfits marches in a parade while holding a yellow banner with the year 1983."
+      },
+      {
+        "start_mmss": "00:33",
+        "end_mmss": "01:06",
+        "caption": "Women wearing white dresses and green scarves gather on a grassy area surrounded by trees."
+      },
+      {
+        "start_mmss": "01:06",
+        "end_mmss": "01:39",
+        "caption": "Several women in white attire, some with green headscarves, walk through a wooded area."
+      },
+      {
+        "start_mmss": "01:39",
+        "end_mmss": "02:12",
+        "caption": "An older woman with glasses and a dark blue sweater speaks while sitting in front of a shelf of figurines."
+      },
+      {
+        "start_mmss": "02:12",
+        "end_mmss": "02:46",
+        "caption": "A woman drives a golf cart carrying passengers in white clothing along a paved path."
+      },
+      {
+        "start_mmss": "02:46",
+        "end_mmss": "03:19",
+        "caption": "A group of women indoors interact while holding and wearing green garlands."
+      },
+      {
+        "start_mmss": "03:19",
+        "end_mmss": "03:52",
+        "caption": "Women in white dresses carry a long, thick green garland through a crowd of people."
+      },
+      {
+        "start_mmss": "03:52",
+        "end_mmss": "04:25",
+        "caption": "A line of women in white shirts and green scarves holds a continuous green garland while walking."
+      },
+      {
+        "start_mmss": "04:25",
+        "end_mmss": "04:58",
+        "caption": "Two women wearing glasses and button-down shirts stand outside and speak to an off-camera interviewer."
+      },
+      {
+        "start_mmss": "04:58",
+        "end_mmss": "05:31",
+        "caption": "Spectators on the side of a path clap and cheer as people in white outfits walk past."
+      },
+      {
+        "start_mmss": "05:31",
+        "end_mmss": "06:04",
+        "caption": "The screen transitions to black with white text indicating production credits."
+      }
+    ]
+  },
+  "video_28": {
+    "sample_meta": {
+      "total_frames": 8281,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:25",
+        "caption": "People stand on a sidewalk along a street lined with tall palm trees."
+      },
+      {
+        "start_mmss": "00:25",
+        "end_mmss": "00:50",
+        "caption": "Spectators watch from the roadside as motorcycles drive past in a procession."
+      },
+      {
+        "start_mmss": "00:50",
+        "end_mmss": "01:15",
+        "caption": "A group of people stands on a grassy area next to the road under large trees."
+      },
+      {
+        "start_mmss": "01:15",
+        "end_mmss": "01:40",
+        "caption": "A police SUV with flashing blue lights drives slowly down the street."
+      },
+      {
+        "start_mmss": "01:40",
+        "end_mmss": "02:06",
+        "caption": "People on the sidewalk watch as a police vehicle leads a parade of cars."
+      },
+      {
+        "start_mmss": "02:06",
+        "end_mmss": "02:31",
+        "caption": "A black pickup truck carrying passengers in its bed drives past the crowd."
+      },
+      {
+        "start_mmss": "02:31",
+        "end_mmss": "02:56",
+        "caption": "Individuals in the back of a moving pickup truck wave to people on the sidewalk."
+      },
+      {
+        "start_mmss": "02:56",
+        "end_mmss": "03:21",
+        "caption": "A motorcycle with a sidecar travels along the street past standing spectators."
+      },
+      {
+        "start_mmss": "03:21",
+        "end_mmss": "03:46",
+        "caption": "A white pickup truck drives by as people on the side of the road hold up cameras."
+      },
+      {
+        "start_mmss": "03:46",
+        "end_mmss": "04:11",
+        "caption": "Men in sports jerseys stand in the back of a white truck and wave to the crowd."
+      },
+      {
+        "start_mmss": "04:11",
+        "end_mmss": "04:36",
+        "caption": "A police car and a red fire truck with flashing lights follow the parade route."
+      },
+      {
+        "start_mmss": "04:36",
+        "end_mmss": "05:01",
+        "caption": "A person on a bicycle rides along the street near a crowd and a fire truck."
+      }
+    ]
+  },
+  "video_29": {
+    "sample_meta": {
+      "total_frames": 17527,
+      "fps": 29.917,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:53",
+        "caption": "A black screen transitions to a man in a black hat smiling among a crowd of people."
+      },
+      {
+        "start_mmss": "00:53",
+        "end_mmss": "01:47",
+        "caption": "A person wearing a traditional red and white costume walks down a street lined with onlookers."
+      },
+      {
+        "start_mmss": "01:47",
+        "end_mmss": "02:40",
+        "caption": "A white and gold lion dance costume moves through a street filled with spectators."
+      },
+      {
+        "start_mmss": "02:40",
+        "end_mmss": "03:33",
+        "caption": "A white and grey lion dance costume performs a routine on a city street."
+      },
+      {
+        "start_mmss": "03:33",
+        "end_mmss": "04:26",
+        "caption": "A group of dancers in green and white traditional clothing perform a synchronized dance."
+      },
+      {
+        "start_mmss": "04:26",
+        "end_mmss": "05:20",
+        "caption": "Several people in red outfits carry a long red and gold dragon costume through the street."
+      },
+      {
+        "start_mmss": "05:20",
+        "end_mmss": "06:13",
+        "caption": "Performers in colorful tiered skirts dance while holding large blue and white fans."
+      },
+      {
+        "start_mmss": "06:13",
+        "end_mmss": "07:06",
+        "caption": "A dense crowd of people carries numerous colorful flags and banners during a parade."
+      },
+      {
+        "start_mmss": "07:06",
+        "end_mmss": "07:59",
+        "caption": "A man with glasses and a beard is seen through a glass window reflecting the street."
+      },
+      {
+        "start_mmss": "07:59",
+        "end_mmss": "08:53",
+        "caption": "A man wearing a red scarf and glasses speaks directly to the camera while holding an umbrella."
+      },
+      {
+        "start_mmss": "08:53",
+        "end_mmss": "09:46",
+        "caption": "The video ends with a transition to a solid black screen."
+      }
+    ]
+  },
+  "video_30": {
+    "sample_meta": {
+      "total_frames": 4005,
+      "fps": 23.976023976023978,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:15",
+        "caption": "A young child rides a small yellow bicycle across a wide cobblestone square."
+      },
+      {
+        "start_mmss": "00:15",
+        "end_mmss": "00:30",
+        "caption": "Cyclists ride on a paved path next to a road, with one person holding a black umbrella."
+      },
+      {
+        "start_mmss": "00:30",
+        "end_mmss": "00:46",
+        "caption": "Two men stand in a park and talk, one wearing a grey vest and the other a blue shirt."
+      },
+      {
+        "start_mmss": "00:46",
+        "end_mmss": "01:01",
+        "caption": "A man in a helmet and vest cycles down a street followed by other riders."
+      },
+      {
+        "start_mmss": "01:01",
+        "end_mmss": "01:16",
+        "caption": "Two women in hats stand in a park and speak toward the camera."
+      },
+      {
+        "start_mmss": "01:16",
+        "end_mmss": "01:31",
+        "caption": "A long, covered bicycle parking area is filled with many parked bikes."
+      },
+      {
+        "start_mmss": "01:31",
+        "end_mmss": "01:46",
+        "caption": "A group of cyclists in matching jerseys ride through a city street with historic buildings."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "02:01",
+        "caption": "A man with glasses speaks in front of a clothing stall under a white tent."
+      },
+      {
+        "start_mmss": "02:01",
+        "end_mmss": "02:17",
+        "caption": "People in costumes and hats ride decorated bicycles along a tree-lined path."
+      },
+      {
+        "start_mmss": "02:17",
+        "end_mmss": "02:32",
+        "caption": "A large crowd of people gathers in a city square with colorful banners."
+      },
+      {
+        "start_mmss": "02:32",
+        "end_mmss": "02:47",
+        "caption": "The screen turns black as the video ends."
+      }
+    ]
+  },
+  "video_31": {
+    "sample_meta": {
+      "total_frames": 5412,
+      "fps": 25.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:15",
+        "caption": "A black screen displays text in the bottom right corner."
+      },
+      {
+        "start_mmss": "00:15",
+        "end_mmss": "00:35",
+        "caption": "A person in a dark outfit and black gloves moves their arms."
+      },
+      {
+        "start_mmss": "00:35",
+        "end_mmss": "00:55",
+        "caption": "A close-up shows a person wearing a dark vest and gloves moving."
+      },
+      {
+        "start_mmss": "00:55",
+        "end_mmss": "01:15",
+        "caption": "The screen turns black with a text overlay in the corner."
+      },
+      {
+        "start_mmss": "01:15",
+        "end_mmss": "01:35",
+        "caption": "A person wearing a black beanie and jacket clenches their fist."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:55",
+        "caption": "A young person with blonde hair looks down in an outdoor setting."
+      },
+      {
+        "start_mmss": "01:55",
+        "end_mmss": "02:15",
+        "caption": "A child holds a sign that says HOW MANY MORE CHILDREN in a public square."
+      },
+      {
+        "start_mmss": "02:15",
+        "end_mmss": "02:35",
+        "caption": "A person wears a camouflage jacket with a picture of a face pinned to it."
+      },
+      {
+        "start_mmss": "02:35",
+        "end_mmss": "02:55",
+        "caption": "People in black clothing kneel and hold signs in a large plaza."
+      },
+      {
+        "start_mmss": "02:55",
+        "end_mmss": "03:15",
+        "caption": "A group of people in dark clothes raise their arms in unison."
+      },
+      {
+        "start_mmss": "03:15",
+        "end_mmss": "03:30",
+        "caption": "A white banner with text hangs from a concrete overpass."
+      },
+      {
+        "start_mmss": "03:30",
+        "end_mmss": "03:45",
+        "caption": "The video ends with a black screen and a text overlay."
+      }
+    ]
+  },
+  "video_32": {
+    "sample_meta": {
+      "total_frames": 3802,
+      "fps": 25.0,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:14",
+        "caption": "A title card displays the ICC World Twenty20 Bangladesh 2014 logo and event details."
+      },
+      {
+        "start_mmss": "00:14",
+        "end_mmss": "00:28",
+        "caption": "A large crowd of people gathers on a paved road under a clear sky."
+      },
+      {
+        "start_mmss": "00:28",
+        "end_mmss": "00:41",
+        "caption": "A group of young men and women begin dancing in unison on the street."
+      },
+      {
+        "start_mmss": "00:41",
+        "end_mmss": "00:55",
+        "caption": "The dancers perform rhythmic movements with their arms raised while a crowd watches."
+      },
+      {
+        "start_mmss": "00:55",
+        "end_mmss": "01:09",
+        "caption": "A line of men in traditional lungis and colorful shirts dance together in the street."
+      },
+      {
+        "start_mmss": "01:09",
+        "end_mmss": "01:23",
+        "caption": "A woman in a red and gold dress dances at the front of the group."
+      },
+      {
+        "start_mmss": "01:23",
+        "end_mmss": "01:37",
+        "caption": "The dancers continue their performance with energetic jumps and arm swings."
+      },
+      {
+        "start_mmss": "01:37",
+        "end_mmss": "01:51",
+        "caption": "The group performs a coordinated dance routine as the camera captures different angles."
+      },
+      {
+        "start_mmss": "01:51",
+        "end_mmss": "02:04",
+        "caption": "A large group of people holds up a green and red flag while cheering."
+      },
+      {
+        "start_mmss": "02:04",
+        "end_mmss": "02:18",
+        "caption": "The dancers move in a synchronized fashion as the crowd around them grows."
+      },
+      {
+        "start_mmss": "02:18",
+        "end_mmss": "02:32",
+        "caption": "A man performs a stunt by balancing on a moving motorcycle in the middle of the street."
+      },
+      {
+        "start_mmss": "02:32",
+        "end_mmss": "02:46",
+        "caption": "The video concludes with a black screen after the street performance ends."
+      }
+    ]
+  },
+  "video_33": {
+    "sample_meta": {
+      "total_frames": 13365,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:41",
+        "caption": "A man in a black hoodie and shorts stands on a basketball court holding a microphone and a long cable."
+      },
+      {
+        "start_mmss": "00:41",
+        "end_mmss": "01:21",
+        "caption": "The man speaks into the microphone while another person stands in the background on the wooden floor."
+      },
+      {
+        "start_mmss": "01:21",
+        "end_mmss": "02:02",
+        "caption": "The man gestures with his hands while speaking into the microphone in a close-up shot."
+      },
+      {
+        "start_mmss": "02:02",
+        "end_mmss": "02:42",
+        "caption": "The man continues to address the crowd, holding the microphone and moving his arms."
+      },
+      {
+        "start_mmss": "02:42",
+        "end_mmss": "03:23",
+        "caption": "The man points his finger toward the audience while speaking into the microphone."
+      },
+      {
+        "start_mmss": "03:23",
+        "end_mmss": "04:03",
+        "caption": "The man raises his fist in the air while continuing his speech on the court."
+      },
+      {
+        "start_mmss": "04:03",
+        "end_mmss": "04:44",
+        "caption": "A large group of people in dark clothing performs a synchronized dance routine on the basketball court."
+      },
+      {
+        "start_mmss": "04:44",
+        "end_mmss": "05:24",
+        "caption": "The dancers move their arms and bodies in unison while standing in rows across the court."
+      },
+      {
+        "start_mmss": "05:24",
+        "end_mmss": "06:05",
+        "caption": "The group performs coordinated jumps and arm swings as part of the choreographed dance."
+      },
+      {
+        "start_mmss": "06:05",
+        "end_mmss": "06:45",
+        "caption": "The dancers continue the performance with various arm gestures and synchronized footwork."
+      },
+      {
+        "start_mmss": "06:45",
+        "end_mmss": "07:26",
+        "caption": "The group completes a sequence of movements and transitions to new positions on the court."
+      }
+    ]
+  },
+  "video_34": {
+    "sample_meta": {
+      "total_frames": 3705,
+      "fps": 23.976023976023978,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:08",
+        "caption": "The video begins with a black screen."
+      },
+      {
+        "start_mmss": "00:08",
+        "end_mmss": "00:22",
+        "caption": "A boy wearing a blue headwrap stands on a sandy field while another boy bats in a cricket game."
+      },
+      {
+        "start_mmss": "00:22",
+        "end_mmss": "00:36",
+        "caption": "A group of people dance outdoors, with several individuals pointing their fingers in the air."
+      },
+      {
+        "start_mmss": "00:36",
+        "end_mmss": "00:50",
+        "caption": "Men and women dance in a street in front of several multi-story buildings."
+      },
+      {
+        "start_mmss": "00:50",
+        "end_mmss": "01:04",
+        "caption": "A group of young boys in light blue shirts cheer and wave toward the camera."
+      },
+      {
+        "start_mmss": "01:04",
+        "end_mmss": "01:18",
+        "caption": "A large group of people perform a synchronized dance routine in a city street."
+      },
+      {
+        "start_mmss": "01:18",
+        "end_mmss": "01:32",
+        "caption": "A man in a grey shirt and jeans dances in the center of a large gathering of people."
+      },
+      {
+        "start_mmss": "01:32",
+        "end_mmss": "01:46",
+        "caption": "Dancers wearing colorful clothing move together in a line on a paved road."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "02:00",
+        "caption": "A woman with long dark hair dances in a patterned shirt among a crowd of people."
+      },
+      {
+        "start_mmss": "02:00",
+        "end_mmss": "02:14",
+        "caption": "A person performs a cartwheel in the middle of a street filled with dancing people."
+      },
+      {
+        "start_mmss": "02:14",
+        "end_mmss": "02:28",
+        "caption": "A large crowd of people moves and dances throughout a wide city street."
+      },
+      {
+        "start_mmss": "02:28",
+        "end_mmss": "02:34",
+        "caption": "The video ends with a black screen."
+      }
+    ]
+  },
+  "video_35": {
+    "sample_meta": {
+      "total_frames": 4463,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:14",
+        "caption": "Grey rectangular blocks sit on a dark, reflective surface under a dim light."
+      },
+      {
+        "start_mmss": "00:14",
+        "end_mmss": "00:27",
+        "caption": "A colorful logo with the text CASA CL and a creator's name is displayed."
+      },
+      {
+        "start_mmss": "00:27",
+        "end_mmss": "00:41",
+        "caption": "A group of people stands on a platform, waiting for a train."
+      },
+      {
+        "start_mmss": "00:41",
+        "end_mmss": "00:54",
+        "caption": "Passengers stand inside a crowded train car."
+      },
+      {
+        "start_mmss": "00:54",
+        "end_mmss": "01:08",
+        "caption": "A close-up view shows a musician's fingers pressing the keys of a silver flute."
+      },
+      {
+        "start_mmss": "01:08",
+        "end_mmss": "01:21",
+        "caption": "A young child looks around while a violinist plays in the background of the train."
+      },
+      {
+        "start_mmss": "01:21",
+        "end_mmss": "01:35",
+        "caption": "A woman with brown hair plays a flute inside the moving train."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:48",
+        "caption": "A man wearing sunglasses plays a violin among the standing passengers."
+      },
+      {
+        "start_mmss": "01:48",
+        "end_mmss": "02:02",
+        "caption": "A young man with headphones around his neck watches the performance in the train."
+      },
+      {
+        "start_mmss": "02:02",
+        "end_mmss": "02:15",
+        "caption": "A baby in a stroller looks toward the musicians inside the train car."
+      },
+      {
+        "start_mmss": "02:15",
+        "end_mmss": "02:29",
+        "caption": "Text reading Enjoy the music appears over a bright, washed-out view of train tracks."
+      },
+      {
+        "start_mmss": "02:29",
+        "end_mmss": "02:40",
+        "caption": "A final logo for CASACL CHANNEL is shown against a dark background with blue light streaks."
+      }
+    ]
+  },
+  "video_36": {
+    "sample_meta": {
+      "total_frames": 7959,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:24",
+        "caption": "An elderly man in a purple cap and suspenders walks down a driveway."
+      },
+      {
+        "start_mmss": "00:24",
+        "end_mmss": "00:48",
+        "caption": "The man walks past a white car toward a garden with a wooden fence."
+      },
+      {
+        "start_mmss": "00:48",
+        "end_mmss": "01:12",
+        "caption": "The man stands in a garden and looks down at a beehive."
+      },
+      {
+        "start_mmss": "01:12",
+        "end_mmss": "01:37",
+        "caption": "A pair of hands lifts a wooden frame covered with bees from a hive."
+      },
+      {
+        "start_mmss": "01:37",
+        "end_mmss": "02:01",
+        "caption": "Numerous bees crawl over the surface of a wooden beehive frame."
+      },
+      {
+        "start_mmss": "02:01",
+        "end_mmss": "02:25",
+        "caption": "The man holds a honeycomb frame up, showing bees and wax cells."
+      },
+      {
+        "start_mmss": "02:25",
+        "end_mmss": "02:49",
+        "caption": "The man speaks while standing outdoors in front of a garden fence."
+      },
+      {
+        "start_mmss": "02:49",
+        "end_mmss": "03:13",
+        "caption": "Bees fly around the entrance of a wooden beehive on a sunny day."
+      },
+      {
+        "start_mmss": "03:13",
+        "end_mmss": "03:37",
+        "caption": "A person holds a jar lid over a glass container filled with dark honey."
+      },
+      {
+        "start_mmss": "03:37",
+        "end_mmss": "04:01",
+        "caption": "A close-up shot shows the man's face as he looks downward."
+      },
+      {
+        "start_mmss": "04:01",
+        "end_mmss": "04:26",
+        "caption": "The man removes the top cover from a stacked wooden beehive box."
+      },
+      {
+        "start_mmss": "04:26",
+        "end_mmss": "04:30",
+        "caption": "White text credits appear on a black background."
+      }
+    ]
+  },
+  "video_37": {
+    "sample_meta": {
+      "total_frames": 4009,
+      "fps": 24.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:15",
+        "caption": "The video begins with a black screen that fades into a shot of a man's tattooed back in a sunlit outdoor area."
+      },
+      {
+        "start_mmss": "00:15",
+        "end_mmss": "00:30",
+        "caption": "A hand holds a bundle of dry, golden grass against a blurred natural background."
+      },
+      {
+        "start_mmss": "00:30",
+        "end_mmss": "00:46",
+        "caption": "A bee crawls on a dark purple flower spike in a field of lavender."
+      },
+      {
+        "start_mmss": "00:46",
+        "end_mmss": "01:01",
+        "caption": "Multiple wooden beehives are arranged in a row on a wooden stand in a field."
+      },
+      {
+        "start_mmss": "01:01",
+        "end_mmss": "01:16",
+        "caption": "A person wearing a white protective beekeeping suit and yellow gloves crouches beside the beehives."
+      },
+      {
+        "start_mmss": "01:16",
+        "end_mmss": "01:31",
+        "caption": "Two beekeepers in white suits and mesh veils work together over an open beehive."
+      },
+      {
+        "start_mmss": "01:31",
+        "end_mmss": "01:46",
+        "caption": "A beekeeper holds up a wooden frame densely covered with crawling honeybees."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "02:01",
+        "caption": "A gloved hand uses a metal hive tool to manipulate the wooden frames inside a hive box."
+      },
+      {
+        "start_mmss": "02:01",
+        "end_mmss": "02:17",
+        "caption": "A pair of metal pliers with yellow handles rests on the edge of a beehive next to a grey rock."
+      },
+      {
+        "start_mmss": "02:17",
+        "end_mmss": "02:32",
+        "caption": "The scene fades to a black screen with white text displaying a social media handle."
+      },
+      {
+        "start_mmss": "02:32",
+        "end_mmss": "02:47",
+        "caption": "The video concludes with a solid black screen."
+      }
+    ]
+  },
+  "video_38": {
+    "sample_meta": {
+      "total_frames": 2941,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:09",
+        "caption": "A title screen displays the University of Wyoming Extension logo above a row of green grass."
+      },
+      {
+        "start_mmss": "00:09",
+        "end_mmss": "00:18",
+        "caption": "A close-up shot shows the intricate hexagonal cells of a wasp nest."
+      },
+      {
+        "start_mmss": "00:18",
+        "end_mmss": "00:27",
+        "caption": "A wasp crawls on a small, paper-like nest attached to a thin tree branch."
+      },
+      {
+        "start_mmss": "00:27",
+        "end_mmss": "00:36",
+        "caption": "A man in a tan shirt stands inside a wooden greenhouse, holding a fragment of a wasp nest."
+      },
+      {
+        "start_mmss": "00:36",
+        "end_mmss": "00:45",
+        "caption": "Numerous wasps crawl over the surface of a large, active nest attached to a wooden wall."
+      },
+      {
+        "start_mmss": "00:45",
+        "end_mmss": "00:54",
+        "caption": "The man reaches upward with a long wooden pole toward the ceiling of the structure."
+      },
+      {
+        "start_mmss": "00:54",
+        "end_mmss": "01:02",
+        "caption": "Standing in the greenhouse, the man holds the long pole while speaking to the camera."
+      },
+      {
+        "start_mmss": "01:02",
+        "end_mmss": "01:11",
+        "caption": "The man continues his explanation while holding both the pole and a piece of the nest."
+      },
+      {
+        "start_mmss": "01:11",
+        "end_mmss": "01:20",
+        "caption": "A medium shot captures the man gesturing with a small piece of a wasp nest."
+      },
+      {
+        "start_mmss": "01:20",
+        "end_mmss": "01:29",
+        "caption": "A detailed close-up reveals the empty, paper-like chambers of a wasp nest resting on wood."
+      },
+      {
+        "start_mmss": "01:29",
+        "end_mmss": "01:38",
+        "caption": "The camera focuses on the repetitive pattern of the hexagonal cells within the nest."
+      },
+      {
+        "start_mmss": "01:38",
+        "end_mmss": "01:45",
+        "caption": "The video concludes with a black screen showing the host and producer credits."
+      }
+    ]
+  },
+  "video_39": {
+    "sample_meta": {
+      "total_frames": 4166,
+      "fps": 30.0,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:13",
+        "caption": "Animated light streaks and news graphics move across a dark blue background."
+      },
+      {
+        "start_mmss": "00:13",
+        "end_mmss": "00:25",
+        "caption": "A news anchor in a pink shirt stands next to a monitor displaying a wooden building."
+      },
+      {
+        "start_mmss": "00:25",
+        "end_mmss": "00:38",
+        "caption": "A large jagged hole in a white wall reveals wooden structural beams."
+      },
+      {
+        "start_mmss": "00:38",
+        "end_mmss": "00:50",
+        "caption": "A white pig moves around inside a dark, dusty room."
+      },
+      {
+        "start_mmss": "00:50",
+        "end_mmss": "01:03",
+        "caption": "A man wearing a green bandana and glasses speaks in front of a white truck with a bee logo."
+      },
+      {
+        "start_mmss": "01:03",
+        "end_mmss": "01:16",
+        "caption": "A woman in a purple cap and pink shirt speaks while standing in an outdoor area."
+      },
+      {
+        "start_mmss": "01:16",
+        "end_mmss": "01:28",
+        "caption": "The woman gestures with her hands toward wood scraps and debris on the ground."
+      },
+      {
+        "start_mmss": "01:28",
+        "end_mmss": "01:41",
+        "caption": "A dense cluster of bees covers a flat wooden surface."
+      },
+      {
+        "start_mmss": "01:41",
+        "end_mmss": "01:54",
+        "caption": "Numerous bees crawl over the interior surfaces of a dark wall opening."
+      },
+      {
+        "start_mmss": "01:54",
+        "end_mmss": "02:06",
+        "caption": "A pig stands in a fenced enclosure with a dirt floor."
+      },
+      {
+        "start_mmss": "02:06",
+        "end_mmss": "02:19",
+        "caption": "A reporter in a blue shirt speaks directly to the camera in a dark room with wooden planks."
+      },
+      {
+        "start_mmss": "02:19",
+        "end_mmss": "02:25",
+        "caption": "A graphic with the text DEVELOPING STORY appears over a blue background."
+      }
+    ]
+  },
+  "video_40": {
+    "sample_meta": {
+      "total_frames": 11414,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:35",
+        "caption": "A view of a tree trunk surrounded by green and red leaves."
+      },
+      {
+        "start_mmss": "00:35",
+        "end_mmss": "01:09",
+        "caption": "A close-up shot of a circular opening in the side of a tree trunk."
+      },
+      {
+        "start_mmss": "01:09",
+        "end_mmss": "01:44",
+        "caption": "The camera moves inside the dark, hollow interior of the tree."
+      },
+      {
+        "start_mmss": "01:44",
+        "end_mmss": "02:18",
+        "caption": "A large swarm of honeybees covers the inner walls of the tree cavity."
+      },
+      {
+        "start_mmss": "02:18",
+        "end_mmss": "02:53",
+        "caption": "Honeybees crawl over white wax structures inside the hollow tree."
+      },
+      {
+        "start_mmss": "02:53",
+        "end_mmss": "03:28",
+        "caption": "A hand touches a circular wooden cover secured to the tree with a rope."
+      },
+      {
+        "start_mmss": "03:28",
+        "end_mmss": "04:02",
+        "caption": "Numerous bees move around a honeycomb structure within the tree."
+      },
+      {
+        "start_mmss": "04:02",
+        "end_mmss": "04:37",
+        "caption": "The camera focuses on the rough bark of the tree near the circular opening."
+      },
+      {
+        "start_mmss": "04:37",
+        "end_mmss": "05:12",
+        "caption": "A person holds a circular wooden disc that is covered with crawling bees."
+      },
+      {
+        "start_mmss": "05:12",
+        "end_mmss": "05:46",
+        "caption": "A detailed view of bees working on a yellow hexagonal honeycomb."
+      },
+      {
+        "start_mmss": "05:46",
+        "end_mmss": "06:21",
+        "caption": "A hand reaches into the tree cavity near the bees and the honeycomb."
+      },
+      {
+        "start_mmss": "06:21",
+        "end_mmss": "06:30",
+        "caption": "The screen turns black as the video concludes."
+      }
+    ]
+  },
+  "video_41": {
+    "sample_meta": {
+      "total_frames": 8073,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:24",
+        "caption": "A man in motocross gear stands in an open dirt field with trees in the background."
+      },
+      {
+        "start_mmss": "00:24",
+        "end_mmss": "00:49",
+        "caption": "The man speaks to the camera while wearing a yellow and black jersey and protective padding."
+      },
+      {
+        "start_mmss": "00:49",
+        "end_mmss": "01:13",
+        "caption": "He gestures with his gloved hands while continuing to speak in the outdoor setting."
+      },
+      {
+        "start_mmss": "01:13",
+        "end_mmss": "01:38",
+        "caption": "The man raises his right hand horizontally to demonstrate a height or level."
+      },
+      {
+        "start_mmss": "01:38",
+        "end_mmss": "02:02",
+        "caption": "He moves his gloved hand in a side-to-side motion while speaking."
+      },
+      {
+        "start_mmss": "02:02",
+        "end_mmss": "02:27",
+        "caption": "The man points his hand downward towards the ground while speaking."
+      },
+      {
+        "start_mmss": "02:27",
+        "end_mmss": "02:51",
+        "caption": "A wide view shows a dirt motocross track with mounds and sparse vegetation."
+      },
+      {
+        "start_mmss": "02:51",
+        "end_mmss": "03:16",
+        "caption": "A rider on a dirt bike travels across the sandy track away from the camera."
+      },
+      {
+        "start_mmss": "03:16",
+        "end_mmss": "03:40",
+        "caption": "The man holds a blue and black helmet while gesturing with his other hand."
+      },
+      {
+        "start_mmss": "03:40",
+        "end_mmss": "04:05",
+        "caption": "He looks down at the helmet in his hand while continuing to speak."
+      },
+      {
+        "start_mmss": "04:05",
+        "end_mmss": "04:29",
+        "caption": "The man stands next to a red and white motocross bike parked under a tree."
+      },
+      {
+        "start_mmss": "04:29",
+        "end_mmss": "04:54",
+        "caption": "The scene fades to a dark screen at the end of the video."
+      }
+    ]
+  },
+  "video_42": {
+    "sample_meta": {
+      "total_frames": 5939,
+      "fps": 29.97002997002997,
+      "width": 540,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:18",
+        "caption": "A motorcyclist performs a high jump over a ramp in an indoor arena."
+      },
+      {
+        "start_mmss": "00:18",
+        "end_mmss": "00:36",
+        "caption": "The motorcycle wheels spin rapidly in a close-up shot during a stunt."
+      },
+      {
+        "start_mmss": "00:36",
+        "end_mmss": "00:54",
+        "caption": "A man in a red, white, and blue jersey and a black cap gestures with his hands while talking."
+      },
+      {
+        "start_mmss": "00:54",
+        "end_mmss": "01:12",
+        "caption": "The man in the jersey continues speaking to an interviewer off-camera."
+      },
+      {
+        "start_mmss": "01:12",
+        "end_mmss": "01:30",
+        "caption": "A man in a green shirt and glasses listens to the man in the jersey."
+      },
+      {
+        "start_mmss": "01:30",
+        "end_mmss": "01:48",
+        "caption": "Two motorcyclists ride their bikes slowly across the arena floor."
+      },
+      {
+        "start_mmss": "01:48",
+        "end_mmss": "02:06",
+        "caption": "The man in the jersey and the man in the green shirt continue their conversation."
+      },
+      {
+        "start_mmss": "02:06",
+        "end_mmss": "02:24",
+        "caption": "A motorcyclist balances on top of a large rectangular obstacle."
+      },
+      {
+        "start_mmss": "02:24",
+        "end_mmss": "02:42",
+        "caption": "A motorcyclist performs a wheelie while riding past a crowd of spectators."
+      },
+      {
+        "start_mmss": "02:42",
+        "end_mmss": "03:00",
+        "caption": "A motorcyclist stands on the seat of a moving motorcycle while performing a wheelie."
+      },
+      {
+        "start_mmss": "03:00",
+        "end_mmss": "03:18",
+        "caption": "The video concludes with a black screen displaying a copyright notice."
+      }
+    ]
+  },
+  "video_43": {
+    "sample_meta": {
+      "total_frames": 4931,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:15",
+        "caption": "A man in a black cap and t-shirt holds a set of white bicycle handlebars in a workshop."
+      },
+      {
+        "start_mmss": "00:15",
+        "end_mmss": "00:30",
+        "caption": "A woman with dark hair and a black tank top speaks directly to the camera against a colorful background."
+      },
+      {
+        "start_mmss": "00:30",
+        "end_mmss": "00:45",
+        "caption": "The woman continues speaking while looking into the camera lens."
+      },
+      {
+        "start_mmss": "00:45",
+        "end_mmss": "01:00",
+        "caption": "The woman smiles and speaks while standing in front of a pink and green mural."
+      },
+      {
+        "start_mmss": "01:00",
+        "end_mmss": "01:15",
+        "caption": "A person on a white bicycle with white wheels rides quickly past a dark building on a paved street."
+      },
+      {
+        "start_mmss": "01:15",
+        "end_mmss": "01:30",
+        "caption": "The woman in the black tank top continues her explanation to the camera."
+      },
+      {
+        "start_mmss": "01:30",
+        "end_mmss": "01:45",
+        "caption": "A man wearing a helmet and black athletic gear rides a white bicycle down a city street."
+      },
+      {
+        "start_mmss": "01:45",
+        "end_mmss": "02:00",
+        "caption": "The woman speaks again, her face framed by her dark hair and the vibrant background."
+      },
+      {
+        "start_mmss": "02:00",
+        "end_mmss": "02:15",
+        "caption": "The man on the white bicycle pedals along the street, passing parked cars and a fence."
+      },
+      {
+        "start_mmss": "02:15",
+        "end_mmss": "02:30",
+        "caption": "The woman stands in front of several bicycles and speaks, with text appearing on the screen."
+      },
+      {
+        "start_mmss": "02:30",
+        "end_mmss": "02:44",
+        "caption": "The woman continues speaking as the video concludes with a black screen."
+      }
+    ]
+  },
+  "video_44": {
+    "sample_meta": {
+      "total_frames": 4304,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:13",
+        "caption": "A person applies lubricant to a bicycle chain and works on a wheel hub."
+      },
+      {
+        "start_mmss": "00:13",
+        "end_mmss": "00:26",
+        "caption": "A woman in a pink shirt and a man in a grey shirt stand before a wall of bike wheels."
+      },
+      {
+        "start_mmss": "00:26",
+        "end_mmss": "00:39",
+        "caption": "The man speaks while standing in front of the colorful bicycle wheels."
+      },
+      {
+        "start_mmss": "00:39",
+        "end_mmss": "00:52",
+        "caption": "A person adjusts the front wheel of a bicycle on a concrete sidewalk."
+      },
+      {
+        "start_mmss": "00:52",
+        "end_mmss": "01:05",
+        "caption": "The text \"bike camo\" is displayed in white on a black background."
+      },
+      {
+        "start_mmss": "01:05",
+        "end_mmss": "01:18",
+        "caption": "The man in the grey shirt continues to speak in the bicycle shop."
+      },
+      {
+        "start_mmss": "01:18",
+        "end_mmss": "01:31",
+        "caption": "The word \"locks\" appears in a stylized white font on a black screen."
+      },
+      {
+        "start_mmss": "01:31",
+        "end_mmss": "01:44",
+        "caption": "A person secures a bicycle with a red rim to a fence using a U-lock."
+      },
+      {
+        "start_mmss": "01:44",
+        "end_mmss": "01:57",
+        "caption": "The man speaks to the camera in a close-up shot."
+      },
+      {
+        "start_mmss": "01:57",
+        "end_mmss": "02:11",
+        "caption": "The woman in the pink shirt talks while standing beside the man."
+      },
+      {
+        "start_mmss": "02:11",
+        "end_mmss": "02:24",
+        "caption": "The woman and man stand together in the shop as she continues speaking."
+      },
+      {
+        "start_mmss": "02:24",
+        "end_mmss": "02:30",
+        "caption": "The screen turns black to conclude the video."
+      }
+    ]
+  },
+  "video_46": {
+    "sample_meta": {
+      "total_frames": 15307,
+      "fps": 30.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:46",
+        "caption": "Two men stand in an open field while one holds a black motorcycle helmet."
+      },
+      {
+        "start_mmss": "00:46",
+        "end_mmss": "01:33",
+        "caption": "A man wearing a bucket hat and a blue jacket speaks in front of a large white banner."
+      },
+      {
+        "start_mmss": "01:33",
+        "end_mmss": "02:19",
+        "caption": "A person points their finger at a phone number printed on a veterinary hospital sign."
+      },
+      {
+        "start_mmss": "02:19",
+        "end_mmss": "03:06",
+        "caption": "Several dogs and their handlers move across a grassy field marked with white tape."
+      },
+      {
+        "start_mmss": "03:06",
+        "end_mmss": "03:52",
+        "caption": "A man with dark hair talks to the camera amidst a crowd of people outdoors."
+      },
+      {
+        "start_mmss": "03:52",
+        "end_mmss": "04:38",
+        "caption": "People walk through an outdoor event space featuring white tents and rows of chairs."
+      },
+      {
+        "start_mmss": "04:38",
+        "end_mmss": "05:25",
+        "caption": "A woman with dark curly hair speaks to the camera in an outdoor setting."
+      },
+      {
+        "start_mmss": "05:25",
+        "end_mmss": "06:11",
+        "caption": "A man in a blue jacket holds a small brown and white dog in his arms."
+      },
+      {
+        "start_mmss": "06:11",
+        "end_mmss": "06:57",
+        "caption": "A man wearing a red turban walks across a field past the camera."
+      },
+      {
+        "start_mmss": "06:57",
+        "end_mmss": "07:44",
+        "caption": "A group of people and their dogs congregate in a field near several event booths."
+      },
+      {
+        "start_mmss": "07:44",
+        "end_mmss": "08:30",
+        "caption": "A man in a grey hat stands in a field and looks toward the side."
+      },
+      {
+        "start_mmss": "08:30",
+        "end_mmss": "09:17",
+        "caption": "A man in a plaid shirt and blue jeans walks across a large dry field."
+      }
+    ]
+  },
+  "video_47": {
+    "sample_meta": {
+      "total_frames": 4740,
+      "fps": 25.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:17",
+        "caption": "A man and a woman smile together for a close-up shot."
+      },
+      {
+        "start_mmss": "00:17",
+        "end_mmss": "00:34",
+        "caption": "A person's hands pet a black dog wearing a silver collar."
+      },
+      {
+        "start_mmss": "00:34",
+        "end_mmss": "00:52",
+        "caption": "A small black and white dog interacts with a larger dog on a green floor."
+      },
+      {
+        "start_mmss": "00:52",
+        "end_mmss": "01:09",
+        "caption": "Two white and tan dogs play and wrestle on a blue mat."
+      },
+      {
+        "start_mmss": "01:09",
+        "end_mmss": "01:26",
+        "caption": "A person's hand strokes the head of a large black dog."
+      },
+      {
+        "start_mmss": "01:26",
+        "end_mmss": "01:43",
+        "caption": "A man with dark hair smiles broadly in a close-up shot."
+      },
+      {
+        "start_mmss": "01:43",
+        "end_mmss": "02:01",
+        "caption": "A person pets the back of a large brown and white dog."
+      },
+      {
+        "start_mmss": "02:01",
+        "end_mmss": "02:18",
+        "caption": "A small, scruffy grey dog stands on a green surface while attached to a leash."
+      },
+      {
+        "start_mmss": "02:18",
+        "end_mmss": "02:35",
+        "caption": "A person gently pets a small, light-colored dog resting on a purple blanket."
+      },
+      {
+        "start_mmss": "02:35",
+        "end_mmss": "02:52",
+        "caption": "A hand reaches out to pet a black dog on a green background."
+      },
+      {
+        "start_mmss": "02:52",
+        "end_mmss": "03:10",
+        "caption": "A person's hand strokes the long fur of a brown dog."
+      }
+    ]
+  },
+  "video_48": {
+    "sample_meta": {
+      "total_frames": 3896,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:12",
+        "caption": "A small brown dog sits in a red plaid dog bed as the title \"DOG'S TALE\" appears on the screen."
+      },
+      {
+        "start_mmss": "00:12",
+        "end_mmss": "00:24",
+        "caption": "A hand reaches down to place a yellow plastic bowl on the floor in front of the dog."
+      },
+      {
+        "start_mmss": "00:24",
+        "end_mmss": "00:35",
+        "caption": "The dog sits alertly on a carpeted step next to a decorative wooden table leg."
+      },
+      {
+        "start_mmss": "00:35",
+        "end_mmss": "00:47",
+        "caption": "A young man with dark hair stands in front of a wall clock and looks around the room."
+      },
+      {
+        "start_mmss": "00:47",
+        "end_mmss": "00:59",
+        "caption": "The dog walks down a set of stone steps leading toward a grassy yard."
+      },
+      {
+        "start_mmss": "00:59",
+        "end_mmss": "01:11",
+        "caption": "The dog sniffs the green grass while exploring the outdoor area."
+      },
+      {
+        "start_mmss": "01:11",
+        "end_mmss": "01:23",
+        "caption": "A close-up shot captures the dog's face as it looks to the side in the yard."
+      },
+      {
+        "start_mmss": "01:23",
+        "end_mmss": "01:35",
+        "caption": "The dog stands still in the middle of the yard and looks directly at the camera."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:46",
+        "caption": "Back indoors, the dog sits on a rug while wearing a small purple shirt."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "01:58",
+        "caption": "The dog lies on its back on a bed covered with blankets and pillows."
+      },
+      {
+        "start_mmss": "01:58",
+        "end_mmss": "02:10",
+        "caption": "The dog remains on the bed, looking up with its ears perked before the screen fades to black."
+      }
+    ]
+  },
+  "video_49": {
+    "sample_meta": {
+      "total_frames": 5971,
+      "fps": 29.97002997002997,
+      "width": 596,
+      "height": 336,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:15",
+        "caption": "A man wearing a grey suit and glasses speaks while looking at the camera."
+      },
+      {
+        "start_mmss": "00:15",
+        "end_mmss": "00:30",
+        "caption": "Three people stand around a table where a large brown dachshund is positioned."
+      },
+      {
+        "start_mmss": "00:30",
+        "end_mmss": "00:45",
+        "caption": "A hand pets the head of the dachshund as it sits on the table."
+      },
+      {
+        "start_mmss": "00:45",
+        "end_mmss": "01:05",
+        "caption": "The dachshund sits still on the table while the people behind it talk."
+      },
+      {
+        "start_mmss": "01:05",
+        "end_mmss": "01:25",
+        "caption": "A woman rests her hand on the table near the dachshund's front legs."
+      },
+      {
+        "start_mmss": "01:25",
+        "end_mmss": "01:45",
+        "caption": "The dachshund walks slowly across a light-colored floor indoors."
+      },
+      {
+        "start_mmss": "01:45",
+        "end_mmss": "02:00",
+        "caption": "The dachshund lowers its head to eat from a grey bowl on the floor."
+      },
+      {
+        "start_mmss": "02:00",
+        "end_mmss": "02:20",
+        "caption": "The dachshund licks its nose and mouth after eating."
+      },
+      {
+        "start_mmss": "02:20",
+        "end_mmss": "02:40",
+        "caption": "The man in the suit gestures with his hand while standing next to the table."
+      },
+      {
+        "start_mmss": "02:40",
+        "end_mmss": "02:55",
+        "caption": "A split-screen image shows an obese dachshund on the left and a thinner one on the right."
+      },
+      {
+        "start_mmss": "02:55",
+        "end_mmss": "03:15",
+        "caption": "A close-up view shows the dachshund's head while a hand pets its back."
+      },
+      {
+        "start_mmss": "03:15",
+        "end_mmss": "03:30",
+        "caption": "The three people stand together and smile at the camera in the studio."
+      }
+    ]
+  },
+  "video_50": {
+    "sample_meta": {
+      "total_frames": 6912,
+      "fps": 30.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:21",
+        "caption": "An orange tabby cat lies on a carpeted floor next to a black metal table leg."
+      },
+      {
+        "start_mmss": "00:21",
+        "end_mmss": "00:42",
+        "caption": "A young boy and girl stand in a hallway and look toward the camera."
+      },
+      {
+        "start_mmss": "00:42",
+        "end_mmss": "01:03",
+        "caption": "A person places a small white dish of food on the wooden floor for the cat."
+      },
+      {
+        "start_mmss": "01:03",
+        "end_mmss": "01:24",
+        "caption": "The orange cat eats food from the small white container on the floor."
+      },
+      {
+        "start_mmss": "01:24",
+        "end_mmss": "01:45",
+        "caption": "The cat eats wet food from a white plate with a floral pattern."
+      },
+      {
+        "start_mmss": "01:45",
+        "end_mmss": "02:06",
+        "caption": "A close-up shows the cat eating large chunks of meat from the floral plate."
+      },
+      {
+        "start_mmss": "02:06",
+        "end_mmss": "02:27",
+        "caption": "The orange cat walks across the wooden floor away from the feeding area."
+      },
+      {
+        "start_mmss": "02:27",
+        "end_mmss": "02:48",
+        "caption": "The cat sits on the carpet and grooms its fur near a wooden table leg."
+      },
+      {
+        "start_mmss": "02:48",
+        "end_mmss": "03:08",
+        "caption": "The cat remains seated on the carpet while looking around the room."
+      },
+      {
+        "start_mmss": "03:08",
+        "end_mmss": "03:29",
+        "caption": "The orange cat rests inside a tan upholstered chair."
+      },
+      {
+        "start_mmss": "03:29",
+        "end_mmss": "03:50",
+        "caption": "The floral plate with food remnants sits on the floor next to a dry food bowl."
+      },
+      {
+        "start_mmss": "03:50",
+        "end_mmss": "04:11",
+        "caption": "The orange cat sits on the wooden floor beside a white doorframe."
+      }
+    ]
+  },
+  "video_45": {
+    "sample_meta": {
+      "total_frames": 2500,
+      "fps": 23.976023976023978,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 12
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:09",
+        "caption": "A person performs a wheelie on a bicycle while riding down a city street."
+      },
+      {
+        "start_mmss": "00:09",
+        "end_mmss": "00:19",
+        "caption": "A man in a workshop explains something to a woman while holding a set of white bicycle handlebars."
+      },
+      {
+        "start_mmss": "00:19",
+        "end_mmss": "00:28",
+        "caption": "Two men stand in a large warehouse, one wearing a black t-shirt and the other a camouflage shirt with a bicycle."
+      },
+      {
+        "start_mmss": "00:28",
+        "end_mmss": "00:38",
+        "caption": "The man in the black t-shirt gestures toward the other man as a name tag appears on the screen."
+      },
+      {
+        "start_mmss": "00:38",
+        "end_mmss": "00:47",
+        "caption": "A man wearing a black cap and t-shirt speaks directly into the camera in a dimly lit hallway."
+      },
+      {
+        "start_mmss": "00:47",
+        "end_mmss": "00:57",
+        "caption": "A close-up shot shows a hand gripping a dark metal beam."
+      },
+      {
+        "start_mmss": "00:57",
+        "end_mmss": "01:06",
+        "caption": "A rider on a bicycle with red handlebars lifts the front wheel off the ground while pedaling."
+      },
+      {
+        "start_mmss": "01:06",
+        "end_mmss": "01:16",
+        "caption": "A person on a bicycle rides across a large, empty concrete floor toward a single orange cone."
+      },
+      {
+        "start_mmss": "01:16",
+        "end_mmss": "01:25",
+        "caption": "The cyclist performs a trick by spinning the bicycle frame while keeping their feet on the pedals."
+      },
+      {
+        "start_mmss": "01:25",
+        "end_mmss": "01:35",
+        "caption": "A woman with a headband speaks in front of a wall decorated with pink and green graffiti."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:44",
+        "caption": "A white screen displays the Pure Fix TV logo along with social media handles and a website URL."
+      },
+      {
+        "start_mmss": "01:44",
+        "end_mmss": "01:53",
+        "caption": "The video ends with a solid black screen."
+      }
+    ]
+  }
+}
