@@ -1,0 +1,594 @@
+import logging
+
+import numpy as np
+import torch
+from torch.nn import functional as F
+
+from anchor_free.dsnet_af_mil_cond import DSNetAFMILCond
+from evaluate_mil_cond import evaluate_mil_cond
+from helpers import data_helper, mil_data_helper_cond
+
+logger = logging.getLogger(__name__)
+
+
+def train(args, split, save_path):
+    logger.info(
+        'lambda_pair=%s, pair_margin=%s, lambda_align=%s, lambda_aux=%s',
+        args.lambda_pair,
+        args.pair_margin,
+        args.lambda_align,
+        args.lambda_aux,
+    )
+
+    train_keys = split['train_keys']
+    val_keys = split['test_keys']
+
+    train_dataset_name = infer_single_dataset_name(train_keys)
+    val_dataset_name = infer_single_dataset_name(val_keys)
+
+    if train_dataset_name != val_dataset_name:
+        raise ValueError(
+            f'Mixed dataset split is not allowed: train={train_dataset_name}, val={val_dataset_name}'
+        )
+
+    train_set = mil_data_helper_cond.VideoDatasetMILCond(
+        train_keys,
+        text_cond_num=args.text_cond_num,
+        random_text_sampling=True,
+    )
+    val_set = mil_data_helper_cond.VideoDatasetMILCond(
+        val_keys,
+        text_cond_num=args.text_cond_num,
+        random_text_sampling=False,
+    )
+
+    num_classes = infer_num_classes(train_set)
+    model = DSNetAFMILCond(
+        base_model=args.base_model,
+        num_feature=args.num_feature,
+        num_hidden=args.num_hidden,
+        num_head=args.num_head,
+        num_classes=num_classes,
+    ).to(args.device)
+
+    optimizer = torch.optim.Adam(
+        [p for p in model.parameters() if p.requires_grad],
+        lr=args.lr,
+        weight_decay=args.weight_decay,
+    )
+
+    train_loader = data_helper.DataLoader(train_set, shuffle=True)
+    val_loader = data_helper.DataLoader(val_set, shuffle=False)
+
+    save_path = str(save_path)
+    if save_path.endswith('.pth'):
+        spearman_save_path = save_path[:-4] + '_max_spearman.pth'
+    else:
+        spearman_save_path = save_path + '_max_spearman.pth'
+
+    best_val_fscore = -1.0
+    spearman_at_best_fscore = 0.0
+
+    max_val_spearman = -1.0
+    fscore_at_max_spearman = 0.0
+
+    for epoch in range(args.max_epoch):
+        model.train()
+        stats = data_helper.AverageMeter(
+            'loss',
+            'pair_loss',
+            'weighted_pair_loss',
+            'align_loss',
+            'weighted_align_loss',
+            'bag_loss',
+            'weighted_bag_loss',
+            'num_aux_active',
+            'num_aux_skipped',
+        )
+
+        for (
+            key,
+            seq,
+            soft_label,
+            text_cond,
+            text_target,
+            all_text_features,
+            caption_spans_idx,
+            caption_valid_mask,
+            gtscore,
+            user_summary,
+            cps,
+            n_frames,
+            nfps,
+            picks,
+        ) in train_loader:
+            seq_tensor = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).to(args.device)
+            text_cond_tensor = torch.tensor(text_cond, dtype=torch.float32).to(args.device)
+            text_target_tensor = torch.tensor(text_target, dtype=torch.float32).to(args.device)
+            all_text_features_tensor = torch.tensor(
+                all_text_features, dtype=torch.float32, device=args.device
+            )
+            caption_spans_idx_tensor = torch.tensor(
+                caption_spans_idx, dtype=torch.long, device=args.device
+            )
+            caption_valid_mask_tensor = torch.tensor(
+                caption_valid_mask, dtype=torch.float32, device=args.device
+            )
+            soft_label_tensor = torch.tensor(soft_label, dtype=torch.float32).to(args.device)
+
+            cps_tensor = torch.tensor(cps, dtype=torch.long, device=args.device)
+            picks_tensor = torch.tensor(picks, dtype=torch.long, device=args.device)
+            n_frames_int = int(np.asarray(n_frames).item())
+
+            assert_finite_tensor('seq_tensor', seq_tensor, key)
+            assert_finite_tensor('text_cond_tensor', text_cond_tensor, key)
+            assert_finite_tensor('text_target_tensor', text_target_tensor, key)
+            assert_finite_tensor('all_text_features_tensor', all_text_features_tensor, key)
+
+            normalized_target, is_effective = normalize_soft_label(soft_label_tensor)
+
+            (
+                instance_logits,
+                attn_logits,
+                attn_weights,
+                bag_logits,
+                summary_feat,
+                _,
+            ) = model(seq_tensor, text_cond_tensor)
+
+            overlaps, shot_lengths = build_sampled_to_shot_overlap(
+                picks=picks_tensor,
+                cps=cps_tensor,
+                n_frames=n_frames_int,
+            )
+
+            pred_shot_scores = aggregate_attn_to_shot_scores(
+                attn_weights=attn_weights,
+                overlaps=overlaps,
+                shot_lengths=shot_lengths,
+            )
+
+            shot_text_feat, shot_mass_density, valid_shots = build_shot_text_stats(
+                caption_spans_idx=caption_spans_idx_tensor,
+                caption_valid_mask=caption_valid_mask_tensor,
+                all_text_features=all_text_features_tensor,
+                overlaps=overlaps,
+                shot_lengths=shot_lengths,
+            )
+
+            shot_change, change_valid_mask = compute_shot_semantic_change(
+                shot_text_feat=shot_text_feat,
+                valid_shots=valid_shots,
+            )
+
+            pos_idx, neg_idx = mine_sparse_shot_pairs(
+                shot_change=shot_change,
+                shot_mass_density=shot_mass_density,
+                change_valid_mask=change_valid_mask,
+                top_ratio=0.2,
+            )
+
+            pair_loss = compute_sparse_pair_rank_loss(
+                pred_shot_scores=pred_shot_scores,
+                pos_idx=pos_idx,
+                neg_idx=neg_idx,
+                margin=args.pair_margin,
+            )
+
+            align_loss = compute_align_loss(summary_feat, text_target_tensor)
+
+            weighted_pair_loss = args.lambda_pair * pair_loss
+            weighted_align_loss = args.lambda_align * align_loss
+
+            assert_finite_tensor('attn_weights', attn_weights, key)
+            assert_finite_tensor('bag_logits', bag_logits, key)
+            assert_finite_tensor('summary_feat', summary_feat, key)
+            assert_finite_tensor('pred_shot_scores', pred_shot_scores, key)
+            assert_finite_tensor('shot_change', shot_change, key)
+            assert_finite_tensor('pair_loss', pair_loss.unsqueeze(0), key)
+            assert_finite_tensor('weighted_pair_loss', weighted_pair_loss.unsqueeze(0), key)
+            assert_finite_tensor('align_loss', align_loss.unsqueeze(0), key)
+            assert_finite_tensor('weighted_align_loss', weighted_align_loss.unsqueeze(0), key)
+
+            if is_effective:
+                bag_scores = torch.sigmoid(bag_logits)
+                bag_loss = F.smooth_l1_loss(bag_scores, normalized_target)
+                weighted_bag_loss = args.lambda_aux * bag_loss
+
+                assert_finite_tensor('normalized_target', normalized_target, key)
+                assert_finite_tensor('bag_scores', bag_scores, key)
+                assert_finite_tensor('bag_loss', bag_loss.unsqueeze(0), key)
+                assert_finite_tensor('weighted_bag_loss', weighted_bag_loss.unsqueeze(0), key)
+
+                num_aux_active = 1.0
+                num_aux_skipped = 0.0
+            else:
+                bag_loss = seq_tensor.new_zeros(())
+                weighted_bag_loss = seq_tensor.new_zeros(())
+                num_aux_active = 0.0
+                num_aux_skipped = 1.0
+
+            loss = (
+                weighted_align_loss
+                + weighted_bag_loss
+                + weighted_pair_loss
+            )
+
+            optimizer.zero_grad()
+            assert_finite_tensor('loss', loss.unsqueeze(0), key)
+            loss.backward()
+            optimizer.step()
+
+            stats.update(
+                loss=float(loss.item()),
+                pair_loss=float(pair_loss.item()),
+                weighted_pair_loss=float(weighted_pair_loss.item()),
+                align_loss=float(align_loss.item()),
+                weighted_align_loss=float(weighted_align_loss.item()),
+                bag_loss=float(bag_loss.item()),
+                weighted_bag_loss=float(weighted_bag_loss.item()),
+                num_aux_active=num_aux_active,
+                num_aux_skipped=num_aux_skipped,
+            )
+
+        val_fscore, val_spearman = evaluate_mil_cond(
+            model=model,
+            val_loader=val_loader,
+            device=args.device,
+        )
+
+        if val_spearman > max_val_spearman:
+            max_val_spearman = val_spearman
+            fscore_at_max_spearman = val_fscore
+            torch.save(model.state_dict(), spearman_save_path)
+
+        if val_fscore > best_val_fscore:
+            best_val_fscore = val_fscore
+            spearman_at_best_fscore = val_spearman
+            torch.save(model.state_dict(), save_path)
+
+        logger.info(
+            f'Epoch: {epoch}/{args.max_epoch} '
+            f'Loss: {stats.loss:.4f} '
+            f'PairLoss: {stats.pair_loss:.4f} '
+            f'WeightedPairLoss: {stats.weighted_pair_loss:.4f} '
+            f'AlignLoss: {stats.align_loss:.4f} '
+            f'WeightedAlignLoss: {stats.weighted_align_loss:.4f} '
+            f'BagLoss: {stats.bag_loss:.4f} '
+            f'WeightedBagLoss: {stats.weighted_bag_loss:.4f} '
+            f'AuxActive: {stats.num_aux_active:.4f} '
+            f'AuxSkipped: {stats.num_aux_skipped:.4f} '
+            f'Val F-score cur/best: {val_fscore:.4f}/{best_val_fscore:.4f} '
+            f'Val Spearman cur/max: {val_spearman:.4f}/{max_val_spearman:.4f} '
+            f'Spearman@BestF: {spearman_at_best_fscore:.4f} '
+            f'Fscore@MaxS: {fscore_at_max_spearman:.4f}'
+        )
+
+    return (
+        best_val_fscore,
+        spearman_at_best_fscore,
+        max_val_spearman,
+        fscore_at_max_spearman,
+    )
+
+
+def infer_single_dataset_name(keys):
+    names = {infer_dataset_name_from_key(key) for key in keys}
+    if len(names) != 1:
+        raise ValueError(f'Expected a single dataset in one run, got: {sorted(names)}')
+    return next(iter(names))
+
+
+def infer_dataset_name_from_key(key: str) -> str:
+    key_lower = str(key).lower()
+    if 'tvsum' in key_lower:
+        return 'tvsum'
+    if 'summe' in key_lower:
+        return 'summe'
+    raise ValueError(f'Cannot infer dataset name from key: {key}')
+
+
+def infer_num_classes(dataset) -> int:
+    if len(dataset) == 0:
+        raise ValueError('Cannot infer num_classes from empty dataset.')
+    sample = dataset[0]
+    soft_label = np.asarray(sample[2], dtype=np.float32)
+    if soft_label.ndim != 1:
+        raise ValueError(f'Invalid soft_label shape: {soft_label.shape}')
+    return int(soft_label.shape[0])
+
+
+def normalize_soft_label(soft_label: torch.Tensor, eps: float = 1e-8):
+    label_min = torch.min(soft_label)
+    label_max = torch.max(soft_label)
+    label_range = label_max - label_min
+
+    if float(label_range.item()) < eps:
+        normalized = torch.zeros_like(soft_label)
+        return normalized, False
+
+    normalized = (soft_label - label_min) / (label_range + eps)
+    return normalized, True
+
+
+def assert_finite_tensor(name: str, x: torch.Tensor, key: str) -> None:
+    if not torch.isfinite(x).all():
+        num_nan = int(torch.isnan(x).sum().item())
+        num_inf = int(torch.isinf(x).sum().item())
+        raise ValueError(
+            f'Non-finite tensor detected: {name} | sample={key} | '
+            f'nan={num_nan} | inf={num_inf} | shape={tuple(x.shape)}'
+        )
+
+
+def compute_align_loss(summary_feat: torch.Tensor,
+                       text_target: torch.Tensor) -> torch.Tensor:
+    if summary_feat.ndim != 1:
+        raise ValueError(f'Expected summary_feat shape [D], got {tuple(summary_feat.shape)}')
+    if text_target.ndim != 1:
+        raise ValueError(f'Expected text_target shape [D], got {tuple(text_target.shape)}')
+    if summary_feat.shape[0] != text_target.shape[0]:
+        raise ValueError(
+            f'Feature dim mismatch in compute_align_loss: '
+            f'{summary_feat.shape[0]} vs {text_target.shape[0]}'
+        )
+
+    cosine = F.cosine_similarity(
+        summary_feat.unsqueeze(0),
+        text_target.unsqueeze(0),
+        dim=-1,
+    ).squeeze(0)
+
+    return 1.0 - cosine
+
+
+def build_sampled_to_shot_overlap(picks: torch.Tensor,
+                                  cps: torch.Tensor,
+                                  n_frames: int):
+    if picks.ndim != 1:
+        raise ValueError(f'Expected picks shape [T], got {tuple(picks.shape)}')
+    if cps.ndim != 2 or cps.shape[1] != 2:
+        raise ValueError(f'Expected cps shape [S, 2], got {tuple(cps.shape)}')
+    if n_frames <= 0:
+        raise ValueError(f'Invalid n_frames: {n_frames}')
+
+    picks = picks.to(torch.long)
+    cps = cps.to(torch.long)
+
+    lo = picks
+    hi = torch.empty_like(lo)
+    hi[:-1] = picks[1:]
+    hi[-1] = int(n_frames)
+
+    overlaps = []
+    for s in range(cps.shape[0]):
+        first = int(cps[s, 0].item())
+        last_exclusive = int(cps[s, 1].item()) + 1
+
+        first_t = lo.new_tensor(first)
+        last_t = lo.new_tensor(last_exclusive)
+
+        inter = torch.minimum(hi, last_t) - torch.maximum(lo, first_t)
+        inter = torch.clamp(inter, min=0).to(torch.float32)
+        overlaps.append(inter)
+
+    overlaps = torch.stack(overlaps, dim=0)  # [S, T]
+    shot_lengths = overlaps.sum(dim=1)       # [S]
+
+    if not torch.all(shot_lengths > 0):
+        raise ValueError('Detected non-positive shot length in build_sampled_to_shot_overlap.')
+
+    return overlaps, shot_lengths
+
+
+def aggregate_attn_to_shot_scores(attn_weights: torch.Tensor,
+                                  overlaps: torch.Tensor,
+                                  shot_lengths: torch.Tensor,
+                                  eps: float = 1e-8) -> torch.Tensor:
+    if attn_weights.ndim != 1:
+        raise ValueError(f'Expected attn_weights shape [T], got {tuple(attn_weights.shape)}')
+    if overlaps.ndim != 2:
+        raise ValueError(f'Expected overlaps shape [S, T], got {tuple(overlaps.shape)}')
+    if shot_lengths.ndim != 1:
+        raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
+    if overlaps.shape[1] != attn_weights.shape[0]:
+        raise ValueError(
+            f'Time-step mismatch in aggregate_attn_to_shot_scores: '
+            f'overlaps={tuple(overlaps.shape)} vs attn_weights={tuple(attn_weights.shape)}'
+        )
+    if overlaps.shape[0] != shot_lengths.shape[0]:
+        raise ValueError(
+            f'Shot count mismatch in aggregate_attn_to_shot_scores: '
+            f'overlaps={tuple(overlaps.shape)} vs shot_lengths={tuple(shot_lengths.shape)}'
+        )
+
+    shot_scores = torch.matmul(overlaps, attn_weights) / shot_lengths.clamp_min(1.0)
+    shot_scores = shot_scores.clamp_min(0.0)
+
+    total = shot_scores.sum()
+    if float(total.item()) <= eps:
+        raise ValueError('Predicted shot scores have non-positive sum.')
+
+    return shot_scores / total
+
+
+def build_shot_text_stats(caption_spans_idx: torch.Tensor,
+                          caption_valid_mask: torch.Tensor,
+                          all_text_features: torch.Tensor,
+                          overlaps: torch.Tensor,
+                          shot_lengths: torch.Tensor,
+                          eps: float = 1e-8):
+    if caption_spans_idx.ndim != 2 or caption_spans_idx.shape[1] != 2:
+        raise ValueError(
+            f'Expected caption_spans_idx shape [K, 2], got {tuple(caption_spans_idx.shape)}'
+        )
+    if caption_valid_mask.ndim != 1:
+        raise ValueError(
+            f'Expected caption_valid_mask shape [K], got {tuple(caption_valid_mask.shape)}'
+        )
+    if all_text_features.ndim != 2:
+        raise ValueError(
+            f'Expected all_text_features shape [K, D], got {tuple(all_text_features.shape)}'
+        )
+    if overlaps.ndim != 2:
+        raise ValueError(f'Expected overlaps shape [S, T], got {tuple(overlaps.shape)}')
+    if shot_lengths.ndim != 1:
+        raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
+    if caption_spans_idx.shape[0] != caption_valid_mask.shape[0]:
+        raise ValueError('Caption count mismatch in build_shot_text_stats.')
+    if caption_spans_idx.shape[0] != all_text_features.shape[0]:
+        raise ValueError('Caption/text count mismatch in build_shot_text_stats.')
+
+    num_shots, num_steps = overlaps.shape
+    feat_dim = all_text_features.shape[1]
+
+    shot_text_sum = overlaps.new_zeros((num_shots, feat_dim))
+    shot_text_mass = overlaps.new_zeros(num_shots)
+
+    for k in range(caption_spans_idx.shape[0]):
+        if float(caption_valid_mask[k].item()) <= 0.5:
+            continue
+
+        start_idx = int(caption_spans_idx[k, 0].item())
+        end_idx = int(caption_spans_idx[k, 1].item())
+
+        start_idx = max(0, min(start_idx, num_steps - 1))
+        end_idx = max(start_idx, min(end_idx, num_steps - 1))
+
+        shot_overlap = overlaps[:, start_idx:end_idx + 1].sum(dim=1)
+        overlap_sum = shot_overlap.sum()
+        if float(overlap_sum.item()) <= eps:
+            continue
+
+        weights = shot_overlap / overlap_sum
+        shot_text_sum = shot_text_sum + weights.unsqueeze(1) * all_text_features[k].unsqueeze(0)
+        shot_text_mass = shot_text_mass + weights
+
+    valid_shots = shot_text_mass > eps
+    shot_text_feat = overlaps.new_zeros((num_shots, feat_dim))
+
+    if valid_shots.any():
+        shot_text_avg = shot_text_sum[valid_shots] / shot_text_mass[valid_shots].unsqueeze(1).clamp_min(eps)
+        shot_text_feat[valid_shots] = F.normalize(shot_text_avg, p=2, dim=1)
+
+    shot_mass_density = shot_text_mass / shot_lengths.clamp_min(1.0)
+    return shot_text_feat, shot_mass_density, valid_shots
+
+
+def compute_shot_semantic_change(shot_text_feat: torch.Tensor,
+                                 valid_shots: torch.Tensor):
+    if shot_text_feat.ndim != 2:
+        raise ValueError(f'Expected shot_text_feat shape [S, D], got {tuple(shot_text_feat.shape)}')
+    if valid_shots.ndim != 1:
+        raise ValueError(f'Expected valid_shots shape [S], got {tuple(valid_shots.shape)}')
+    if shot_text_feat.shape[0] != valid_shots.shape[0]:
+        raise ValueError('Shot count mismatch in compute_shot_semantic_change.')
+
+    num_shots = shot_text_feat.shape[0]
+    shot_change = shot_text_feat.new_zeros(num_shots)
+    change_valid_mask = torch.zeros_like(valid_shots, dtype=torch.bool)
+
+    for s in range(num_shots):
+        if not bool(valid_shots[s].item()):
+            continue
+
+        diffs = []
+
+        if s - 1 >= 0 and bool(valid_shots[s - 1].item()):
+            cos_prev = torch.sum(shot_text_feat[s] * shot_text_feat[s - 1])
+            diffs.append(1.0 - cos_prev)
+
+        if s + 1 < num_shots and bool(valid_shots[s + 1].item()):
+            cos_next = torch.sum(shot_text_feat[s] * shot_text_feat[s + 1])
+            diffs.append(1.0 - cos_next)
+
+        if diffs:
+            shot_change[s] = torch.stack(diffs).mean()
+            change_valid_mask[s] = True
+
+    return shot_change, change_valid_mask
+
+
+def remove_indices(candidates: torch.Tensor,
+                   exclude: torch.Tensor) -> torch.Tensor:
+    if candidates.ndim != 1:
+        raise ValueError(f'Expected candidates shape [N], got {tuple(candidates.shape)}')
+    if exclude.ndim != 1:
+        raise ValueError(f'Expected exclude shape [M], got {tuple(exclude.shape)}')
+
+    if exclude.numel() == 0:
+        return candidates
+
+    keep = torch.ones(candidates.shape[0], dtype=torch.bool, device=candidates.device)
+    for idx in exclude:
+        keep = keep & (candidates != idx)
+
+    return candidates[keep]
+
+
+def mine_sparse_shot_pairs(shot_change: torch.Tensor,
+                           shot_mass_density: torch.Tensor,
+                           change_valid_mask: torch.Tensor,
+                           top_ratio: float = 0.2):
+    if shot_change.ndim != 1:
+        raise ValueError(f'Expected shot_change shape [S], got {tuple(shot_change.shape)}')
+    if shot_mass_density.ndim != 1:
+        raise ValueError(f'Expected shot_mass_density shape [S], got {tuple(shot_mass_density.shape)}')
+    if change_valid_mask.ndim != 1:
+        raise ValueError(f'Expected change_valid_mask shape [S], got {tuple(change_valid_mask.shape)}')
+    if shot_change.shape[0] != shot_mass_density.shape[0] or shot_change.shape[0] != change_valid_mask.shape[0]:
+        raise ValueError('Shot count mismatch in mine_sparse_shot_pairs.')
+
+    candidate_mask = change_valid_mask & (shot_mass_density > 0)
+    candidate_idx = torch.where(candidate_mask)[0]
+
+    if candidate_idx.numel() < 2:
+        empty = torch.empty(0, dtype=torch.long, device=shot_change.device)
+        return empty, empty
+
+    k = max(1, int(round(candidate_idx.numel() * top_ratio)))
+    k = min(k, candidate_idx.numel())
+
+    candidate_change = shot_change[candidate_idx]
+    pos_local = torch.topk(candidate_change, k=k, largest=True).indices
+    pos_idx = candidate_idx[pos_local]
+
+    mass_thr = torch.median(shot_mass_density[candidate_idx])
+    neg_candidate = candidate_idx[shot_mass_density[candidate_idx] >= mass_thr]
+    neg_candidate = remove_indices(neg_candidate, pos_idx)
+
+    if neg_candidate.numel() == 0:
+        neg_candidate = remove_indices(candidate_idx, pos_idx)
+
+    if neg_candidate.numel() == 0:
+        empty = torch.empty(0, dtype=torch.long, device=shot_change.device)
+        return empty, empty
+
+    neg_k = max(1, min(k, neg_candidate.numel()))
+    neg_change = shot_change[neg_candidate]
+    neg_local = torch.topk(neg_change, k=neg_k, largest=False).indices
+    neg_idx = neg_candidate[neg_local]
+
+    return pos_idx, neg_idx
+
+
+def compute_sparse_pair_rank_loss(pred_shot_scores: torch.Tensor,
+                                  pos_idx: torch.Tensor,
+                                  neg_idx: torch.Tensor,
+                                  margin: float) -> torch.Tensor:
+    if pred_shot_scores.ndim != 1:
+        raise ValueError(
+            f'Expected pred_shot_scores shape [S], got {tuple(pred_shot_scores.shape)}'
+        )
+    if pos_idx.ndim != 1:
+        raise ValueError(f'Expected pos_idx shape [P], got {tuple(pos_idx.shape)}')
+    if neg_idx.ndim != 1:
+        raise ValueError(f'Expected neg_idx shape [N], got {tuple(neg_idx.shape)}')
+
+    if pos_idx.numel() == 0 or neg_idx.numel() == 0:
+        return pred_shot_scores.new_zeros(())
+
+    pos_scores = pred_shot_scores[pos_idx].unsqueeze(1)
+    neg_scores = pred_shot_scores[neg_idx].unsqueeze(0)
+
+    return F.relu(margin - pos_scores + neg_scores).mean()

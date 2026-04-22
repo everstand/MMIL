@@ -9,6 +9,7 @@ PSEUDO_LABELS_DIR = PROJECT_ROOT / 'pseudo_labels'
 META_DIR = PROJECT_ROOT / 'meta'
 FEATURES_DIR = PROJECT_ROOT / 'features'
 CAPTIONS_DIR = PROJECT_ROOT / 'captions'
+CAPTIONS_RAW_DIR = PROJECT_ROOT / 'captions_raw'
 
 
 def normalize_dataset_name(dataset_name: str) -> str:
@@ -59,14 +60,31 @@ def ensure_dataset_layout(dataset_name: str) -> None:
     PROMPTS_DIR.mkdir(parents=True, exist_ok=True)
     FEATURES_DIR.mkdir(parents=True, exist_ok=True)
     CAPTIONS_DIR.mkdir(parents=True, exist_ok=True)
+    CAPTIONS_RAW_DIR.mkdir(parents=True, exist_ok=True)
 
-# 改进1
-def get_openclip_feature_store_path(dataset_name: str) -> Path:
+
+def resolve_new_mainline_dataset_name(dataset_name: str) -> str:
     dataset_name = normalize_dataset_name(dataset_name)
+    if dataset_name == 'summe':
+        return 'summe24'
+    return dataset_name
+
+
+def get_openclip_feature_store_path(dataset_name: str) -> Path:
+    dataset_name = resolve_new_mainline_dataset_name(dataset_name)
     return FEATURES_DIR / f'openclip_{dataset_name}.h5'
 
 
 def get_dense_caption_json_path(dataset_name: str) -> Path:
-    dataset_name = normalize_dataset_name(dataset_name)
+    dataset_name = resolve_new_mainline_dataset_name(dataset_name)
     return CAPTIONS_DIR / f'{dataset_name}_dense_captions.json'
-# end
+
+def get_structured_caption_json_path(dataset_name: str) -> Path:
+    dataset_name = resolve_new_mainline_dataset_name(dataset_name)
+    return CAPTIONS_RAW_DIR / f'{dataset_name}_dense_captions_structured.json'
+
+
+
+def get_text_feature_store_path(dataset_name: str) -> Path:
+    dataset_name = resolve_new_mainline_dataset_name(dataset_name)
+    return FEATURES_DIR / f'text_{dataset_name}.h5'
