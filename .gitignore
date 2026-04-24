@@ -12,8 +12,7 @@ __pycache__/
 .coverage
 
 # project
-/captions/
-/captions_raw/
-/custom_data/ 
+/custom_data/videos/
 /datasets/ 
 /models/  
+
