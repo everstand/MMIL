@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -7,21 +8,36 @@ from torch.nn import functional as F
 from anchor_free.dsnet_af_mil_cond import DSNetAFMILCond
 from evaluate_mil_cond import evaluate_mil_cond
 from helpers import data_helper, mil_data_helper_cond
+from helpers.shot_utility_helper import (
+    ShotUtilityStore,
+    resolve_shot_utility_path,
+)
 
 logger = logging.getLogger(__name__)
 
 
 def train(args, split, save_path):
     logger.debug(
-        'Loss weights | lambda_pair=%s | pair_margin=%s | lambda_align=%s | lambda_aux=%s',
+        'Loss weights | rank_loss=%s | lambda_pair=%s | pair_margin=%s | '
+        'lambda_listwise=%s | listwise_temperature=%s | utility_formula=%s | '
+        'lambda_align=%s | lambda_aux=%s',
+        args.rank_loss,
         args.lambda_pair,
         args.pair_margin,
+        args.lambda_listwise,
+        args.listwise_temperature,
+        args.utility_formula,
         args.lambda_align,
         args.lambda_aux,
     )
 
     if 'val_keys' not in split:
-        raise ValueError('train_mil_cond requires split["val_keys"]. Do not use test_keys for checkpoint selection.')
+        raise ValueError(
+            'train_mil_cond requires split["val_keys"]. '
+            'Do not use test_keys for checkpoint selection.'
+        )
+
+    validate_rank_loss_args(args)
 
     train_keys = split['train_keys']
     val_keys = split['val_keys']
@@ -35,6 +51,23 @@ def train(args, split, save_path):
         raise ValueError(
             f'Mixed dataset split is not allowed: '
             f'train={train_dataset_name}, val={val_dataset_name}, test={test_dataset_name}'
+        )
+
+    dataset_name = train_dataset_name
+
+    shot_utility_store = None
+    if args.rank_loss == 'listwise_utility':
+        utility_path = resolve_shot_utility_path(
+            dataset_name=dataset_name,
+            explicit_path=args.shot_utility_path,
+        )
+        shot_utility_store = ShotUtilityStore(utility_path)
+        logger.info(
+            'Using listwise utility rank loss | path=%s | formula=%s | lambda=%.4f | tau=%.4f',
+            utility_path,
+            args.utility_formula,
+            args.lambda_listwise,
+            args.listwise_temperature,
         )
 
     train_set = mil_data_helper_cond.VideoDatasetMILCond(
@@ -96,8 +129,12 @@ def train(args, split, save_path):
         model.train()
         stats = data_helper.AverageMeter(
             'loss',
+            'rank_loss',
+            'weighted_rank_loss',
             'pair_loss',
             'weighted_pair_loss',
+            'listwise_loss',
+            'weighted_listwise_loss',
             'align_loss',
             'weighted_align_loss',
             'bag_loss',
@@ -168,45 +205,88 @@ def train(args, split, save_path):
                 shot_lengths=shot_lengths,
             )
 
-            shot_text_feat, shot_mass_density, valid_shots = build_shot_text_stats(
-                caption_spans_idx=caption_spans_idx_tensor,
-                caption_valid_mask=caption_valid_mask_tensor,
-                all_text_features=all_text_features_tensor,
-                overlaps=overlaps,
-                shot_lengths=shot_lengths,
-            )
+            pair_loss = seq_tensor.new_zeros(())
+            weighted_pair_loss = seq_tensor.new_zeros(())
+            listwise_loss = seq_tensor.new_zeros(())
+            weighted_listwise_loss = seq_tensor.new_zeros(())
 
-            shot_change, change_valid_mask = compute_shot_semantic_change(
-                shot_text_feat=shot_text_feat,
-                valid_shots=valid_shots,
-            )
+            if args.rank_loss == 'sparse_pair':
+                shot_text_feat, shot_mass_density, valid_shots = build_shot_text_stats(
+                    caption_spans_idx=caption_spans_idx_tensor,
+                    caption_valid_mask=caption_valid_mask_tensor,
+                    all_text_features=all_text_features_tensor,
+                    overlaps=overlaps,
+                    shot_lengths=shot_lengths,
+                )
 
-            pos_idx, neg_idx = mine_sparse_shot_pairs(
-                shot_change=shot_change,
-                shot_mass_density=shot_mass_density,
-                change_valid_mask=change_valid_mask,
-                top_ratio=0.2,
-            )
+                shot_change, change_valid_mask = compute_shot_semantic_change(
+                    shot_text_feat=shot_text_feat,
+                    valid_shots=valid_shots,
+                )
 
-            pair_loss = compute_sparse_pair_rank_loss(
-                pred_shot_scores=pred_shot_scores,
-                pos_idx=pos_idx,
-                neg_idx=neg_idx,
-                margin=args.pair_margin,
-            )
+                pos_idx, neg_idx = mine_sparse_shot_pairs(
+                    shot_change=shot_change,
+                    shot_mass_density=shot_mass_density,
+                    change_valid_mask=change_valid_mask,
+                    top_ratio=0.2,
+                )
+
+                pair_loss = compute_sparse_pair_rank_loss(
+                    pred_shot_scores=pred_shot_scores,
+                    pos_idx=pos_idx,
+                    neg_idx=neg_idx,
+                    margin=args.pair_margin,
+                )
+                weighted_pair_loss = args.lambda_pair * pair_loss
+
+                assert_finite_tensor('shot_change', shot_change, key)
+                assert_finite_tensor('pair_loss', pair_loss.unsqueeze(0), key)
+                assert_finite_tensor('weighted_pair_loss', weighted_pair_loss.unsqueeze(0), key)
+
+            elif args.rank_loss == 'listwise_utility':
+                if shot_utility_store is None:
+                    raise RuntimeError('shot_utility_store is required for listwise_utility rank loss.')
+
+                h5_key = Path(str(key)).name
+                teacher_utility_np = shot_utility_store.get(
+                    h5_key=h5_key,
+                    formula_name=args.utility_formula,
+                )
+                teacher_utility = torch.tensor(
+                    teacher_utility_np,
+                    dtype=torch.float32,
+                    device=args.device,
+                )
+
+                if teacher_utility.shape[0] != pred_shot_scores.shape[0]:
+                    raise ValueError(
+                        f'Shot utility length mismatch for sample {key}: '
+                        f'utility={teacher_utility.shape[0]} vs pred_shot_scores={pred_shot_scores.shape[0]}'
+                    )
+
+                listwise_loss = compute_listwise_utility_loss(
+                    pred_shot_scores=pred_shot_scores,
+                    teacher_utility=teacher_utility,
+                    temperature=args.listwise_temperature,
+                )
+                weighted_listwise_loss = args.lambda_listwise * listwise_loss
+
+                assert_finite_tensor('teacher_utility', teacher_utility, key)
+                assert_finite_tensor('listwise_loss', listwise_loss.unsqueeze(0), key)
+                assert_finite_tensor('weighted_listwise_loss', weighted_listwise_loss.unsqueeze(0), key)
+
+            elif args.rank_loss == 'none':
+                pass
+            else:
+                raise ValueError(f'Unknown rank_loss: {args.rank_loss}')
 
             align_loss = compute_align_loss(summary_feat, text_target_tensor)
-
-            weighted_pair_loss = args.lambda_pair * pair_loss
             weighted_align_loss = args.lambda_align * align_loss
 
             assert_finite_tensor('attn_weights', attn_weights, key)
             assert_finite_tensor('bag_logits', bag_logits, key)
             assert_finite_tensor('summary_feat', summary_feat, key)
             assert_finite_tensor('pred_shot_scores', pred_shot_scores, key)
-            assert_finite_tensor('shot_change', shot_change, key)
-            assert_finite_tensor('pair_loss', pair_loss.unsqueeze(0), key)
-            assert_finite_tensor('weighted_pair_loss', weighted_pair_loss.unsqueeze(0), key)
             assert_finite_tensor('align_loss', align_loss.unsqueeze(0), key)
             assert_finite_tensor('weighted_align_loss', weighted_align_loss.unsqueeze(0), key)
 
@@ -228,7 +308,10 @@ def train(args, split, save_path):
                 num_aux_active = 0.0
                 num_aux_skipped = 1.0
 
-            loss = weighted_align_loss + weighted_bag_loss + weighted_pair_loss
+            weighted_rank_loss = weighted_pair_loss + weighted_listwise_loss
+            rank_loss_value = pair_loss + listwise_loss
+
+            loss = weighted_align_loss + weighted_bag_loss + weighted_rank_loss
 
             optimizer.zero_grad()
             assert_finite_tensor('loss', loss.unsqueeze(0), key)
@@ -237,8 +320,12 @@ def train(args, split, save_path):
 
             stats.update(
                 loss=float(loss.item()),
+                rank_loss=float(rank_loss_value.item()),
+                weighted_rank_loss=float(weighted_rank_loss.item()),
                 pair_loss=float(pair_loss.item()),
                 weighted_pair_loss=float(weighted_pair_loss.item()),
+                listwise_loss=float(listwise_loss.item()),
+                weighted_listwise_loss=float(weighted_listwise_loss.item()),
                 align_loss=float(align_loss.item()),
                 weighted_align_loss=float(weighted_align_loss.item()),
                 bag_loss=float(bag_loss.item()),
@@ -275,10 +362,12 @@ def train(args, split, save_path):
             torch.save(model.state_dict(), save_path)
 
         logger.info(
-            'Epoch %03d/%03d | loss=%.4f | val_F1=%.4f | val_Tau=%.4f | val_Rho=%.4f | best_val_F1=%.4f',
+            'Epoch %03d/%03d | loss=%.4f | rank=%.4f | val_F1=%.4f | '
+            'val_Tau=%.4f | val_Rho=%.4f | best_val_F1=%.4f',
             epoch + 1,
             args.max_epoch,
             stats.loss,
+            stats.weighted_rank_loss,
             val_fscore,
             val_kendall,
             val_spearman,
@@ -287,6 +376,7 @@ def train(args, split, save_path):
 
         logger.debug(
             'Epoch %03d/%03d detail | pair_loss=%.4f | weighted_pair_loss=%.4f | '
+            'listwise_loss=%.4f | weighted_listwise_loss=%.4f | '
             'align_loss=%.4f | weighted_align_loss=%.4f | '
             'bag_loss=%.4f | weighted_bag_loss=%.4f | '
             'aux_active=%.4f | aux_skipped=%.4f | '
@@ -296,6 +386,8 @@ def train(args, split, save_path):
             args.max_epoch,
             stats.pair_loss,
             stats.weighted_pair_loss,
+            stats.listwise_loss,
+            stats.weighted_listwise_loss,
             stats.align_loss,
             stats.weighted_align_loss,
             stats.bag_loss,
@@ -336,10 +428,73 @@ def train(args, split, save_path):
     }
 
 
+def validate_rank_loss_args(args) -> None:
+    if args.rank_loss == 'sparse_pair':
+        if args.lambda_pair < 0:
+            raise ValueError(f'Invalid lambda_pair={args.lambda_pair}; expected >= 0.')
+        if args.pair_margin <= 0:
+            raise ValueError(f'Invalid pair_margin={args.pair_margin}; expected > 0.')
+    elif args.rank_loss == 'listwise_utility':
+        if args.lambda_listwise < 0:
+            raise ValueError(f'Invalid lambda_listwise={args.lambda_listwise}; expected >= 0.')
+        if args.listwise_temperature <= 0:
+            raise ValueError(
+                f'Invalid listwise_temperature={args.listwise_temperature}; expected > 0.'
+            )
+    elif args.rank_loss == 'none':
+        pass
+    else:
+        raise ValueError(
+            f'Invalid rank_loss={args.rank_loss}; expected sparse_pair, listwise_utility, or none.'
+        )
+
+
+def compute_listwise_utility_loss(pred_shot_scores: torch.Tensor,
+                                  teacher_utility: torch.Tensor,
+                                  temperature: float,
+                                  eps: float = 1e-8) -> torch.Tensor:
+    if pred_shot_scores.ndim != 1:
+        raise ValueError(
+            f'Expected pred_shot_scores shape [S], got {tuple(pred_shot_scores.shape)}'
+        )
+    if teacher_utility.ndim != 1:
+        raise ValueError(
+            f'Expected teacher_utility shape [S], got {tuple(teacher_utility.shape)}'
+        )
+    if pred_shot_scores.shape[0] != teacher_utility.shape[0]:
+        raise ValueError(
+            f'Shot count mismatch in compute_listwise_utility_loss: '
+            f'pred={tuple(pred_shot_scores.shape)} vs teacher={tuple(teacher_utility.shape)}'
+        )
+    if pred_shot_scores.shape[0] < 2:
+        return pred_shot_scores.new_zeros(())
+    if not torch.isfinite(pred_shot_scores).all():
+        raise ValueError('Non-finite pred_shot_scores in compute_listwise_utility_loss.')
+    if not torch.isfinite(teacher_utility).all():
+        raise ValueError('Non-finite teacher_utility in compute_listwise_utility_loss.')
+    if temperature <= 0:
+        raise ValueError(f'Invalid temperature={temperature}; expected > 0.')
+
+    teacher_range = torch.max(teacher_utility) - torch.min(teacher_utility)
+    if float(teacher_range.item()) <= eps:
+        return pred_shot_scores.new_zeros(())
+
+    student_prob = pred_shot_scores.clamp_min(eps)
+    student_prob = student_prob / student_prob.sum().clamp_min(eps)
+    student_log_prob = torch.log(student_prob)
+
+    teacher_prob = torch.softmax(teacher_utility / temperature, dim=0).detach()
+
+    loss = F.kl_div(student_log_prob, teacher_prob, reduction='sum')
+
+    return loss
+
+
 def evaluate_checkpoint(model, ckpt_path, test_loader, device: str):
     state_dict = torch.load(str(ckpt_path), map_location=device)
     model.load_state_dict(state_dict)
     return evaluate_mil_cond(model=model, val_loader=test_loader, device=device)
+
 
 def infer_single_dataset_name(keys):
     names = {infer_dataset_name_from_key(key) for key in keys}

@@ -15,4 +15,6 @@ __pycache__/
 /custom_data/videos/
 /datasets/ 
 /models/  
+/docs/
+/diagnostics/
 

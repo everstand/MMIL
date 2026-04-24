@@ -11,6 +11,7 @@ from helpers.init_helper import init_logger, set_random_seed
 
 logger = logging.getLogger(__name__)
 
+
 def mean_std(values: List[float]):
     values = [float(v) for v in values]
     if not values:
@@ -39,6 +40,43 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--pair-margin', type=float, default=0.01)
     parser.add_argument('--lambda-align', type=float, default=1.0)
     parser.add_argument('--lambda-aux', type=float, default=0.1)
+
+    parser.add_argument(
+        '--rank-loss',
+        type=str,
+        default='sparse_pair',
+        choices=('sparse_pair', 'listwise_utility', 'none'),
+        help=(
+            'Temporal ranking supervision branch. '
+            'sparse_pair keeps the current caption semantic-change pair baseline; '
+            'listwise_utility uses offline shot_utility.npy; '
+            'none disables temporal ranking supervision.'
+        ),
+    )
+    parser.add_argument(
+        '--shot-utility-path',
+        type=str,
+        default=None,
+        help='Required for --rank-loss listwise_utility unless using the default pseudo_labels/{dataset}/shot_utility.npy path.',
+    )
+    parser.add_argument(
+        '--utility-formula',
+        type=str,
+        default='semantic_plus_distinct_minus_red',
+        help='Formula name used inside shot_utility.npy for listwise utility training.',
+    )
+    parser.add_argument(
+        '--lambda-listwise',
+        type=float,
+        default=0.2,
+        help='Weight for listwise utility loss when --rank-loss listwise_utility.',
+    )
+    parser.add_argument(
+        '--listwise-temperature',
+        type=float,
+        default=0.2,
+        help='Softmax temperature for teacher/student shot distributions.',
+    )
 
     parser.add_argument('--text-cond-num', type=int, default=7)
 
@@ -71,15 +109,21 @@ def main() -> None:
 
     logger.info(
         'Run | dataset=%s | folds=%d | seed=%d | epochs=%d | lr=%.2e | wd=%.2e | '
-        'lambda_pair=%.3g | pair_margin=%.3g | lambda_align=%.3g | lambda_aux=%.3g | text_cond_num=%d',
+        'rank_loss=%s | lambda_pair=%.3g | pair_margin=%.3g | '
+        'lambda_listwise=%.3g | utility_formula=%s | tau=%.3g | '
+        'lambda_align=%.3g | lambda_aux=%.3g | text_cond_num=%d',
         args.dataset,
         len(splits),
         args.seed,
         args.max_epoch,
         args.lr,
         args.weight_decay,
+        args.rank_loss,
         args.lambda_pair,
         args.pair_margin,
+        args.lambda_listwise,
+        args.utility_formula,
+        args.listwise_temperature,
         args.lambda_align,
         args.lambda_aux,
         args.text_cond_num,
@@ -200,7 +244,8 @@ def split_train_val(train_keys: List[str], val_ratio: float, seed: int):
     val_count = max(1, int(round(len(keys) * val_ratio)))
     if val_count >= len(keys):
         raise ValueError(
-            f'val_ratio={val_ratio} leaves no training samples: train_count={len(keys)}, val_count={val_count}'
+            f'val_ratio={val_ratio} leaves no training samples: '
+            f'train_count={len(keys)}, val_count={val_count}'
         )
 
     val_keys = sorted(keys[:val_count])
@@ -240,10 +285,13 @@ def validate_splits(splits: List[Dict], expected_dataset: str) -> None:
         overlap_train_val = set(train_keys) & set(val_keys)
         overlap_train_test = set(train_keys) & set(test_keys)
         overlap_val_test = set(val_keys) & set(test_keys)
+
         if overlap_train_val or overlap_train_test or overlap_val_test:
             raise ValueError(
                 f'Split {split_idx} has overlapping train/val/test keys: '
-                f'train_val={len(overlap_train_val)}, train_test={len(overlap_train_test)}, val_test={len(overlap_val_test)}'
+                f'train_val={len(overlap_train_val)}, '
+                f'train_test={len(overlap_train_test)}, '
+                f'val_test={len(overlap_val_test)}'
             )
 
         for key in train_keys + val_keys + test_keys:
