@@ -242,28 +242,50 @@ def sample_video_frames_sequential(
     if num_frames < 2:
         raise ValueError(f"num_frames must be >= 2, got {num_frames}")
 
+    # Pass 1: audit real decodable frame count.
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         raise ValueError(f"Cannot open video: {video_path}")
 
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    reported_total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     fps = float(cap.get(cv2.CAP_PROP_FPS))
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    if total_frames <= 1:
-        cap.release()
-        raise ValueError(f"Invalid frame count for video: {video_path}")
     if fps <= 0:
         cap.release()
         raise ValueError(f"Invalid fps for video: {video_path}")
 
+    actual_total_frames = 0
+    while True:
+        ret, frame = cap.read()
+        if not ret or frame is None:
+            break
+        actual_total_frames += 1
+
+    cap.release()
+
+    if actual_total_frames <= 1:
+        raise ValueError(
+            f"Invalid actual decodable frame count for video: {video_path}, "
+            f"actual_total_frames={actual_total_frames}, "
+            f"reported_total_frames={reported_total_frames}"
+        )
+
+    effective_num_frames = min(int(num_frames), int(actual_total_frames))
+
     target_indices = sorted(set(
-        int(round(i * (total_frames - 1) / max(num_frames - 1, 1)))
-        for i in range(num_frames)
+        int(round(i * (actual_total_frames - 1) / max(effective_num_frames - 1, 1)))
+        for i in range(effective_num_frames)
     ))
+
     target_set = set(target_indices)
     last_target = target_indices[-1]
+
+    # Pass 2: decode selected frames using actual decodable frame indices.
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        raise ValueError(f"Cannot reopen video: {video_path}")
 
     sampled_by_frame_idx: Dict[int, Dict[str, Any]] = {}
     current_idx = 0
@@ -293,9 +315,13 @@ def sample_video_frames_sequential(
     missing = [idx for idx in target_indices if idx not in sampled_by_frame_idx]
     if missing:
         raise RuntimeError(
-            f"Failed to sequentially decode all sampled frames from {video_path}. "
+            f"Failed to sequentially decode sampled frames from {video_path} "
+            f"even after actual-frame audit. "
             f"decoded={len(sampled_by_frame_idx)}/{len(target_indices)}, "
-            f"first_missing_frame={missing[0]}, last_scanned_frame={current_idx - 1}"
+            f"first_missing_frame={missing[0]}, "
+            f"last_scanned_frame={current_idx - 1}, "
+            f"actual_total_frames={actual_total_frames}, "
+            f"reported_total_frames={reported_total_frames}"
         )
 
     sampled_frames: List[Dict[str, Any]] = []
@@ -305,15 +331,20 @@ def sample_video_frames_sequential(
         sampled_frames.append(record)
 
     if len(sampled_frames) < 2:
-        raise ValueError(f"Need at least 2 sampled frames, got {len(sampled_frames)} for {video_path}")
+        raise ValueError(
+            f"Need at least 2 sampled frames, got {len(sampled_frames)} for {video_path}"
+        )
 
     meta = {
-        "total_frames": int(total_frames),
+        "reported_total_frames": int(reported_total_frames),
+        "actual_total_frames": int(actual_total_frames),
+        "total_frames": int(actual_total_frames),
         "fps": float(fps),
         "width": int(width),
         "height": int(height),
+        "requested_sampled_count": int(num_frames),
         "sampled_count": int(len(sampled_frames)),
-        "sampling_backend": "opencv_sequential_scan",
+        "sampling_backend": "opencv_actual_decodable_two_pass",
         "sampled_frames": [
             {
                 "frame_id": int(x["frame_id"]),
@@ -324,6 +355,7 @@ def sample_video_frames_sequential(
             for x in sampled_frames
         ],
     }
+
     return sampled_frames, meta
 
 

@@ -1,0 +1,4615 @@
+{
+  "video_1": {
+    "sample_meta": {
+      "total_frames": 4494,
+      "fps": 25.0,
+      "width": 1920,
+      "height": 1080,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 300,
+          "timestamp_sec": 12.0,
+          "timestamp_mmss": "00:12"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 599,
+          "timestamp_sec": 23.96,
+          "timestamp_mmss": "00:23"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 899,
+          "timestamp_sec": 35.96,
+          "timestamp_mmss": "00:35"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1198,
+          "timestamp_sec": 47.92,
+          "timestamp_mmss": "00:47"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1498,
+          "timestamp_sec": 59.92,
+          "timestamp_mmss": "00:59"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1797,
+          "timestamp_sec": 71.88,
+          "timestamp_mmss": "01:11"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 2097,
+          "timestamp_sec": 83.88,
+          "timestamp_mmss": "01:23"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 2396,
+          "timestamp_sec": 95.84,
+          "timestamp_mmss": "01:35"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 2696,
+          "timestamp_sec": 107.84,
+          "timestamp_mmss": "01:47"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 2995,
+          "timestamp_sec": 119.8,
+          "timestamp_mmss": "01:59"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 3295,
+          "timestamp_sec": 131.8,
+          "timestamp_mmss": "02:11"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 3594,
+          "timestamp_sec": 143.76,
+          "timestamp_mmss": "02:23"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 3894,
+          "timestamp_sec": 155.76,
+          "timestamp_mmss": "02:35"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 4193,
+          "timestamp_sec": 167.72,
+          "timestamp_mmss": "02:47"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 4493,
+          "timestamp_sec": 179.72,
+          "timestamp_mmss": "02:59"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "The runway is empty with a city skyline in the distance."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 6,
+          "caption": "A large airplane descends from the sky towards the runway."
+        },
+        {
+          "start_frame_id": 6,
+          "end_frame_id": 8,
+          "caption": "The airplane touches down on the runway, producing smoke from its tires."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 13,
+          "caption": "The airplane rolls straight down the center of the runway."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 15,
+          "caption": "The airplane turns right off the runway and exits the view."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:12",
+        "caption": "The runway is empty with a city skyline in the distance."
+      },
+      {
+        "start_mmss": "00:12",
+        "end_mmss": "01:12",
+        "caption": "A large airplane descends from the sky towards the runway."
+      },
+      {
+        "start_mmss": "01:11",
+        "end_mmss": "01:36",
+        "caption": "The airplane touches down on the runway, producing smoke from its tires."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "02:36",
+        "caption": "The airplane rolls straight down the center of the runway."
+      },
+      {
+        "start_mmss": "02:35",
+        "end_mmss": "03:00",
+        "caption": "The airplane turns right off the runway and exits the view."
+      }
+    ]
+  },
+  "video_2": {
+    "sample_meta": {
+      "total_frames": 4729,
+      "fps": 29.97002997002997,
+      "width": 854,
+      "height": 480,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 315,
+          "timestamp_sec": 10.5105,
+          "timestamp_mmss": "00:10"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 630,
+          "timestamp_sec": 21.021,
+          "timestamp_mmss": "00:21"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 946,
+          "timestamp_sec": 31.564866666666667,
+          "timestamp_mmss": "00:31"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1261,
+          "timestamp_sec": 42.07536666666667,
+          "timestamp_mmss": "00:42"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1576,
+          "timestamp_sec": 52.58586666666667,
+          "timestamp_mmss": "00:52"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1891,
+          "timestamp_sec": 63.09636666666667,
+          "timestamp_mmss": "01:03"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 2206,
+          "timestamp_sec": 73.60686666666666,
+          "timestamp_mmss": "01:13"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 2522,
+          "timestamp_sec": 84.15073333333333,
+          "timestamp_mmss": "01:24"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 2837,
+          "timestamp_sec": 94.66123333333333,
+          "timestamp_mmss": "01:34"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 3152,
+          "timestamp_sec": 105.17173333333334,
+          "timestamp_mmss": "01:45"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 3467,
+          "timestamp_sec": 115.68223333333333,
+          "timestamp_mmss": "01:55"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 3782,
+          "timestamp_sec": 126.19273333333334,
+          "timestamp_mmss": "02:06"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 4098,
+          "timestamp_sec": 136.7366,
+          "timestamp_mmss": "02:16"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 4413,
+          "timestamp_sec": 147.2471,
+          "timestamp_mmss": "02:27"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 4728,
+          "timestamp_sec": 157.7576,
+          "timestamp_mmss": "02:37"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 2,
+          "caption": "A person stands on a rocky cliff overlooking a large body of water."
+        },
+        {
+          "start_frame_id": 2,
+          "end_frame_id": 3,
+          "caption": "A person in a wingsuit jumps from the edge of the cliff."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 9,
+          "caption": "A person glides in a wingsuit over a forested mountain slope."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 13,
+          "caption": "A white parachute is deployed and the person descends to land on a road."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 15,
+          "caption": "The person stands on the road with the parachute lying on the ground."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:22",
+        "caption": "A person stands on a rocky cliff overlooking a large body of water."
+      },
+      {
+        "start_mmss": "00:21",
+        "end_mmss": "00:32",
+        "caption": "A person in a wingsuit jumps from the edge of the cliff."
+      },
+      {
+        "start_mmss": "00:31",
+        "end_mmss": "01:35",
+        "caption": "A person glides in a wingsuit over a forested mountain slope."
+      },
+      {
+        "start_mmss": "01:34",
+        "end_mmss": "02:17",
+        "caption": "A white parachute is deployed and the person descends to land on a road."
+      },
+      {
+        "start_mmss": "02:16",
+        "end_mmss": "02:38",
+        "caption": "The person stands on the road with the parachute lying on the ground."
+      }
+    ]
+  },
+  "video_3": {
+    "sample_meta": {
+      "total_frames": 3341,
+      "fps": 25.0,
+      "width": 1280,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 223,
+          "timestamp_sec": 8.92,
+          "timestamp_mmss": "00:08"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 445,
+          "timestamp_sec": 17.8,
+          "timestamp_mmss": "00:17"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 668,
+          "timestamp_sec": 26.72,
+          "timestamp_mmss": "00:26"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 891,
+          "timestamp_sec": 35.64,
+          "timestamp_mmss": "00:35"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1113,
+          "timestamp_sec": 44.52,
+          "timestamp_mmss": "00:44"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1336,
+          "timestamp_sec": 53.44,
+          "timestamp_mmss": "00:53"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 1559,
+          "timestamp_sec": 62.36,
+          "timestamp_mmss": "01:02"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 1781,
+          "timestamp_sec": 71.24,
+          "timestamp_mmss": "01:11"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 2004,
+          "timestamp_sec": 80.16,
+          "timestamp_mmss": "01:20"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 2227,
+          "timestamp_sec": 89.08,
+          "timestamp_mmss": "01:29"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 2449,
+          "timestamp_sec": 97.96,
+          "timestamp_mmss": "01:37"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 2672,
+          "timestamp_sec": 106.88,
+          "timestamp_mmss": "01:46"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 2895,
+          "timestamp_sec": 115.8,
+          "timestamp_mmss": "01:55"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 3117,
+          "timestamp_sec": 124.68,
+          "timestamp_mmss": "02:04"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 3340,
+          "timestamp_sec": 133.6,
+          "timestamp_mmss": "02:13"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 8,
+          "caption": "A brown bear climbs and moves among the branches of a tree."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 11,
+          "caption": "Three brown bears are perched in the branches of a tree."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 13,
+          "caption": "Two brown bears climb down a tree trunk toward the ground."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "Two brown bears walk across a grassy area."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "01:12",
+        "caption": "A brown bear climbs and moves among the branches of a tree."
+      },
+      {
+        "start_mmss": "01:20",
+        "end_mmss": "01:38",
+        "caption": "Three brown bears are perched in the branches of a tree."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "01:56",
+        "caption": "Two brown bears climb down a tree trunk toward the ground."
+      },
+      {
+        "start_mmss": "02:04",
+        "end_mmss": "02:14",
+        "caption": "Two brown bears walk across a grassy area."
+      }
+    ]
+  },
+  "video_4": {
+    "sample_meta": {
+      "total_frames": 3064,
+      "fps": 30.0,
+      "width": 1280,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 204,
+          "timestamp_sec": 6.8,
+          "timestamp_mmss": "00:06"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 408,
+          "timestamp_sec": 13.6,
+          "timestamp_mmss": "00:13"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 613,
+          "timestamp_sec": 20.433333333333334,
+          "timestamp_mmss": "00:20"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 817,
+          "timestamp_sec": 27.233333333333334,
+          "timestamp_mmss": "00:27"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1021,
+          "timestamp_sec": 34.03333333333333,
+          "timestamp_mmss": "00:34"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1225,
+          "timestamp_sec": 40.833333333333336,
+          "timestamp_mmss": "00:40"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 1429,
+          "timestamp_sec": 47.63333333333333,
+          "timestamp_mmss": "00:47"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 1634,
+          "timestamp_sec": 54.46666666666667,
+          "timestamp_mmss": "00:54"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 1838,
+          "timestamp_sec": 61.266666666666666,
+          "timestamp_mmss": "01:01"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 2042,
+          "timestamp_sec": 68.06666666666666,
+          "timestamp_mmss": "01:08"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 2246,
+          "timestamp_sec": 74.86666666666666,
+          "timestamp_mmss": "01:14"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 2450,
+          "timestamp_sec": 81.66666666666667,
+          "timestamp_mmss": "01:21"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 2655,
+          "timestamp_sec": 88.5,
+          "timestamp_mmss": "01:28"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 2859,
+          "timestamp_sec": 95.3,
+          "timestamp_mmss": "01:35"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 3063,
+          "timestamp_sec": 102.1,
+          "timestamp_mmss": "01:42"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "An empty outdoor court is shown at night with a goal and a perimeter fence."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 2,
+          "caption": "A person on a bicycle rides across the court at night."
+        },
+        {
+          "start_frame_id": 2,
+          "end_frame_id": 4,
+          "caption": "Several people on bicycles play a game with mallets on the illuminated court."
+        },
+        {
+          "start_frame_id": 4,
+          "end_frame_id": 5,
+          "caption": "Players on bicycles with mallets move across the court."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 7,
+          "caption": "The camera captures players on bicycles from a low angle as they play."
+        },
+        {
+          "start_frame_id": 7,
+          "end_frame_id": 9,
+          "caption": "A player on a bicycle rides across the court during the game."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 11,
+          "caption": "A player in a black shirt rides a bicycle and holds a mallet."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 12,
+          "caption": "The camera pans from the players to the sidelines."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 13,
+          "caption": "The camera pans from the sidelines to a player on the court."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 14,
+          "caption": "A player on a bicycle moves towards a goal."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "The camera pans from the court to the sidelines."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:07",
+        "caption": "An empty outdoor court is shown at night with a goal and a perimeter fence."
+      },
+      {
+        "start_mmss": "00:06",
+        "end_mmss": "00:14",
+        "caption": "A person on a bicycle rides across the court at night."
+      },
+      {
+        "start_mmss": "00:13",
+        "end_mmss": "00:28",
+        "caption": "Several people on bicycles play a game with mallets on the illuminated court."
+      },
+      {
+        "start_mmss": "00:27",
+        "end_mmss": "00:35",
+        "caption": "Players on bicycles with mallets move across the court."
+      },
+      {
+        "start_mmss": "00:34",
+        "end_mmss": "00:48",
+        "caption": "The camera captures players on bicycles from a low angle as they play."
+      },
+      {
+        "start_mmss": "00:47",
+        "end_mmss": "01:02",
+        "caption": "A player on a bicycle rides across the court during the game."
+      },
+      {
+        "start_mmss": "01:01",
+        "end_mmss": "01:15",
+        "caption": "A player in a black shirt rides a bicycle and holds a mallet."
+      },
+      {
+        "start_mmss": "01:14",
+        "end_mmss": "01:22",
+        "caption": "The camera pans from the players to the sidelines."
+      },
+      {
+        "start_mmss": "01:21",
+        "end_mmss": "01:29",
+        "caption": "The camera pans from the sidelines to a player on the court."
+      },
+      {
+        "start_mmss": "01:28",
+        "end_mmss": "01:36",
+        "caption": "A player on a bicycle moves towards a goal."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:43",
+        "caption": "The camera pans from the court to the sidelines."
+      }
+    ]
+  },
+  "video_6": {
+    "sample_meta": {
+      "total_frames": 5075,
+      "fps": 29.97002997002997,
+      "width": 1280,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 338,
+          "timestamp_sec": 11.277933333333333,
+          "timestamp_mmss": "00:11"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 677,
+          "timestamp_sec": 22.589233333333333,
+          "timestamp_mmss": "00:22"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 1015,
+          "timestamp_sec": 33.86716666666667,
+          "timestamp_mmss": "00:33"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1353,
+          "timestamp_sec": 45.1451,
+          "timestamp_mmss": "00:45"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1691,
+          "timestamp_sec": 56.423033333333336,
+          "timestamp_mmss": "00:56"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 2030,
+          "timestamp_sec": 67.73433333333334,
+          "timestamp_mmss": "01:07"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 2368,
+          "timestamp_sec": 79.01226666666666,
+          "timestamp_mmss": "01:19"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 2706,
+          "timestamp_sec": 90.2902,
+          "timestamp_mmss": "01:30"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 3044,
+          "timestamp_sec": 101.56813333333334,
+          "timestamp_mmss": "01:41"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 3383,
+          "timestamp_sec": 112.87943333333334,
+          "timestamp_mmss": "01:52"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 3721,
+          "timestamp_sec": 124.15736666666668,
+          "timestamp_mmss": "02:04"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 4059,
+          "timestamp_sec": 135.4353,
+          "timestamp_mmss": "02:15"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 4397,
+          "timestamp_sec": 146.71323333333333,
+          "timestamp_mmss": "02:26"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 4736,
+          "timestamp_sec": 158.02453333333332,
+          "timestamp_mmss": "02:38"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 5074,
+          "timestamp_sec": 169.30246666666667,
+          "timestamp_mmss": "02:49"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "A green train passes through a railway crossing while people and a car wait behind a barrier."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 2,
+          "caption": "The train clears the crossing, and people stand near the lowered barrier."
+        },
+        {
+          "start_frame_id": 2,
+          "end_frame_id": 8,
+          "caption": "The crossing barrier is raised, and a crowd gathers around a black car that is stationary on the tracks."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 15,
+          "caption": "An excavator bucket is used to lift the front of the black car while a group of people observes."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:12",
+        "caption": "A green train passes through a railway crossing while people and a car wait behind a barrier."
+      },
+      {
+        "start_mmss": "00:11",
+        "end_mmss": "00:23",
+        "caption": "The train clears the crossing, and people stand near the lowered barrier."
+      },
+      {
+        "start_mmss": "00:22",
+        "end_mmss": "01:31",
+        "caption": "The crossing barrier is raised, and a crowd gathers around a black car that is stationary on the tracks."
+      },
+      {
+        "start_mmss": "01:30",
+        "end_mmss": "02:50",
+        "caption": "An excavator bucket is used to lift the front of the black car while a group of people observes."
+      }
+    ]
+  },
+  "video_7": {
+    "sample_meta": {
+      "total_frames": 9046,
+      "fps": 29.97002997002997,
+      "width": 1280,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 603,
+          "timestamp_sec": 20.1201,
+          "timestamp_mmss": "00:20"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 1206,
+          "timestamp_sec": 40.2402,
+          "timestamp_mmss": "00:40"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 1809,
+          "timestamp_sec": 60.3603,
+          "timestamp_mmss": "01:00"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 2412,
+          "timestamp_sec": 80.4804,
+          "timestamp_mmss": "01:20"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 3015,
+          "timestamp_sec": 100.6005,
+          "timestamp_mmss": "01:40"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 3618,
+          "timestamp_sec": 120.7206,
+          "timestamp_mmss": "02:00"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 4221,
+          "timestamp_sec": 140.8407,
+          "timestamp_mmss": "02:20"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 4824,
+          "timestamp_sec": 160.9608,
+          "timestamp_mmss": "02:40"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 5427,
+          "timestamp_sec": 181.0809,
+          "timestamp_mmss": "03:01"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 6030,
+          "timestamp_sec": 201.201,
+          "timestamp_mmss": "03:21"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 6633,
+          "timestamp_sec": 221.3211,
+          "timestamp_mmss": "03:41"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 7236,
+          "timestamp_sec": 241.4412,
+          "timestamp_mmss": "04:01"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 7839,
+          "timestamp_sec": 261.5613,
+          "timestamp_mmss": "04:21"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 8442,
+          "timestamp_sec": 281.6814,
+          "timestamp_mmss": "04:41"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 9045,
+          "timestamp_sec": 301.80150000000003,
+          "timestamp_mmss": "05:01"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 4,
+          "caption": "An aerial view of a city and a river is seen through a cockpit window."
+        },
+        {
+          "start_frame_id": 4,
+          "end_frame_id": 5,
+          "caption": "A hand rests on the cockpit's center console while flying over a residential area."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 6,
+          "caption": "The cockpit's instrument panel displays flight data on multiple digital screens."
+        },
+        {
+          "start_frame_id": 6,
+          "end_frame_id": 8,
+          "caption": "The plane flies over a city skyline featuring several skyscrapers."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 9,
+          "caption": "A large stadium is visible amidst a forested area from the cockpit window."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 12,
+          "caption": "A large airport complex with multiple runways and buildings comes into view."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 13,
+          "caption": "The camera captures a close-up aerial view of airport terminals and parked airplanes."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 14,
+          "caption": "A highway and green landscape are visible as the plane approaches the runway."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "The plane is aligned with the center of a runway and touches down."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "01:21",
+        "caption": "An aerial view of a city and a river is seen through a cockpit window."
+      },
+      {
+        "start_mmss": "01:20",
+        "end_mmss": "01:41",
+        "caption": "A hand rests on the cockpit's center console while flying over a residential area."
+      },
+      {
+        "start_mmss": "01:40",
+        "end_mmss": "02:01",
+        "caption": "The cockpit's instrument panel displays flight data on multiple digital screens."
+      },
+      {
+        "start_mmss": "02:00",
+        "end_mmss": "02:41",
+        "caption": "The plane flies over a city skyline featuring several skyscrapers."
+      },
+      {
+        "start_mmss": "02:40",
+        "end_mmss": "03:02",
+        "caption": "A large stadium is visible amidst a forested area from the cockpit window."
+      },
+      {
+        "start_mmss": "03:01",
+        "end_mmss": "04:02",
+        "caption": "A large airport complex with multiple runways and buildings comes into view."
+      },
+      {
+        "start_mmss": "04:01",
+        "end_mmss": "04:22",
+        "caption": "The camera captures a close-up aerial view of airport terminals and parked airplanes."
+      },
+      {
+        "start_mmss": "04:21",
+        "end_mmss": "04:42",
+        "caption": "A highway and green landscape are visible as the plane approaches the runway."
+      },
+      {
+        "start_mmss": "04:41",
+        "end_mmss": "05:02",
+        "caption": "The plane is aligned with the center of a runway and touches down."
+      }
+    ]
+  },
+  "video_8": {
+    "sample_meta": {
+      "total_frames": 1289,
+      "fps": 15.0,
+      "width": 320,
+      "height": 240,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 86,
+          "timestamp_sec": 5.733333333333333,
+          "timestamp_mmss": "00:05"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 172,
+          "timestamp_sec": 11.466666666666667,
+          "timestamp_mmss": "00:11"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 258,
+          "timestamp_sec": 17.2,
+          "timestamp_mmss": "00:17"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 343,
+          "timestamp_sec": 22.866666666666667,
+          "timestamp_mmss": "00:22"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 429,
+          "timestamp_sec": 28.6,
+          "timestamp_mmss": "00:28"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 515,
+          "timestamp_sec": 34.333333333333336,
+          "timestamp_mmss": "00:34"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 601,
+          "timestamp_sec": 40.06666666666667,
+          "timestamp_mmss": "00:40"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 687,
+          "timestamp_sec": 45.8,
+          "timestamp_mmss": "00:45"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 773,
+          "timestamp_sec": 51.53333333333333,
+          "timestamp_mmss": "00:51"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 859,
+          "timestamp_sec": 57.266666666666666,
+          "timestamp_mmss": "00:57"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 945,
+          "timestamp_sec": 63.0,
+          "timestamp_mmss": "01:03"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 1030,
+          "timestamp_sec": 68.66666666666667,
+          "timestamp_mmss": "01:08"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 1116,
+          "timestamp_sec": 74.4,
+          "timestamp_mmss": "01:14"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 1202,
+          "timestamp_sec": 80.13333333333334,
+          "timestamp_mmss": "01:20"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 1288,
+          "timestamp_sec": 85.86666666666666,
+          "timestamp_mmss": "01:25"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 5,
+          "caption": "A chef uses spatulas to move vegetables and small pieces of food across a teppanyaki grill."
+        },
+        {
+          "start_frame_id": 6,
+          "end_frame_id": 8,
+          "caption": "The chef stacks sliced onion rings into a tower on the grill surface."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 11,
+          "caption": "The chef continues to manipulate food on the grill next to the onion tower."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 12,
+          "caption": "The chef pours liquid from a red bottle onto the onion tower."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 13,
+          "caption": "A small flame ignites on top of the onion tower in a darkened room."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 14,
+          "caption": "A large flame rises from the onion tower."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "White smoke rises from the onion tower as the flame subsides."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:29",
+        "caption": "A chef uses spatulas to move vegetables and small pieces of food across a teppanyaki grill."
+      },
+      {
+        "start_mmss": "00:34",
+        "end_mmss": "00:46",
+        "caption": "The chef stacks sliced onion rings into a tower on the grill surface."
+      },
+      {
+        "start_mmss": "00:51",
+        "end_mmss": "01:03",
+        "caption": "The chef continues to manipulate food on the grill next to the onion tower."
+      },
+      {
+        "start_mmss": "01:03",
+        "end_mmss": "01:09",
+        "caption": "The chef pours liquid from a red bottle onto the onion tower."
+      },
+      {
+        "start_mmss": "01:08",
+        "end_mmss": "01:15",
+        "caption": "A small flame ignites on top of the onion tower in a darkened room."
+      },
+      {
+        "start_mmss": "01:14",
+        "end_mmss": "01:21",
+        "caption": "A large flame rises from the onion tower."
+      },
+      {
+        "start_mmss": "01:20",
+        "end_mmss": "01:26",
+        "caption": "White smoke rises from the onion tower as the flame subsides."
+      }
+    ]
+  },
+  "video_9": {
+    "sample_meta": {
+      "total_frames": 4971,
+      "fps": 25.0,
+      "width": 1920,
+      "height": 1080,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 331,
+          "timestamp_sec": 13.24,
+          "timestamp_mmss": "00:13"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 663,
+          "timestamp_sec": 26.52,
+          "timestamp_mmss": "00:26"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 994,
+          "timestamp_sec": 39.76,
+          "timestamp_mmss": "00:39"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1325,
+          "timestamp_sec": 53.0,
+          "timestamp_mmss": "00:53"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1657,
+          "timestamp_sec": 66.28,
+          "timestamp_mmss": "01:06"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1988,
+          "timestamp_sec": 79.52,
+          "timestamp_mmss": "01:19"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 2319,
+          "timestamp_sec": 92.76,
+          "timestamp_mmss": "01:32"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 2651,
+          "timestamp_sec": 106.04,
+          "timestamp_mmss": "01:46"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 2982,
+          "timestamp_sec": 119.28,
+          "timestamp_mmss": "01:59"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 3313,
+          "timestamp_sec": 132.52,
+          "timestamp_mmss": "02:12"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 3645,
+          "timestamp_sec": 145.8,
+          "timestamp_mmss": "02:25"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 3976,
+          "timestamp_sec": 159.04,
+          "timestamp_mmss": "02:39"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 4307,
+          "timestamp_sec": 172.28,
+          "timestamp_mmss": "02:52"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 4639,
+          "timestamp_sec": 185.56,
+          "timestamp_mmss": "03:05"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 4970,
+          "timestamp_sec": 198.8,
+          "timestamp_mmss": "03:18"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "A bridge spans a river with several buoys floating in the water."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 2,
+          "caption": "A low-angle view shows the intricate metal structure of the Eiffel Tower."
+        },
+        {
+          "start_frame_id": 2,
+          "end_frame_id": 3,
+          "caption": "The camera focuses on the detailed stone base of the Eiffel Tower."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 4,
+          "caption": "A low-angle view shows the intricate metal structure of the Eiffel Tower."
+        },
+        {
+          "start_frame_id": 4,
+          "end_frame_id": 5,
+          "caption": "A platform on the tower is visible with numerous people standing along the railing."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 6,
+          "caption": "A small green plant grows at the foot of the tower's stone foundation."
+        },
+        {
+          "start_frame_id": 6,
+          "end_frame_id": 8,
+          "caption": "A low-angle view shows the intricate metal structure of the Eiffel Tower."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 9,
+          "caption": "A blurry shot shows a metal railing and part of a platform."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 10,
+          "caption": "A large crowd of people gathers in a plaza near the base of the tower."
+        },
+        {
+          "start_frame_id": 10,
+          "end_frame_id": 11,
+          "caption": "A wide shot shows the entire Eiffel Tower standing over a city plaza."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 12,
+          "caption": "The camera looks through the tower's arches toward a distant crowd and buildings."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 13,
+          "caption": "A low-angle shot captures the tower rising into a sky with scattered clouds."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 14,
+          "caption": "A low-angle view shows the intricate metal structure of the Eiffel Tower."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "A wide view looks up through the main arch of the tower toward the sky."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:14",
+        "caption": "A bridge spans a river with several buoys floating in the water."
+      },
+      {
+        "start_mmss": "00:13",
+        "end_mmss": "00:27",
+        "caption": "A low-angle view shows the intricate metal structure of the Eiffel Tower."
+      },
+      {
+        "start_mmss": "00:26",
+        "end_mmss": "00:40",
+        "caption": "The camera focuses on the detailed stone base of the Eiffel Tower."
+      },
+      {
+        "start_mmss": "00:39",
+        "end_mmss": "00:53",
+        "caption": "A low-angle view shows the intricate metal structure of the Eiffel Tower."
+      },
+      {
+        "start_mmss": "00:53",
+        "end_mmss": "01:07",
+        "caption": "A platform on the tower is visible with numerous people standing along the railing."
+      },
+      {
+        "start_mmss": "01:06",
+        "end_mmss": "01:20",
+        "caption": "A small green plant grows at the foot of the tower's stone foundation."
+      },
+      {
+        "start_mmss": "01:19",
+        "end_mmss": "01:47",
+        "caption": "A low-angle view shows the intricate metal structure of the Eiffel Tower."
+      },
+      {
+        "start_mmss": "01:46",
+        "end_mmss": "02:00",
+        "caption": "A blurry shot shows a metal railing and part of a platform."
+      },
+      {
+        "start_mmss": "01:59",
+        "end_mmss": "02:13",
+        "caption": "A large crowd of people gathers in a plaza near the base of the tower."
+      },
+      {
+        "start_mmss": "02:12",
+        "end_mmss": "02:26",
+        "caption": "A wide shot shows the entire Eiffel Tower standing over a city plaza."
+      },
+      {
+        "start_mmss": "02:25",
+        "end_mmss": "02:40",
+        "caption": "The camera looks through the tower's arches toward a distant crowd and buildings."
+      },
+      {
+        "start_mmss": "02:39",
+        "end_mmss": "02:53",
+        "caption": "A low-angle shot captures the tower rising into a sky with scattered clouds."
+      },
+      {
+        "start_mmss": "02:52",
+        "end_mmss": "03:06",
+        "caption": "A low-angle view shows the intricate metal structure of the Eiffel Tower."
+      },
+      {
+        "start_mmss": "03:05",
+        "end_mmss": "03:19",
+        "caption": "A wide view looks up through the main arch of the tower toward the sky."
+      }
+    ]
+  },
+  "video_10": {
+    "sample_meta": {
+      "total_frames": 9721,
+      "fps": 25.0,
+      "width": 640,
+      "height": 360,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 648,
+          "timestamp_sec": 25.92,
+          "timestamp_mmss": "00:25"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 1296,
+          "timestamp_sec": 51.84,
+          "timestamp_mmss": "00:51"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 1944,
+          "timestamp_sec": 77.76,
+          "timestamp_mmss": "01:17"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 2592,
+          "timestamp_sec": 103.68,
+          "timestamp_mmss": "01:43"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 3240,
+          "timestamp_sec": 129.6,
+          "timestamp_mmss": "02:09"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 3888,
+          "timestamp_sec": 155.52,
+          "timestamp_mmss": "02:35"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 4536,
+          "timestamp_sec": 181.44,
+          "timestamp_mmss": "03:01"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 5184,
+          "timestamp_sec": 207.36,
+          "timestamp_mmss": "03:27"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 5832,
+          "timestamp_sec": 233.28,
+          "timestamp_mmss": "03:53"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 6480,
+          "timestamp_sec": 259.2,
+          "timestamp_mmss": "04:19"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 7128,
+          "timestamp_sec": 285.12,
+          "timestamp_mmss": "04:45"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 7776,
+          "timestamp_sec": 311.04,
+          "timestamp_mmss": "05:11"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 8424,
+          "timestamp_sec": 336.96,
+          "timestamp_mmss": "05:36"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 9072,
+          "timestamp_sec": 362.88,
+          "timestamp_mmss": "06:02"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 9720,
+          "timestamp_sec": 388.8,
+          "timestamp_mmss": "06:28"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "An excavator and a crowd of people are on a narrow path over water."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 2,
+          "caption": "A group of people stands near the yellow excavator."
+        },
+        {
+          "start_frame_id": 2,
+          "end_frame_id": 3,
+          "caption": "The excavator bucket is positioned over the water."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 4,
+          "caption": "Several people climb into the excavator bucket."
+        },
+        {
+          "start_frame_id": 4,
+          "end_frame_id": 5,
+          "caption": "A man in a jacket stands on a rocky bank next to the excavator."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 10,
+          "caption": "The excavator bucket transports people across the water."
+        },
+        {
+          "start_frame_id": 10,
+          "end_frame_id": 11,
+          "caption": "The excavator tracks are positioned on a large pipe over the water."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 14,
+          "caption": "People carrying bags and luggage sit inside the excavator bucket."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "An excavator and a crowd of people are on a narrow path over water."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:26",
+        "caption": "An excavator and a crowd of people are on a narrow path over water."
+      },
+      {
+        "start_mmss": "00:25",
+        "end_mmss": "00:52",
+        "caption": "A group of people stands near the yellow excavator."
+      },
+      {
+        "start_mmss": "00:51",
+        "end_mmss": "01:18",
+        "caption": "The excavator bucket is positioned over the water."
+      },
+      {
+        "start_mmss": "01:17",
+        "end_mmss": "01:44",
+        "caption": "Several people climb into the excavator bucket."
+      },
+      {
+        "start_mmss": "01:43",
+        "end_mmss": "02:10",
+        "caption": "A man in a jacket stands on a rocky bank next to the excavator."
+      },
+      {
+        "start_mmss": "02:09",
+        "end_mmss": "04:20",
+        "caption": "The excavator bucket transports people across the water."
+      },
+      {
+        "start_mmss": "04:19",
+        "end_mmss": "04:46",
+        "caption": "The excavator tracks are positioned on a large pipe over the water."
+      },
+      {
+        "start_mmss": "04:45",
+        "end_mmss": "06:03",
+        "caption": "People carrying bags and luggage sit inside the excavator bucket."
+      },
+      {
+        "start_mmss": "06:02",
+        "end_mmss": "06:29",
+        "caption": "An excavator and a crowd of people are on a narrow path over water."
+      }
+    ]
+  },
+  "video_11": {
+    "sample_meta": {
+      "total_frames": 1612,
+      "fps": 30.0,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 107,
+          "timestamp_sec": 3.566666666666667,
+          "timestamp_mmss": "00:03"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 215,
+          "timestamp_sec": 7.166666666666667,
+          "timestamp_mmss": "00:07"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 322,
+          "timestamp_sec": 10.733333333333333,
+          "timestamp_mmss": "00:10"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 430,
+          "timestamp_sec": 14.333333333333334,
+          "timestamp_mmss": "00:14"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 537,
+          "timestamp_sec": 17.9,
+          "timestamp_mmss": "00:17"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 644,
+          "timestamp_sec": 21.466666666666665,
+          "timestamp_mmss": "00:21"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 752,
+          "timestamp_sec": 25.066666666666666,
+          "timestamp_mmss": "00:25"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 859,
+          "timestamp_sec": 28.633333333333333,
+          "timestamp_mmss": "00:28"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 967,
+          "timestamp_sec": 32.233333333333334,
+          "timestamp_mmss": "00:32"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 1074,
+          "timestamp_sec": 35.8,
+          "timestamp_mmss": "00:35"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 1181,
+          "timestamp_sec": 39.36666666666667,
+          "timestamp_mmss": "00:39"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 1289,
+          "timestamp_sec": 42.96666666666667,
+          "timestamp_mmss": "00:42"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 1396,
+          "timestamp_sec": 46.53333333333333,
+          "timestamp_mmss": "00:46"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 1504,
+          "timestamp_sec": 50.13333333333333,
+          "timestamp_mmss": "00:50"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 1611,
+          "timestamp_sec": 53.7,
+          "timestamp_mmss": "00:53"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 3,
+          "caption": "A tower of matches with red tips stands on a white surface."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 4,
+          "caption": "A lit match ignites the top of the match tower."
+        },
+        {
+          "start_frame_id": 4,
+          "end_frame_id": 13,
+          "caption": "Flames spread downward through the match tower, turning the matches black."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 15,
+          "caption": "The match tower collapses into a burning pile of charred matches."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:11",
+        "caption": "A tower of matches with red tips stands on a white surface."
+      },
+      {
+        "start_mmss": "00:10",
+        "end_mmss": "00:15",
+        "caption": "A lit match ignites the top of the match tower."
+      },
+      {
+        "start_mmss": "00:14",
+        "end_mmss": "00:47",
+        "caption": "Flames spread downward through the match tower, turning the matches black."
+      },
+      {
+        "start_mmss": "00:46",
+        "end_mmss": "00:54",
+        "caption": "The match tower collapses into a burning pile of charred matches."
+      }
+    ]
+  },
+  "video_12": {
+    "sample_meta": {
+      "total_frames": 950,
+      "fps": 25.0,
+      "width": 480,
+      "height": 270,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 63,
+          "timestamp_sec": 2.52,
+          "timestamp_mmss": "00:02"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 127,
+          "timestamp_sec": 5.08,
+          "timestamp_mmss": "00:05"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 190,
+          "timestamp_sec": 7.6,
+          "timestamp_mmss": "00:07"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 253,
+          "timestamp_sec": 10.12,
+          "timestamp_mmss": "00:10"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 316,
+          "timestamp_sec": 12.64,
+          "timestamp_mmss": "00:12"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 380,
+          "timestamp_sec": 15.2,
+          "timestamp_mmss": "00:15"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 443,
+          "timestamp_sec": 17.72,
+          "timestamp_mmss": "00:17"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 506,
+          "timestamp_sec": 20.24,
+          "timestamp_mmss": "00:20"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 569,
+          "timestamp_sec": 22.76,
+          "timestamp_mmss": "00:22"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 633,
+          "timestamp_sec": 25.32,
+          "timestamp_mmss": "00:25"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 696,
+          "timestamp_sec": 27.84,
+          "timestamp_mmss": "00:27"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 759,
+          "timestamp_sec": 30.36,
+          "timestamp_mmss": "00:30"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 822,
+          "timestamp_sec": 32.88,
+          "timestamp_mmss": "00:32"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 886,
+          "timestamp_sec": 35.44,
+          "timestamp_mmss": "00:35"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 949,
+          "timestamp_sec": 37.96,
+          "timestamp_mmss": "00:37"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 2,
+          "caption": "Two people pour water from buckets onto a long yellow slide while a third person sits at the top."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 5,
+          "caption": "A person slides down a long yellow slide on a grassy hillside."
+        },
+        {
+          "start_frame_id": 6,
+          "end_frame_id": 9,
+          "caption": "A person is launched into the air from a wooden ramp and lands in a blue inflatable pool."
+        },
+        {
+          "start_frame_id": 10,
+          "end_frame_id": 15,
+          "caption": "A person climbs out of a blue pool and stands with a group of people on a grassy hill."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:06",
+        "caption": "Two people pour water from buckets onto a long yellow slide while a third person sits at the top."
+      },
+      {
+        "start_mmss": "00:07",
+        "end_mmss": "00:13",
+        "caption": "A person slides down a long yellow slide on a grassy hillside."
+      },
+      {
+        "start_mmss": "00:15",
+        "end_mmss": "00:23",
+        "caption": "A person is launched into the air from a wooden ramp and lands in a blue inflatable pool."
+      },
+      {
+        "start_mmss": "00:25",
+        "end_mmss": "00:38",
+        "caption": "A person climbs out of a blue pool and stands with a group of people on a grassy hill."
+      }
+    ]
+  },
+  "video_13": {
+    "sample_meta": {
+      "total_frames": 3187,
+      "fps": 29.97002997002997,
+      "width": 1280,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 212,
+          "timestamp_sec": 7.073733333333333,
+          "timestamp_mmss": "00:07"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 425,
+          "timestamp_sec": 14.180833333333334,
+          "timestamp_mmss": "00:14"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 637,
+          "timestamp_sec": 21.254566666666665,
+          "timestamp_mmss": "00:21"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 850,
+          "timestamp_sec": 28.361666666666668,
+          "timestamp_mmss": "00:28"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1062,
+          "timestamp_sec": 35.4354,
+          "timestamp_mmss": "00:35"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1274,
+          "timestamp_sec": 42.50913333333333,
+          "timestamp_mmss": "00:42"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 1487,
+          "timestamp_sec": 49.616233333333334,
+          "timestamp_mmss": "00:49"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 1699,
+          "timestamp_sec": 56.68996666666667,
+          "timestamp_mmss": "00:56"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 1912,
+          "timestamp_sec": 63.797066666666666,
+          "timestamp_mmss": "01:03"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 2124,
+          "timestamp_sec": 70.8708,
+          "timestamp_mmss": "01:10"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 2336,
+          "timestamp_sec": 77.94453333333334,
+          "timestamp_mmss": "01:17"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 2549,
+          "timestamp_sec": 85.05163333333333,
+          "timestamp_mmss": "01:25"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 2761,
+          "timestamp_sec": 92.12536666666666,
+          "timestamp_mmss": "01:32"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 2974,
+          "timestamp_sec": 99.23246666666667,
+          "timestamp_mmss": "01:39"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 3186,
+          "timestamp_sec": 106.3062,
+          "timestamp_mmss": "01:46"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 3,
+          "caption": "Three children play in and around a pile of leaves in a grassy field."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 6,
+          "caption": "The children run and play in a yard near a red truck and a house."
+        },
+        {
+          "start_frame_id": 6,
+          "end_frame_id": 8,
+          "caption": "A woman walks across a driveway past parked vehicles."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 11,
+          "caption": "A boy crouches in a pile of leaves and then runs across a driveway."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 15,
+          "caption": "Children play in a pile of leaves in a yard next to a red truck."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:22",
+        "caption": "Three children play in and around a pile of leaves in a grassy field."
+      },
+      {
+        "start_mmss": "00:21",
+        "end_mmss": "00:43",
+        "caption": "The children run and play in a yard near a red truck and a house."
+      },
+      {
+        "start_mmss": "00:42",
+        "end_mmss": "00:57",
+        "caption": "A woman walks across a driveway past parked vehicles."
+      },
+      {
+        "start_mmss": "00:56",
+        "end_mmss": "01:18",
+        "caption": "A boy crouches in a pile of leaves and then runs across a driveway."
+      },
+      {
+        "start_mmss": "01:17",
+        "end_mmss": "01:47",
+        "caption": "Children play in a pile of leaves in a yard next to a red truck."
+      }
+    ]
+  },
+  "video_14": {
+    "sample_meta": {
+      "total_frames": 4608,
+      "fps": 24.0,
+      "width": 1920,
+      "height": 1080,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 307,
+          "timestamp_sec": 12.791666666666666,
+          "timestamp_mmss": "00:12"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 614,
+          "timestamp_sec": 25.583333333333332,
+          "timestamp_mmss": "00:25"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 921,
+          "timestamp_sec": 38.375,
+          "timestamp_mmss": "00:38"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1229,
+          "timestamp_sec": 51.208333333333336,
+          "timestamp_mmss": "00:51"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1536,
+          "timestamp_sec": 64.0,
+          "timestamp_mmss": "01:04"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1843,
+          "timestamp_sec": 76.79166666666667,
+          "timestamp_mmss": "01:16"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 2150,
+          "timestamp_sec": 89.58333333333333,
+          "timestamp_mmss": "01:29"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 2457,
+          "timestamp_sec": 102.375,
+          "timestamp_mmss": "01:42"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 2764,
+          "timestamp_sec": 115.16666666666667,
+          "timestamp_mmss": "01:55"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 3071,
+          "timestamp_sec": 127.95833333333333,
+          "timestamp_mmss": "02:07"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 3378,
+          "timestamp_sec": 140.75,
+          "timestamp_mmss": "02:20"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 3686,
+          "timestamp_sec": 153.58333333333334,
+          "timestamp_mmss": "02:33"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 3993,
+          "timestamp_sec": 166.375,
+          "timestamp_mmss": "02:46"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 4300,
+          "timestamp_sec": 179.16666666666666,
+          "timestamp_mmss": "02:59"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 4607,
+          "timestamp_sec": 191.95833333333334,
+          "timestamp_mmss": "03:11"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "The upper towers of the cathedral are shown against a grey sky."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 2,
+          "caption": "A sculpted stone portal features numerous religious figures."
+        },
+        {
+          "start_frame_id": 2,
+          "end_frame_id": 3,
+          "caption": "A row of lit candles with religious imagery sits in a dark space."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 5,
+          "caption": "Low-angle shots capture the gothic exterior, including gargoyles and a rose window."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 7,
+          "caption": "The interior of the cathedral displays vaulted ceilings and stained glass windows."
+        },
+        {
+          "start_frame_id": 7,
+          "end_frame_id": 8,
+          "caption": "A stone gargoyle overlooks the city of Paris from a high vantage point."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 11,
+          "caption": "Various architectural details and high-angle views of the cathedral's facade are shown."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 12,
+          "caption": "A hazy aerial view shows the cathedral and the surrounding city skyline."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 13,
+          "caption": "Green statues are positioned along the roof of the cathedral."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 14,
+          "caption": "A distant aerial view captures the cathedral within the city landscape."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "The cathedral and a nearby river are shown during a snowstorm."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:13",
+        "caption": "The upper towers of the cathedral are shown against a grey sky."
+      },
+      {
+        "start_mmss": "00:12",
+        "end_mmss": "00:26",
+        "caption": "A sculpted stone portal features numerous religious figures."
+      },
+      {
+        "start_mmss": "00:25",
+        "end_mmss": "00:39",
+        "caption": "A row of lit candles with religious imagery sits in a dark space."
+      },
+      {
+        "start_mmss": "00:38",
+        "end_mmss": "01:04",
+        "caption": "Low-angle shots capture the gothic exterior, including gargoyles and a rose window."
+      },
+      {
+        "start_mmss": "01:04",
+        "end_mmss": "01:30",
+        "caption": "The interior of the cathedral displays vaulted ceilings and stained glass windows."
+      },
+      {
+        "start_mmss": "01:29",
+        "end_mmss": "01:43",
+        "caption": "A stone gargoyle overlooks the city of Paris from a high vantage point."
+      },
+      {
+        "start_mmss": "01:42",
+        "end_mmss": "02:21",
+        "caption": "Various architectural details and high-angle views of the cathedral's facade are shown."
+      },
+      {
+        "start_mmss": "02:20",
+        "end_mmss": "02:34",
+        "caption": "A hazy aerial view shows the cathedral and the surrounding city skyline."
+      },
+      {
+        "start_mmss": "02:33",
+        "end_mmss": "02:47",
+        "caption": "Green statues are positioned along the roof of the cathedral."
+      },
+      {
+        "start_mmss": "02:46",
+        "end_mmss": "03:00",
+        "caption": "A distant aerial view captures the cathedral within the city landscape."
+      },
+      {
+        "start_mmss": "02:59",
+        "end_mmss": "03:12",
+        "caption": "The cathedral and a nearby river are shown during a snowstorm."
+      }
+    ]
+  },
+  "video_15": {
+    "sample_meta": {
+      "total_frames": 6096,
+      "fps": 23.976023976023978,
+      "width": 1280,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 406,
+          "timestamp_sec": 16.93358333333333,
+          "timestamp_mmss": "00:16"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 813,
+          "timestamp_sec": 33.908874999999995,
+          "timestamp_mmss": "00:33"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 1219,
+          "timestamp_sec": 50.84245833333333,
+          "timestamp_mmss": "00:50"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1625,
+          "timestamp_sec": 67.77604166666666,
+          "timestamp_mmss": "01:07"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 2032,
+          "timestamp_sec": 84.75133333333332,
+          "timestamp_mmss": "01:24"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 2438,
+          "timestamp_sec": 101.68491666666667,
+          "timestamp_mmss": "01:41"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 2844,
+          "timestamp_sec": 118.6185,
+          "timestamp_mmss": "01:58"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 3251,
+          "timestamp_sec": 135.59379166666665,
+          "timestamp_mmss": "02:15"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 3657,
+          "timestamp_sec": 152.52737499999998,
+          "timestamp_mmss": "02:32"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 4063,
+          "timestamp_sec": 169.4609583333333,
+          "timestamp_mmss": "02:49"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 4470,
+          "timestamp_sec": 186.43624999999997,
+          "timestamp_mmss": "03:06"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 4876,
+          "timestamp_sec": 203.36983333333333,
+          "timestamp_mmss": "03:23"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 5282,
+          "timestamp_sec": 220.30341666666666,
+          "timestamp_mmss": "03:40"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 5689,
+          "timestamp_sec": 237.27870833333333,
+          "timestamp_mmss": "03:57"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 6095,
+          "timestamp_sec": 254.21229166666666,
+          "timestamp_mmss": "04:14"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 5,
+          "caption": "A grassy field features large wooden spools and a white wooden structure as obstacles."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 7,
+          "caption": "The camera moves rapidly toward the ground, resulting in a blurred image."
+        },
+        {
+          "start_frame_id": 7,
+          "end_frame_id": 14,
+          "caption": "The camera is positioned at ground level, showing blurred blades of grass."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "A metallic braided hose and a person's feet are visible on the grass."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "01:25",
+        "caption": "A grassy field features large wooden spools and a white wooden structure as obstacles."
+      },
+      {
+        "start_mmss": "01:24",
+        "end_mmss": "01:59",
+        "caption": "The camera moves rapidly toward the ground, resulting in a blurred image."
+      },
+      {
+        "start_mmss": "01:58",
+        "end_mmss": "03:58",
+        "caption": "The camera is positioned at ground level, showing blurred blades of grass."
+      },
+      {
+        "start_mmss": "03:57",
+        "end_mmss": "04:15",
+        "caption": "A metallic braided hose and a person's feet are visible on the grass."
+      }
+    ]
+  },
+  "video_16": {
+    "sample_meta": {
+      "total_frames": 3065,
+      "fps": 29.97002997002997,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 204,
+          "timestamp_sec": 6.8068,
+          "timestamp_mmss": "00:06"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 409,
+          "timestamp_sec": 13.646966666666668,
+          "timestamp_mmss": "00:13"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 613,
+          "timestamp_sec": 20.453766666666667,
+          "timestamp_mmss": "00:20"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 817,
+          "timestamp_sec": 27.260566666666666,
+          "timestamp_mmss": "00:27"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1021,
+          "timestamp_sec": 34.067366666666665,
+          "timestamp_mmss": "00:34"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1226,
+          "timestamp_sec": 40.90753333333333,
+          "timestamp_mmss": "00:40"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 1430,
+          "timestamp_sec": 47.714333333333336,
+          "timestamp_mmss": "00:47"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 1634,
+          "timestamp_sec": 54.52113333333333,
+          "timestamp_mmss": "00:54"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 1838,
+          "timestamp_sec": 61.327933333333334,
+          "timestamp_mmss": "01:01"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 2043,
+          "timestamp_sec": 68.1681,
+          "timestamp_mmss": "01:08"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 2247,
+          "timestamp_sec": 74.9749,
+          "timestamp_mmss": "01:14"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 2451,
+          "timestamp_sec": 81.7817,
+          "timestamp_mmss": "01:21"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 2655,
+          "timestamp_sec": 88.5885,
+          "timestamp_mmss": "01:28"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 2860,
+          "timestamp_sec": 95.42866666666667,
+          "timestamp_mmss": "01:35"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 3064,
+          "timestamp_sec": 102.23546666666667,
+          "timestamp_mmss": "01:42"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "A boy walks toward a large blue and yellow inflatable slide."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 14,
+          "caption": "Children climb and slide on the inflatable water slide."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "A boy walks across the grass."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:07",
+        "caption": "A boy walks toward a large blue and yellow inflatable slide."
+      },
+      {
+        "start_mmss": "00:06",
+        "end_mmss": "01:36",
+        "caption": "Children climb and slide on the inflatable water slide."
+      },
+      {
+        "start_mmss": "01:35",
+        "end_mmss": "01:43",
+        "caption": "A boy walks across the grass."
+      }
+    ]
+  },
+  "video_17": {
+    "sample_meta": {
+      "total_frames": 6683,
+      "fps": 29.97002997002997,
+      "width": 960,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 445,
+          "timestamp_sec": 14.848166666666668,
+          "timestamp_mmss": "00:14"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 891,
+          "timestamp_sec": 29.7297,
+          "timestamp_mmss": "00:29"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 1336,
+          "timestamp_sec": 44.577866666666665,
+          "timestamp_mmss": "00:44"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1782,
+          "timestamp_sec": 59.4594,
+          "timestamp_mmss": "00:59"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 2227,
+          "timestamp_sec": 74.30756666666667,
+          "timestamp_mmss": "01:14"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 2673,
+          "timestamp_sec": 89.1891,
+          "timestamp_mmss": "01:29"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 3118,
+          "timestamp_sec": 104.03726666666667,
+          "timestamp_mmss": "01:44"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 3564,
+          "timestamp_sec": 118.9188,
+          "timestamp_mmss": "01:58"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 4009,
+          "timestamp_sec": 133.76696666666666,
+          "timestamp_mmss": "02:13"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 4455,
+          "timestamp_sec": 148.6485,
+          "timestamp_mmss": "02:28"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 4900,
+          "timestamp_sec": 163.49666666666667,
+          "timestamp_mmss": "02:43"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 5346,
+          "timestamp_sec": 178.3782,
+          "timestamp_mmss": "02:58"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 5791,
+          "timestamp_sec": 193.22636666666668,
+          "timestamp_mmss": "03:13"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 6237,
+          "timestamp_sec": 208.1079,
+          "timestamp_mmss": "03:28"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 6682,
+          "timestamp_sec": 222.95606666666666,
+          "timestamp_mmss": "03:42"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 2,
+          "caption": "Waves roll onto a sandy beach under a clear blue sky."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 4,
+          "caption": "A group of dolphins swims in the shallow surf near the shore."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 7,
+          "caption": "People gather on the beach and in the water to watch dolphins splashing in the waves."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 10,
+          "caption": "People in the water guide and pull dolphins from the shallow shore back toward the open sea."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 14,
+          "caption": "People stand in the shallow water and watch as the dolphins swim away from the shoreline."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "The open ocean and the horizon are visible under a clear sky."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:30",
+        "caption": "Waves roll onto a sandy beach under a clear blue sky."
+      },
+      {
+        "start_mmss": "00:44",
+        "end_mmss": "01:00",
+        "caption": "A group of dolphins swims in the shallow surf near the shore."
+      },
+      {
+        "start_mmss": "01:14",
+        "end_mmss": "01:45",
+        "caption": "People gather on the beach and in the water to watch dolphins splashing in the waves."
+      },
+      {
+        "start_mmss": "01:58",
+        "end_mmss": "02:29",
+        "caption": "People in the water guide and pull dolphins from the shallow shore back toward the open sea."
+      },
+      {
+        "start_mmss": "02:43",
+        "end_mmss": "03:29",
+        "caption": "People stand in the shallow water and watch as the dolphins swim away from the shoreline."
+      },
+      {
+        "start_mmss": "03:28",
+        "end_mmss": "03:43",
+        "caption": "The open ocean and the horizon are visible under a clear sky."
+      }
+    ]
+  },
+  "video_18": {
+    "sample_meta": {
+      "total_frames": 2221,
+      "fps": 30.0,
+      "width": 1280,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 148,
+          "timestamp_sec": 4.933333333333334,
+          "timestamp_mmss": "00:04"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 296,
+          "timestamp_sec": 9.866666666666667,
+          "timestamp_mmss": "00:09"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 444,
+          "timestamp_sec": 14.8,
+          "timestamp_mmss": "00:14"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 592,
+          "timestamp_sec": 19.733333333333334,
+          "timestamp_mmss": "00:19"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 740,
+          "timestamp_sec": 24.666666666666668,
+          "timestamp_mmss": "00:24"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 888,
+          "timestamp_sec": 29.6,
+          "timestamp_mmss": "00:29"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 1036,
+          "timestamp_sec": 34.53333333333333,
+          "timestamp_mmss": "00:34"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 1184,
+          "timestamp_sec": 39.46666666666667,
+          "timestamp_mmss": "00:39"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 1332,
+          "timestamp_sec": 44.4,
+          "timestamp_mmss": "00:44"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 1480,
+          "timestamp_sec": 49.333333333333336,
+          "timestamp_mmss": "00:49"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 1628,
+          "timestamp_sec": 54.266666666666666,
+          "timestamp_mmss": "00:54"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 1776,
+          "timestamp_sec": 59.2,
+          "timestamp_mmss": "00:59"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 1924,
+          "timestamp_sec": 64.13333333333334,
+          "timestamp_mmss": "01:04"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 2072,
+          "timestamp_sec": 69.06666666666666,
+          "timestamp_mmss": "01:09"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 2220,
+          "timestamp_sec": 74.0,
+          "timestamp_mmss": "01:14"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "A scuba diver swims over a coral reef."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 3,
+          "caption": "The camera pans across a vast coral reef."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 5,
+          "caption": "Close-up views of various coral formations."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 7,
+          "caption": "The camera moves over a wide expanse of the coral reef."
+        },
+        {
+          "start_frame_id": 7,
+          "end_frame_id": 8,
+          "caption": "A diver is visible in the distance above the reef."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 9,
+          "caption": "A close-up shot shows a small coral structure inside a crevice."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 11,
+          "caption": "Scuba divers swim in the distance over the reef."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 12,
+          "caption": "A close-up view of a light-colored coral formation."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 14,
+          "caption": "A scuba diver swims in the distance over the reef."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "A close-up shot shows a scuba diver's mask and head from below."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:05",
+        "caption": "A scuba diver swims over a coral reef."
+      },
+      {
+        "start_mmss": "00:04",
+        "end_mmss": "00:15",
+        "caption": "The camera pans across a vast coral reef."
+      },
+      {
+        "start_mmss": "00:14",
+        "end_mmss": "00:25",
+        "caption": "Close-up views of various coral formations."
+      },
+      {
+        "start_mmss": "00:24",
+        "end_mmss": "00:35",
+        "caption": "The camera moves over a wide expanse of the coral reef."
+      },
+      {
+        "start_mmss": "00:34",
+        "end_mmss": "00:40",
+        "caption": "A diver is visible in the distance above the reef."
+      },
+      {
+        "start_mmss": "00:39",
+        "end_mmss": "00:45",
+        "caption": "A close-up shot shows a small coral structure inside a crevice."
+      },
+      {
+        "start_mmss": "00:44",
+        "end_mmss": "00:55",
+        "caption": "Scuba divers swim in the distance over the reef."
+      },
+      {
+        "start_mmss": "00:54",
+        "end_mmss": "01:00",
+        "caption": "A close-up view of a light-colored coral formation."
+      },
+      {
+        "start_mmss": "00:59",
+        "end_mmss": "01:10",
+        "caption": "A scuba diver swims in the distance over the reef."
+      },
+      {
+        "start_mmss": "01:09",
+        "end_mmss": "01:14",
+        "caption": "A close-up shot shows a scuba diver's mask and head from below."
+      }
+    ]
+  },
+  "video_19": {
+    "sample_meta": {
+      "total_frames": 1751,
+      "fps": 25.0,
+      "width": 854,
+      "height": 480,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 117,
+          "timestamp_sec": 4.68,
+          "timestamp_mmss": "00:04"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 233,
+          "timestamp_sec": 9.32,
+          "timestamp_mmss": "00:09"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 350,
+          "timestamp_sec": 14.0,
+          "timestamp_mmss": "00:14"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 467,
+          "timestamp_sec": 18.68,
+          "timestamp_mmss": "00:18"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 583,
+          "timestamp_sec": 23.32,
+          "timestamp_mmss": "00:23"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 700,
+          "timestamp_sec": 28.0,
+          "timestamp_mmss": "00:28"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 817,
+          "timestamp_sec": 32.68,
+          "timestamp_mmss": "00:32"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 933,
+          "timestamp_sec": 37.32,
+          "timestamp_mmss": "00:37"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 1050,
+          "timestamp_sec": 42.0,
+          "timestamp_mmss": "00:42"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 1167,
+          "timestamp_sec": 46.68,
+          "timestamp_mmss": "00:46"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 1283,
+          "timestamp_sec": 51.32,
+          "timestamp_mmss": "00:51"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 1400,
+          "timestamp_sec": 56.0,
+          "timestamp_mmss": "00:56"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 1517,
+          "timestamp_sec": 60.68,
+          "timestamp_mmss": "01:00"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 1633,
+          "timestamp_sec": 65.32,
+          "timestamp_mmss": "01:05"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 1750,
+          "timestamp_sec": 70.0,
+          "timestamp_mmss": "01:10"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 9,
+          "caption": "An airplane approaches from a distance over the ocean."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 12,
+          "caption": "The airplane flies at a low altitude over the water toward the beach."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 13,
+          "caption": "The airplane flies directly over a beach filled with people."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 14,
+          "caption": "The airplane descends toward the runway."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "The airplane touches down and taxies on the runway."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:42",
+        "caption": "An airplane approaches from a distance over the ocean."
+      },
+      {
+        "start_mmss": "00:42",
+        "end_mmss": "00:56",
+        "caption": "The airplane flies at a low altitude over the water toward the beach."
+      },
+      {
+        "start_mmss": "00:56",
+        "end_mmss": "01:01",
+        "caption": "The airplane flies directly over a beach filled with people."
+      },
+      {
+        "start_mmss": "01:00",
+        "end_mmss": "01:06",
+        "caption": "The airplane descends toward the runway."
+      },
+      {
+        "start_mmss": "01:05",
+        "end_mmss": "01:10",
+        "caption": "The airplane touches down and taxies on the runway."
+      }
+    ]
+  },
+  "video_20": {
+    "sample_meta": {
+      "total_frames": 3863,
+      "fps": 25.0,
+      "width": 640,
+      "height": 480,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 257,
+          "timestamp_sec": 10.28,
+          "timestamp_mmss": "00:10"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 515,
+          "timestamp_sec": 20.6,
+          "timestamp_mmss": "00:20"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 772,
+          "timestamp_sec": 30.88,
+          "timestamp_mmss": "00:30"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1030,
+          "timestamp_sec": 41.2,
+          "timestamp_mmss": "00:41"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1287,
+          "timestamp_sec": 51.48,
+          "timestamp_mmss": "00:51"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1545,
+          "timestamp_sec": 61.8,
+          "timestamp_mmss": "01:01"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 1802,
+          "timestamp_sec": 72.08,
+          "timestamp_mmss": "01:12"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 2060,
+          "timestamp_sec": 82.4,
+          "timestamp_mmss": "01:22"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 2317,
+          "timestamp_sec": 92.68,
+          "timestamp_mmss": "01:32"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 2575,
+          "timestamp_sec": 103.0,
+          "timestamp_mmss": "01:43"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 2832,
+          "timestamp_sec": 113.28,
+          "timestamp_mmss": "01:53"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 3090,
+          "timestamp_sec": 123.6,
+          "timestamp_mmss": "02:03"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 3347,
+          "timestamp_sec": 133.88,
+          "timestamp_mmss": "02:13"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 3605,
+          "timestamp_sec": 144.2,
+          "timestamp_mmss": "02:24"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 3862,
+          "timestamp_sec": 154.48,
+          "timestamp_mmss": "02:34"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "People walk on a boardwalk with a city skyline in the background."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 2,
+          "caption": "People walk along a path next to a grassy field with a city skyline in the distance."
+        },
+        {
+          "start_frame_id": 2,
+          "end_frame_id": 3,
+          "caption": "A person walks on a grassy area in front of a large stone wall."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 4,
+          "caption": "The Statue of Liberty stands on its pedestal against a blue sky."
+        },
+        {
+          "start_frame_id": 4,
+          "end_frame_id": 5,
+          "caption": "A medium shot shows the Statue of Liberty from the waist up."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 7,
+          "caption": "A close-up shot focuses on the face and crown of the Statue of Liberty."
+        },
+        {
+          "start_frame_id": 7,
+          "end_frame_id": 8,
+          "caption": "A medium shot shows the Statue of Liberty from the waist up."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 9,
+          "caption": "The stone pedestal of the Statue of Liberty is shown with people walking at its base."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 10,
+          "caption": "A man in a dark t-shirt stands with his hands on his hips among other people."
+        },
+        {
+          "start_frame_id": 10,
+          "end_frame_id": 11,
+          "caption": "People stand by a railing overlooking a body of water."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 12,
+          "caption": "People walk on a boardwalk with a city skyline in the background."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 13,
+          "caption": "A group of people poses for a photo in front of a stone wall."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 14,
+          "caption": "The Statue of Liberty stands on its pedestal against a blue sky."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "The Statue of Liberty is shown in a medium shot and a close-up of its face."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:11",
+        "caption": "People walk on a boardwalk with a city skyline in the background."
+      },
+      {
+        "start_mmss": "00:10",
+        "end_mmss": "00:21",
+        "caption": "People walk along a path next to a grassy field with a city skyline in the distance."
+      },
+      {
+        "start_mmss": "00:20",
+        "end_mmss": "00:31",
+        "caption": "A person walks on a grassy area in front of a large stone wall."
+      },
+      {
+        "start_mmss": "00:30",
+        "end_mmss": "00:42",
+        "caption": "The Statue of Liberty stands on its pedestal against a blue sky."
+      },
+      {
+        "start_mmss": "00:41",
+        "end_mmss": "00:52",
+        "caption": "A medium shot shows the Statue of Liberty from the waist up."
+      },
+      {
+        "start_mmss": "00:51",
+        "end_mmss": "01:13",
+        "caption": "A close-up shot focuses on the face and crown of the Statue of Liberty."
+      },
+      {
+        "start_mmss": "01:12",
+        "end_mmss": "01:23",
+        "caption": "A medium shot shows the Statue of Liberty from the waist up."
+      },
+      {
+        "start_mmss": "01:22",
+        "end_mmss": "01:33",
+        "caption": "The stone pedestal of the Statue of Liberty is shown with people walking at its base."
+      },
+      {
+        "start_mmss": "01:32",
+        "end_mmss": "01:43",
+        "caption": "A man in a dark t-shirt stands with his hands on his hips among other people."
+      },
+      {
+        "start_mmss": "01:43",
+        "end_mmss": "01:54",
+        "caption": "People stand by a railing overlooking a body of water."
+      },
+      {
+        "start_mmss": "01:53",
+        "end_mmss": "02:04",
+        "caption": "People walk on a boardwalk with a city skyline in the background."
+      },
+      {
+        "start_mmss": "02:03",
+        "end_mmss": "02:14",
+        "caption": "A group of people poses for a photo in front of a stone wall."
+      },
+      {
+        "start_mmss": "02:13",
+        "end_mmss": "02:25",
+        "caption": "The Statue of Liberty stands on its pedestal against a blue sky."
+      },
+      {
+        "start_mmss": "02:24",
+        "end_mmss": "02:35",
+        "caption": "The Statue of Liberty is shown in a medium shot and a close-up of its face."
+      }
+    ]
+  },
+  "video_21": {
+    "sample_meta": {
+      "total_frames": 9672,
+      "fps": 29.97002997002997,
+      "width": 1280,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 645,
+          "timestamp_sec": 21.5215,
+          "timestamp_mmss": "00:21"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 1289,
+          "timestamp_sec": 43.00963333333333,
+          "timestamp_mmss": "00:43"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 1934,
+          "timestamp_sec": 64.53113333333333,
+          "timestamp_mmss": "01:04"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 2579,
+          "timestamp_sec": 86.05263333333333,
+          "timestamp_mmss": "01:26"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 3224,
+          "timestamp_sec": 107.57413333333334,
+          "timestamp_mmss": "01:47"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 3868,
+          "timestamp_sec": 129.06226666666666,
+          "timestamp_mmss": "02:09"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 4513,
+          "timestamp_sec": 150.58376666666666,
+          "timestamp_mmss": "02:30"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 5158,
+          "timestamp_sec": 172.10526666666667,
+          "timestamp_mmss": "02:52"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 5803,
+          "timestamp_sec": 193.62676666666667,
+          "timestamp_mmss": "03:13"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 6447,
+          "timestamp_sec": 215.1149,
+          "timestamp_mmss": "03:35"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 7092,
+          "timestamp_sec": 236.6364,
+          "timestamp_mmss": "03:56"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 7737,
+          "timestamp_sec": 258.1579,
+          "timestamp_mmss": "04:18"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 8382,
+          "timestamp_sec": 279.6794,
+          "timestamp_mmss": "04:39"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 9026,
+          "timestamp_sec": 301.1675333333333,
+          "timestamp_mmss": "05:01"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 9671,
+          "timestamp_sec": 322.6890333333333,
+          "timestamp_mmss": "05:22"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "A white glider sits on a grassy field with two people standing nearby."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 14,
+          "caption": "A white glider flies over a rural landscape with fields, forests, and bodies of water."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "A white glider sits on a grassy field with a person in the background."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:22",
+        "caption": "A white glider sits on a grassy field with two people standing nearby."
+      },
+      {
+        "start_mmss": "00:21",
+        "end_mmss": "05:02",
+        "caption": "A white glider flies over a rural landscape with fields, forests, and bodies of water."
+      },
+      {
+        "start_mmss": "05:01",
+        "end_mmss": "05:23",
+        "caption": "A white glider sits on a grassy field with a person in the background."
+      }
+    ]
+  },
+  "video_22": {
+    "sample_meta": {
+      "total_frames": 5178,
+      "fps": 29.97002997002997,
+      "width": 1280,
+      "height": 720,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 345,
+          "timestamp_sec": 11.5115,
+          "timestamp_mmss": "00:11"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 690,
+          "timestamp_sec": 23.023,
+          "timestamp_mmss": "00:23"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 1035,
+          "timestamp_sec": 34.5345,
+          "timestamp_mmss": "00:34"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1381,
+          "timestamp_sec": 46.079366666666665,
+          "timestamp_mmss": "00:46"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1726,
+          "timestamp_sec": 57.59086666666667,
+          "timestamp_mmss": "00:57"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 2071,
+          "timestamp_sec": 69.10236666666667,
+          "timestamp_mmss": "01:09"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 2416,
+          "timestamp_sec": 80.61386666666667,
+          "timestamp_mmss": "01:20"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 2761,
+          "timestamp_sec": 92.12536666666666,
+          "timestamp_mmss": "01:32"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 3106,
+          "timestamp_sec": 103.63686666666666,
+          "timestamp_mmss": "01:43"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 3451,
+          "timestamp_sec": 115.14836666666667,
+          "timestamp_mmss": "01:55"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 3796,
+          "timestamp_sec": 126.65986666666667,
+          "timestamp_mmss": "02:06"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 4142,
+          "timestamp_sec": 138.20473333333334,
+          "timestamp_mmss": "02:18"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 4487,
+          "timestamp_sec": 149.71623333333335,
+          "timestamp_mmss": "02:29"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 4832,
+          "timestamp_sec": 161.22773333333333,
+          "timestamp_mmss": "02:41"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 5177,
+          "timestamp_sec": 172.73923333333335,
+          "timestamp_mmss": "02:52"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "The camera is positioned at the start of a course, facing a silver and blue car and a white fence."
+        },
+        {
+          "start_frame_id": 1,
+          "end_frame_id": 2,
+          "caption": "The camera moves down a paved road towards a wooden ramp and a red banner."
+        },
+        {
+          "start_frame_id": 2,
+          "end_frame_id": 3,
+          "caption": "The camera moves down a narrow street with a wooden wall on the right."
+        },
+        {
+          "start_frame_id": 3,
+          "end_frame_id": 4,
+          "caption": "The camera moves past a crowd of people behind an orange banner."
+        },
+        {
+          "start_frame_id": 4,
+          "end_frame_id": 5,
+          "caption": "The camera descends a long flight of concrete stairs with a white railing."
+        },
+        {
+          "start_frame_id": 5,
+          "end_frame_id": 6,
+          "caption": "The camera moves over a wooden ramp structure between buildings."
+        },
+        {
+          "start_frame_id": 6,
+          "end_frame_id": 7,
+          "caption": "The camera moves down a paved road with orange cones and people on the left."
+        },
+        {
+          "start_frame_id": 7,
+          "end_frame_id": 8,
+          "caption": "The camera moves through a dense crowd of people lining a paved street."
+        },
+        {
+          "start_frame_id": 8,
+          "end_frame_id": 9,
+          "caption": "The camera approaches a large curved wooden wall with a Red Bull logo."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 10,
+          "caption": "The camera moves down a paved road, casting a shadow of the cyclist."
+        },
+        {
+          "start_frame_id": 10,
+          "end_frame_id": 11,
+          "caption": "The camera moves down a street with graffiti-covered walls on the left."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 12,
+          "caption": "The camera moves down a cobblestone street with people standing on the right."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 13,
+          "caption": "The camera moves down a street with red and blue lines on the pavement."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 14,
+          "caption": "The camera moves over a large wooden ramp with a massive crowd on either side."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "The camera is stationary in a crowd of people at the end of the course."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:12",
+        "caption": "The camera is positioned at the start of a course, facing a silver and blue car and a white fence."
+      },
+      {
+        "start_mmss": "00:11",
+        "end_mmss": "00:24",
+        "caption": "The camera moves down a paved road towards a wooden ramp and a red banner."
+      },
+      {
+        "start_mmss": "00:23",
+        "end_mmss": "00:35",
+        "caption": "The camera moves down a narrow street with a wooden wall on the right."
+      },
+      {
+        "start_mmss": "00:34",
+        "end_mmss": "00:47",
+        "caption": "The camera moves past a crowd of people behind an orange banner."
+      },
+      {
+        "start_mmss": "00:46",
+        "end_mmss": "00:58",
+        "caption": "The camera descends a long flight of concrete stairs with a white railing."
+      },
+      {
+        "start_mmss": "00:57",
+        "end_mmss": "01:10",
+        "caption": "The camera moves over a wooden ramp structure between buildings."
+      },
+      {
+        "start_mmss": "01:09",
+        "end_mmss": "01:21",
+        "caption": "The camera moves down a paved road with orange cones and people on the left."
+      },
+      {
+        "start_mmss": "01:20",
+        "end_mmss": "01:33",
+        "caption": "The camera moves through a dense crowd of people lining a paved street."
+      },
+      {
+        "start_mmss": "01:32",
+        "end_mmss": "01:44",
+        "caption": "The camera approaches a large curved wooden wall with a Red Bull logo."
+      },
+      {
+        "start_mmss": "01:43",
+        "end_mmss": "01:56",
+        "caption": "The camera moves down a paved road, casting a shadow of the cyclist."
+      },
+      {
+        "start_mmss": "01:55",
+        "end_mmss": "02:07",
+        "caption": "The camera moves down a street with graffiti-covered walls on the left."
+      },
+      {
+        "start_mmss": "02:06",
+        "end_mmss": "02:19",
+        "caption": "The camera moves down a cobblestone street with people standing on the right."
+      },
+      {
+        "start_mmss": "02:18",
+        "end_mmss": "02:30",
+        "caption": "The camera moves down a street with red and blue lines on the pavement."
+      },
+      {
+        "start_mmss": "02:29",
+        "end_mmss": "02:42",
+        "caption": "The camera moves over a large wooden ramp with a massive crowd on either side."
+      },
+      {
+        "start_mmss": "02:41",
+        "end_mmss": "02:53",
+        "caption": "The camera is stationary in a crowd of people at the end of the course."
+      }
+    ]
+  },
+  "video_23": {
+    "sample_meta": {
+      "total_frames": 4382,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 480,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 292,
+          "timestamp_sec": 9.743066666666667,
+          "timestamp_mmss": "00:09"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 584,
+          "timestamp_sec": 19.486133333333335,
+          "timestamp_mmss": "00:19"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 876,
+          "timestamp_sec": 29.229200000000002,
+          "timestamp_mmss": "00:29"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1168,
+          "timestamp_sec": 38.97226666666667,
+          "timestamp_mmss": "00:38"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1460,
+          "timestamp_sec": 48.715333333333334,
+          "timestamp_mmss": "00:48"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1752,
+          "timestamp_sec": 58.458400000000005,
+          "timestamp_mmss": "00:58"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 2044,
+          "timestamp_sec": 68.20146666666666,
+          "timestamp_mmss": "01:08"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 2337,
+          "timestamp_sec": 77.9779,
+          "timestamp_mmss": "01:17"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 2629,
+          "timestamp_sec": 87.72096666666667,
+          "timestamp_mmss": "01:27"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 2921,
+          "timestamp_sec": 97.46403333333333,
+          "timestamp_mmss": "01:37"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 3213,
+          "timestamp_sec": 107.2071,
+          "timestamp_mmss": "01:47"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 3505,
+          "timestamp_sec": 116.95016666666668,
+          "timestamp_mmss": "01:56"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 3797,
+          "timestamp_sec": 126.69323333333334,
+          "timestamp_mmss": "02:06"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 4089,
+          "timestamp_sec": 136.4363,
+          "timestamp_mmss": "02:16"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 4381,
+          "timestamp_sec": 146.17936666666668,
+          "timestamp_mmss": "02:26"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 4,
+          "caption": "A wide shot shows a flat dirt field under a cloudy sky."
+        },
+        {
+          "start_frame_id": 4,
+          "end_frame_id": 6,
+          "caption": "The camera view is out of focus, showing a blurry brown surface."
+        },
+        {
+          "start_frame_id": 6,
+          "end_frame_id": 7,
+          "caption": "A close-up view shows the reddish-brown dirt ground."
+        },
+        {
+          "start_frame_id": 7,
+          "end_frame_id": 9,
+          "caption": "A low-angle shot shows the flat dirt field under a cloudy sky."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 12,
+          "caption": "A dark SUV drives across the flat dirt field."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 14,
+          "caption": "The camera view is out of focus, showing a blurry grey surface."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "A close-up view shows the dirt ground with a shoe visible at the bottom."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:39",
+        "caption": "A wide shot shows a flat dirt field under a cloudy sky."
+      },
+      {
+        "start_mmss": "00:38",
+        "end_mmss": "00:59",
+        "caption": "The camera view is out of focus, showing a blurry brown surface."
+      },
+      {
+        "start_mmss": "00:58",
+        "end_mmss": "01:09",
+        "caption": "A close-up view shows the reddish-brown dirt ground."
+      },
+      {
+        "start_mmss": "01:08",
+        "end_mmss": "01:28",
+        "caption": "A low-angle shot shows the flat dirt field under a cloudy sky."
+      },
+      {
+        "start_mmss": "01:27",
+        "end_mmss": "01:57",
+        "caption": "A dark SUV drives across the flat dirt field."
+      },
+      {
+        "start_mmss": "01:56",
+        "end_mmss": "02:17",
+        "caption": "The camera view is out of focus, showing a blurry grey surface."
+      },
+      {
+        "start_mmss": "02:16",
+        "end_mmss": "02:27",
+        "caption": "A close-up view shows the dirt ground with a shoe visible at the bottom."
+      }
+    ]
+  },
+  "video_24": {
+    "sample_meta": {
+      "total_frames": 2574,
+      "fps": 29.97002997002997,
+      "width": 640,
+      "height": 480,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 172,
+          "timestamp_sec": 5.739066666666667,
+          "timestamp_mmss": "00:05"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 343,
+          "timestamp_sec": 11.444766666666666,
+          "timestamp_mmss": "00:11"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 515,
+          "timestamp_sec": 17.183833333333332,
+          "timestamp_mmss": "00:17"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 686,
+          "timestamp_sec": 22.889533333333333,
+          "timestamp_mmss": "00:22"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 858,
+          "timestamp_sec": 28.628600000000002,
+          "timestamp_mmss": "00:28"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1029,
+          "timestamp_sec": 34.3343,
+          "timestamp_mmss": "00:34"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 1201,
+          "timestamp_sec": 40.073366666666665,
+          "timestamp_mmss": "00:40"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 1372,
+          "timestamp_sec": 45.779066666666665,
+          "timestamp_mmss": "00:45"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 1544,
+          "timestamp_sec": 51.51813333333333,
+          "timestamp_mmss": "00:51"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 1715,
+          "timestamp_sec": 57.22383333333333,
+          "timestamp_mmss": "00:57"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 1887,
+          "timestamp_sec": 62.9629,
+          "timestamp_mmss": "01:02"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 2058,
+          "timestamp_sec": 68.6686,
+          "timestamp_mmss": "01:08"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 2230,
+          "timestamp_sec": 74.40766666666667,
+          "timestamp_mmss": "01:14"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 2401,
+          "timestamp_sec": 80.11336666666666,
+          "timestamp_mmss": "01:20"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 2573,
+          "timestamp_sec": 85.85243333333334,
+          "timestamp_mmss": "01:25"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 11,
+          "caption": "People stand on a rock ledge and in a pool of water near a waterfall."
+        },
+        {
+          "start_frame_id": 11,
+          "end_frame_id": 12,
+          "caption": "A splash appears in the water as a person jumps from the rock ledge."
+        },
+        {
+          "start_frame_id": 12,
+          "end_frame_id": 15,
+          "caption": "A man swims through the water toward the camera and stands up."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "01:03",
+        "caption": "People stand on a rock ledge and in a pool of water near a waterfall."
+      },
+      {
+        "start_mmss": "01:02",
+        "end_mmss": "01:09",
+        "caption": "A splash appears in the water as a person jumps from the rock ledge."
+      },
+      {
+        "start_mmss": "01:08",
+        "end_mmss": "01:26",
+        "caption": "A man swims through the water toward the camera and stands up."
+      }
+    ]
+  },
+  "video_25": {
+    "sample_meta": {
+      "total_frames": 3119,
+      "fps": 30.0,
+      "width": 480,
+      "height": 360,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_sequential_scan",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 208,
+          "timestamp_sec": 6.933333333333334,
+          "timestamp_mmss": "00:06"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 416,
+          "timestamp_sec": 13.866666666666667,
+          "timestamp_mmss": "00:13"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 624,
+          "timestamp_sec": 20.8,
+          "timestamp_mmss": "00:20"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 831,
+          "timestamp_sec": 27.7,
+          "timestamp_mmss": "00:27"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1039,
+          "timestamp_sec": 34.63333333333333,
+          "timestamp_mmss": "00:34"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 1247,
+          "timestamp_sec": 41.56666666666667,
+          "timestamp_mmss": "00:41"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 1455,
+          "timestamp_sec": 48.5,
+          "timestamp_mmss": "00:48"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 1663,
+          "timestamp_sec": 55.43333333333333,
+          "timestamp_mmss": "00:55"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 1871,
+          "timestamp_sec": 62.36666666666667,
+          "timestamp_mmss": "01:02"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 2079,
+          "timestamp_sec": 69.3,
+          "timestamp_mmss": "01:09"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 2287,
+          "timestamp_sec": 76.23333333333333,
+          "timestamp_mmss": "01:16"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 2494,
+          "timestamp_sec": 83.13333333333334,
+          "timestamp_mmss": "01:23"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 2702,
+          "timestamp_sec": 90.06666666666666,
+          "timestamp_mmss": "01:30"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 2910,
+          "timestamp_sec": 97.0,
+          "timestamp_mmss": "01:37"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 3118,
+          "timestamp_sec": 103.93333333333334,
+          "timestamp_mmss": "01:43"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 1,
+          "caption": "A hand holds a small white object near a crow on a paved patio."
+        },
+        {
+          "start_frame_id": 2,
+          "end_frame_id": 6,
+          "caption": "A German Shepherd and a crow interact with a small white object on the ground."
+        },
+        {
+          "start_frame_id": 7,
+          "end_frame_id": 9,
+          "caption": "The crow hops across the patio away from the dog."
+        },
+        {
+          "start_frame_id": 10,
+          "end_frame_id": 12,
+          "caption": "The German Shepherd walks on the patio and sniffs the white object."
+        },
+        {
+          "start_frame_id": 13,
+          "end_frame_id": 15,
+          "caption": "The crow walks across the patio past a white chair and towards a green bin."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:07",
+        "caption": "A hand holds a small white object near a crow on a paved patio."
+      },
+      {
+        "start_mmss": "00:13",
+        "end_mmss": "00:42",
+        "caption": "A German Shepherd and a crow interact with a small white object on the ground."
+      },
+      {
+        "start_mmss": "00:48",
+        "end_mmss": "01:03",
+        "caption": "The crow hops across the patio away from the dog."
+      },
+      {
+        "start_mmss": "01:09",
+        "end_mmss": "01:24",
+        "caption": "The German Shepherd walks on the patio and sniffs the white object."
+      },
+      {
+        "start_mmss": "01:30",
+        "end_mmss": "01:44",
+        "caption": "The crow walks across the patio past a white chair and towards a green bin."
+      }
+    ]
+  },
+  "video_5": {
+    "sample_meta": {
+      "reported_total_frames": 5133,
+      "actual_total_frames": 5131,
+      "total_frames": 5131,
+      "fps": 30.0,
+      "width": 640,
+      "height": 360,
+      "requested_sampled_count": 16,
+      "sampled_count": 16,
+      "sampling_backend": "opencv_actual_decodable_two_pass",
+      "sampled_frames": [
+        {
+          "frame_id": 0,
+          "frame_idx": 0,
+          "timestamp_sec": 0.0,
+          "timestamp_mmss": "00:00"
+        },
+        {
+          "frame_id": 1,
+          "frame_idx": 342,
+          "timestamp_sec": 11.4,
+          "timestamp_mmss": "00:11"
+        },
+        {
+          "frame_id": 2,
+          "frame_idx": 684,
+          "timestamp_sec": 22.8,
+          "timestamp_mmss": "00:22"
+        },
+        {
+          "frame_id": 3,
+          "frame_idx": 1026,
+          "timestamp_sec": 34.2,
+          "timestamp_mmss": "00:34"
+        },
+        {
+          "frame_id": 4,
+          "frame_idx": 1368,
+          "timestamp_sec": 45.6,
+          "timestamp_mmss": "00:45"
+        },
+        {
+          "frame_id": 5,
+          "frame_idx": 1710,
+          "timestamp_sec": 57.0,
+          "timestamp_mmss": "00:57"
+        },
+        {
+          "frame_id": 6,
+          "frame_idx": 2052,
+          "timestamp_sec": 68.4,
+          "timestamp_mmss": "01:08"
+        },
+        {
+          "frame_id": 7,
+          "frame_idx": 2394,
+          "timestamp_sec": 79.8,
+          "timestamp_mmss": "01:19"
+        },
+        {
+          "frame_id": 8,
+          "frame_idx": 2736,
+          "timestamp_sec": 91.2,
+          "timestamp_mmss": "01:31"
+        },
+        {
+          "frame_id": 9,
+          "frame_idx": 3078,
+          "timestamp_sec": 102.6,
+          "timestamp_mmss": "01:42"
+        },
+        {
+          "frame_id": 10,
+          "frame_idx": 3420,
+          "timestamp_sec": 114.0,
+          "timestamp_mmss": "01:54"
+        },
+        {
+          "frame_id": 11,
+          "frame_idx": 3762,
+          "timestamp_sec": 125.4,
+          "timestamp_mmss": "02:05"
+        },
+        {
+          "frame_id": 12,
+          "frame_idx": 4104,
+          "timestamp_sec": 136.8,
+          "timestamp_mmss": "02:16"
+        },
+        {
+          "frame_id": 13,
+          "frame_idx": 4446,
+          "timestamp_sec": 148.2,
+          "timestamp_mmss": "02:28"
+        },
+        {
+          "frame_id": 14,
+          "frame_idx": 4788,
+          "timestamp_sec": 159.6,
+          "timestamp_mmss": "02:39"
+        },
+        {
+          "frame_id": 15,
+          "frame_idx": 5130,
+          "timestamp_sec": 171.0,
+          "timestamp_mmss": "02:51"
+        }
+      ],
+      "requested_min_captions": 1,
+      "requested_max_captions": 24,
+      "effective_min_captions": 1,
+      "effective_max_captions": 15,
+      "model_output_segments": [
+        {
+          "start_frame_id": 0,
+          "end_frame_id": 5,
+          "caption": "A high-angle view shows a narrow passage between rocky walls."
+        },
+        {
+          "start_frame_id": 6,
+          "end_frame_id": 8,
+          "caption": "A bus labeled \"STAGECOACH WEST\" emerges from a rocky tunnel."
+        },
+        {
+          "start_frame_id": 9,
+          "end_frame_id": 13,
+          "caption": "The bus roof and sides pass through the narrow rocky passage."
+        },
+        {
+          "start_frame_id": 14,
+          "end_frame_id": 15,
+          "caption": "The bus exits the rocky passage and drives away past a crowd of people."
+        }
+      ]
+    },
+    "captions": [
+      {
+        "start_mmss": "00:00",
+        "end_mmss": "00:57",
+        "caption": "A high-angle view shows a narrow passage between rocky walls."
+      },
+      {
+        "start_mmss": "01:08",
+        "end_mmss": "01:32",
+        "caption": "A bus labeled \"STAGECOACH WEST\" emerges from a rocky tunnel."
+      },
+      {
+        "start_mmss": "01:42",
+        "end_mmss": "02:29",
+        "caption": "The bus roof and sides pass through the narrow rocky passage."
+      },
+      {
+        "start_mmss": "02:39",
+        "end_mmss": "02:51",
+        "caption": "The bus exits the rocky passage and drives away past a crowd of people."
+      }
+    ]
+  }
+}

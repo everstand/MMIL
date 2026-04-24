@@ -41,17 +41,18 @@ python src/make_openclip_features.py --dataset summe --video-dir custom_data/vid
 ## 生成 TVSum 特征
 python src/make_openclip_features.py --dataset tvsum --video-dir custom_data/videos/TVSum --h5-path datasets/eccv16_dataset_tvsum_google_pool5.h5 --openclip-model ViT-L-14 --openclip-pretrained dfn2b
 
-## 生成text feature
-python src/make_text_features.py --dataset summe --device cpu --openclip-model ViT-L-14 --openclip-pretrained dfn2b
-python src/make_text_features.py --dataset tvsum --device cpu --openclip-model ViT-L-14 --openclip-pretrained dfn2b
-
 ## 生成 SumMe-24 caption
 python tools/generate_dense_captions_gemini.py --dataset summe --video-dir custom_data/videos/SumMe --h5-path datasets/eccv16_dataset_summe_google_pool5.h5 --out-structured captions_raw/summe24_dense_captions_structured.json --out-simple captions/summe24_dense_captions.json
 ## 生成 TVSum caption
 python tools/generate_dense_captions_gemini.py --dataset tvsum --video-dir custom_data/videos/TVSum --h5-path datasets/eccv16_dataset_tvsum_google_pool5.h5 --out-structured captions_raw/tvsum_dense_captions_structured.json --out-simple captions/tvsum_dense_captions.json
 
+## 生成text feature
+python src/make_text_features.py --dataset summe --device cpu --openclip-model ViT-L-14 --openclip-pretrained dfn2b
+python src/make_text_features.py --dataset tvsum --device cpu --openclip-model ViT-L-14 --openclip-pretrained dfn2b
+
+
 ## 训练Summe
-CUDA_VISIBLE_DEVICES=6 bash scripts/train_mil_cond_summe_tagr.sh
+CUDA_VISIBLE_DEVICES=7 bash scripts/train_mil_cond_summe_tagr.sh
 ## 训练TVSum
 CUDA_VISIBLE_DEVICES=3 bash scripts/train_mil_cond_tvsum_tagr.sh
 # 改变量形式
