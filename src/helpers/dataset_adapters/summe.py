@@ -1,11 +1,9 @@
 from typing import Dict, List
 
-
 import h5py
 
 from helpers.dataset_adapters.base import BasePseudoLabelAdapter
 from helpers.key_helper import decode_h5_string
-SUMME_EXCLUDED_KEYS = {'video_21'}
 
 
 class SumMePseudoLabelAdapter(BasePseudoLabelAdapter):
@@ -26,8 +24,6 @@ class SumMePseudoLabelAdapter(BasePseudoLabelAdapter):
             h5_keys = sorted(h5_file.keys(), key=self.parse_h5_group_index)
 
             for h5_key in h5_keys:
-                if h5_key in SUMME_EXCLUDED_KEYS:
-                    continue
                 group = h5_file[h5_key]
                 if 'video_name' not in group:
                     raise KeyError(f'Missing "video_name" in SumMe h5 group: {h5_key}')
@@ -45,6 +41,12 @@ class SumMePseudoLabelAdapter(BasePseudoLabelAdapter):
                     'review_status': 'SAFE',
                     'review_notes': None,
                 })
+
+        if len(items) != 25:
+            raise ValueError(
+                f'Standard SumMe-25 adapter expected 25 items, got {len(items)}. '
+                'Check raw video availability and h5/video_name alignment.'
+            )
 
         return items
 

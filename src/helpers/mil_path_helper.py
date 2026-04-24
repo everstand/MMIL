@@ -44,7 +44,6 @@ def get_hard_labels_path(dataset_name: str) -> Path:
 
 
 def get_meta_path(dataset_name: str) -> Path:
-    dataset_name = normalize_dataset_name(dataset_name)
     return get_dataset_pseudo_dir(dataset_name) / 'meta.yaml'
 
 
@@ -64,10 +63,14 @@ def ensure_dataset_layout(dataset_name: str) -> None:
 
 
 def resolve_new_mainline_dataset_name(dataset_name: str) -> str:
-    dataset_name = normalize_dataset_name(dataset_name)
-    if dataset_name == 'summe':
-        return 'summe24'
-    return dataset_name
+    """Return the physical dataset namespace used by new-mainline assets.
+
+    Important: standard `summe` now means SumMe-25 and must resolve to `summe`.
+    Historical SumMe-24 assets must be addressed explicitly with dataset name
+    `summe24`; they must not be reached through an implicit `summe -> summe24`
+    alias.
+    """
+    return normalize_dataset_name(dataset_name)
 
 
 def get_openclip_feature_store_path(dataset_name: str) -> Path:
@@ -79,10 +82,10 @@ def get_dense_caption_json_path(dataset_name: str) -> Path:
     dataset_name = resolve_new_mainline_dataset_name(dataset_name)
     return CAPTIONS_DIR / f'{dataset_name}_dense_captions.json'
 
+
 def get_structured_caption_json_path(dataset_name: str) -> Path:
     dataset_name = resolve_new_mainline_dataset_name(dataset_name)
     return CAPTIONS_RAW_DIR / f'{dataset_name}_dense_captions_structured.json'
-
 
 
 def get_text_feature_store_path(dataset_name: str) -> Path:

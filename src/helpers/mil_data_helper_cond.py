@@ -102,11 +102,7 @@ class VideoDatasetMILCond(object):
                 f'Text feature dim mismatch for {key}: '
                 f'all_text_features={all_text_features.shape}, text_target={text_target.shape}'
             )
-        if all_text_features.shape[0] < self.text_cond_num:
-            raise ValueError(
-                f'Not enough caption features for {key}: '
-                f'num_captions={all_text_features.shape[0]} < text_cond_num={self.text_cond_num}'
-            )
+        
         if seq.shape[1] != text_target.shape[0]:
             raise ValueError(
                 f'Visual/text feature dim mismatch for {key}: '
@@ -175,9 +171,24 @@ class VideoDatasetMILCond(object):
     def sample_text_cond(self, all_text_features: np.ndarray) -> np.ndarray:
         num_captions = int(all_text_features.shape[0])
 
-        if self.random_text_sampling:
-            indices = sorted(random.sample(range(num_captions), self.text_cond_num))
+        if num_captions <= 0:
+            raise ValueError('Cannot sample text_cond from empty all_text_features.')
+
+        if num_captions >= self.text_cond_num:
+            if self.random_text_sampling:
+                indices = sorted(random.sample(range(num_captions), self.text_cond_num))
+            else:
+                if self.text_cond_num == 1:
+                    indices = [0]
+                else:
+                    indices = np.linspace(
+                        0,
+                        num_captions - 1,
+                        num=self.text_cond_num,
+                    ).round().astype(np.int32).tolist()
         else:
+            # Low-pace videos may legitimately have fewer visual segments than text_cond_num.
+            # Repeat available caption features to keep the model input shape fixed.
             if self.text_cond_num == 1:
                 indices = [0]
             else:
@@ -185,8 +196,7 @@ class VideoDatasetMILCond(object):
                     0,
                     num_captions - 1,
                     num=self.text_cond_num,
-                    dtype=np.int32,
-                ).tolist()
+                ).round().astype(np.int32).tolist()
 
         text_cond = all_text_features[indices].astype(np.float32)
         if text_cond.shape != (self.text_cond_num, all_text_features.shape[1]):
@@ -345,8 +355,13 @@ class VideoDatasetMILCond(object):
         text_feature_stores: Dict[str, h5py.File],
         structured_captions_by_dataset: Dict[str, Dict],
     ) -> List[str]:
+        """Validate key coverage for all required conditioned-training assets.
+
+        Formal SumMe/TVSum experiments must be fail-fast: no split key may be
+        silently removed because a pseudo label, visual feature, text feature,
+        or structured caption is missing.
+        """
         valid_keys: List[str] = []
-        filtered_soft_label_missing: Dict[str, List[str]] = {}
 
         for key in keys:
             h5_key = Path(key).name
@@ -354,8 +369,10 @@ class VideoDatasetMILCond(object):
 
             label_dict = soft_labels_by_dataset[dataset_name]
             if h5_key not in label_dict:
-                filtered_soft_label_missing.setdefault(dataset_name, []).append(key)
-                continue
+                raise ValueError(
+                    f'Missing soft label for key "{h5_key}" in dataset "{dataset_name}". '
+                    'Do not silently filter formal split samples.'
+                )
 
             if h5_key not in visual_feature_stores[dataset_name]:
                 raise ValueError(
@@ -374,15 +391,7 @@ class VideoDatasetMILCond(object):
 
             valid_keys.append(key)
 
-        for dataset_name, missing_keys in filtered_soft_label_missing.items():
-            logger.warning(
-                'Filtered out %d sample(s) from dataset "%s" due to missing soft labels.',
-                len(missing_keys),
-                dataset_name,
-            )
-
         return valid_keys
-
 
 def extract_caption_items(structured_entry: Dict) -> List[Dict]:
     if not isinstance(structured_entry, dict):

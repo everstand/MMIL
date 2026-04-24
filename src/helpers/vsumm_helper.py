@@ -159,22 +159,26 @@ def get_summ_f1score(pred_summ: np.ndarray,
     :param eval_metric: Evaluation method. Choose from (max, avg).
     :return: F1-score value.
     """
-    pred_summ = np.asarray(pred_summ, dtype=bool)
+    pred_summ = np.asarray(pred_summ, dtype=bool).reshape(-1)
     test_summ = np.asarray(test_summ, dtype=bool)
+
+    if test_summ.ndim != 2:
+        raise ValueError(f'Expected test_summ shape [num_users, n_frames], got {test_summ.shape}')
+
     _, n_frames = test_summ.shape
+    if pred_summ.size != n_frames:
+        raise ValueError(
+            f'pred_summ/test_summ length mismatch: pred={pred_summ.size}, gt={n_frames}. '
+            'Do not pad or truncate during formal evaluation; fix upstream time-axis alignment.'
+        )
 
-    if pred_summ.size > n_frames:
-        pred_summ = pred_summ[:n_frames]
-    elif pred_summ.size < n_frames:
-        pred_summ = np.pad(pred_summ, (0, n_frames - pred_summ.size))
-
-    f1s = [f1_score(user_summ, pred_summ) for user_summ in test_summ]
+    f1s = [f1_score(pred_summ, user_summ) for user_summ in test_summ]
 
     if eval_metric == 'avg':
         final_f1 = np.mean(f1s)
     elif eval_metric == 'max':
         final_f1 = np.max(f1s)
     else:
-        raise ValueError(f'Invalid eval metric {eval_metric}')
+        raise ValueError(f'Invalid eval_metric: {eval_metric}. Expected "avg" or "max".')
 
     return float(final_f1)

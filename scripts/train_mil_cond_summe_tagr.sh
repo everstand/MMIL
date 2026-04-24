@@ -4,13 +4,13 @@ set -euo pipefail
 PYTHONPATH="${PYTHONPATH:-src}"
 
 DATASET="summe"
-SPLIT_FILE="${SPLIT_FILE:-splits/summe24.yml}"
+SPLIT_FILE="${SPLIT_FILE:-splits/summe.yml}"
 DEVICE="${DEVICE:-cuda}"
-SEED="${SEED:-12345}"
+SEED="${SEED:-19500}"
 MAX_EPOCH="${MAX_EPOCH:-100}"
 
 LR="${LR:-5e-5}"
-WEIGHT_DECAY="${WEIGHT_DECAY:-1e-5}"
+WEIGHT_DECAY="${WEIGHT_DECAY:-2e-5}"
 
 LAMBDA_PAIR="${LAMBDA_PAIR:-0.2}"
 PAIR_MARGIN="${PAIR_MARGIN:-0.05}"
@@ -25,7 +25,7 @@ NUM_FEATURE="${NUM_FEATURE:-768}"
 NUM_HIDDEN="${NUM_HIDDEN:-128}"
 
 RUN_ROOT="${RUN_ROOT:-models/mil_cond}"
-RUN_TAG="${RUN_TAG:-summe_spair_attention_lr${LR}_wd${WEIGHT_DECAY}_lp${LAMBDA_PAIR}_pm${PAIR_MARGIN}_la${LAMBDA_ALIGN}_laux${LAMBDA_AUX}_m${TEXT_COND_NUM}_seed${SEED}}"
+RUN_TAG="${RUN_TAG:-summe25_spair_attention_lr${LR}_wd${WEIGHT_DECAY}_lp${LAMBDA_PAIR}_pm${PAIR_MARGIN}_la${LAMBDA_ALIGN}_laux${LAMBDA_AUX}_m${TEXT_COND_NUM}_seed${SEED}}"
 MODEL_DIR="${MODEL_DIR:-${RUN_ROOT}/${RUN_TAG}}"
 LOG_FILE="${LOG_FILE:-log_mil_cond.txt}"
 

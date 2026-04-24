@@ -1,5 +1,6 @@
 import argparse
 import logging
+import random
 from pathlib import Path
 from typing import Dict, List
 
@@ -10,16 +11,23 @@ from helpers.init_helper import init_logger, set_random_seed
 
 logger = logging.getLogger(__name__)
 
+def mean_std(values: List[float]):
+    values = [float(v) for v in values]
+    if not values:
+        return 0.0, 0.0
+
+    mean = sum(values) / len(values)
+    var = sum((v - mean) ** 2 for v in values) / len(values)
+    return mean, var ** 0.5
+
 
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--dataset', type=str, required=True,
-                        choices=('tvsum', 'summe'))
+    parser.add_argument('--dataset', type=str, required=True, choices=('tvsum', 'summe'))
     parser.add_argument('--splits', type=str, nargs='+', required=True)
 
-    parser.add_argument('--device', type=str, default='cuda',
-                        choices=('cuda', 'cpu'))
+    parser.add_argument('--device', type=str, default='cuda', choices=('cuda', 'cpu'))
     parser.add_argument('--seed', type=int, default=12345)
     parser.add_argument('--max-epoch', type=int, default=300)
     parser.add_argument('--model-dir', type=str, required=True)
@@ -34,11 +42,17 @@ def get_parser() -> argparse.ArgumentParser:
 
     parser.add_argument('--text-cond-num', type=int, default=7)
 
-    parser.add_argument('--base-model', type=str, default='attention',
-                        choices=['attention', 'lstm', 'linear', 'bilstm', 'gcn'])
+    parser.add_argument('--base-model', type=str, default='attention', choices=['attention'])
     parser.add_argument('--num-head', type=int, default=8)
     parser.add_argument('--num-feature', type=int, default=768)
     parser.add_argument('--num-hidden', type=int, default=128)
+
+    parser.add_argument(
+        '--val-ratio',
+        type=float,
+        default=0.2,
+        help='If a split has no val_keys, deterministically carve this ratio from train_keys.',
+    )
 
     return parser
 
@@ -52,61 +66,79 @@ def main() -> None:
     set_random_seed(args.seed)
     init_logger(str(model_dir), args.log_file)
 
-    logger.info('MIL conditioned training start')
-    logger.info('Arguments: %s', vars(args))
-
-    splits = load_all_splits(args.splits)
+    splits = load_all_splits(args.splits, val_ratio=args.val_ratio, seed=args.seed)
     validate_splits(splits, args.dataset)
 
-    fscore_list: List[float] = []
-    spearman_at_best_fscore_list: List[float] = []
-    max_spearman_list: List[float] = []
-    fscore_at_max_spearman_list: List[float] = []
+    logger.info(
+        'Run | dataset=%s | folds=%d | seed=%d | epochs=%d | lr=%.2e | wd=%.2e | '
+        'lambda_pair=%.3g | pair_margin=%.3g | lambda_align=%.3g | lambda_aux=%.3g | text_cond_num=%d',
+        args.dataset,
+        len(splits),
+        args.seed,
+        args.max_epoch,
+        args.lr,
+        args.weight_decay,
+        args.lambda_pair,
+        args.pair_margin,
+        args.lambda_align,
+        args.lambda_aux,
+        args.text_cond_num,
+    )
+    logger.debug('Arguments: %s', vars(args))
+
+    split_metrics: List[Dict[str, float]] = []
 
     for split_idx, split in enumerate(splits):
         save_path = model_dir / f'best_model_split{split_idx}.pth'
-        logger.info('Running split %d / %d', split_idx + 1, len(splits))
 
-        best_fscore, spearman_at_best_fscore, max_spearman, fscore_at_max_spearman = mil_trainer.train(
-            args=args,
-            split=split,
-            save_path=save_path,
-        )
-        fscore_list.append(float(best_fscore))
-        spearman_at_best_fscore_list.append(float(spearman_at_best_fscore))
-        max_spearman_list.append(float(max_spearman))
-        fscore_at_max_spearman_list.append(float(fscore_at_max_spearman))
+        metrics = mil_trainer.train(args=args, split=split, save_path=save_path)
+        split_metrics.append(metrics)
 
         logger.info(
-            'Finished split %d / %d | best_fscore=%.4f | spearman_at_best_fscore=%.4f | max_spearman=%.4f | fscore_at_max_spearman=%.4f | checkpoint=%s',
+            'Split %d/%d | val_F1=%.4f | test_F1=%.4f | test_Tau=%.4f | test_Rho=%.4f',
             split_idx + 1,
             len(splits),
-            best_fscore,
-            spearman_at_best_fscore,
-            max_spearman,
-            fscore_at_max_spearman,
+            metrics['val_best_fscore'],
+            metrics['test_fscore_at_best_fscore'],
+            metrics['test_kendall_at_best_fscore'],
+            metrics['test_spearman_at_best_fscore'],
+        )
+        logger.debug(
+            'Split %d/%d checkpoint=%s',
+            split_idx + 1,
+            len(splits),
             str(save_path),
         )
 
-    mean_fscore = sum(fscore_list) / len(fscore_list)
-    mean_spearman_at_best_fscore = (
-        sum(spearman_at_best_fscore_list) / len(spearman_at_best_fscore_list)
-    )
-    mean_max_spearman = sum(max_spearman_list) / len(max_spearman_list)
-    mean_fscore_at_max_spearman = (
-        sum(fscore_at_max_spearman_list) / len(fscore_at_max_spearman_list)
-    )
+    test_fscore_list = [
+        float(m['test_fscore_at_best_fscore'])
+        for m in split_metrics
+    ]
+    test_kendall_list = [
+        float(m['test_kendall_at_best_fscore'])
+        for m in split_metrics
+    ]
+    test_spearman_list = [
+        float(m['test_spearman_at_best_fscore'])
+        for m in split_metrics
+    ]
+
+    mean_f1, std_f1 = mean_std(test_fscore_list)
+    mean_tau, std_tau = mean_std(test_kendall_list)
+    mean_rho, std_rho = mean_std(test_spearman_list)
 
     logger.info(
-        'All splits finished | mean_fscore=%.4f | mean_spearman_at_best_fscore=%.4f | mean_max_spearman=%.4f | mean_fscore_at_max_spearman=%.4f',
-        mean_fscore,
-        mean_spearman_at_best_fscore,
-        mean_max_spearman,
-        mean_fscore_at_max_spearman,
+        'Final | test_F1=%.4f±%.4f | test_Tau=%.4f±%.4f | test_Rho=%.4f±%.4f',
+        mean_f1,
+        std_f1,
+        mean_tau,
+        std_tau,
+        mean_rho,
+        std_rho,
     )
 
 
-def load_all_splits(split_paths: List[str]) -> List[Dict]:
+def load_all_splits(split_paths: List[str], val_ratio: float, seed: int) -> List[Dict]:
     all_splits: List[Dict] = []
 
     for split_path in split_paths:
@@ -130,16 +162,50 @@ def load_all_splits(split_paths: List[str]) -> List[Dict]:
                     f'Split entry must contain train_keys/test_keys: {path}, index {idx}'
                 )
 
-            normalized_split = {
-                'train_keys': [normalize_split_key(key, split_root) for key in split['train_keys']],
-                'test_keys': [normalize_split_key(key, split_root) for key in split['test_keys']],
-            }
-            all_splits.append(normalized_split)
+            train_keys = [normalize_split_key(key, split_root) for key in split['train_keys']]
+            test_keys = [normalize_split_key(key, split_root) for key in split['test_keys']]
+
+            if 'val_keys' in split and split['val_keys']:
+                val_keys = [normalize_split_key(key, split_root) for key in split['val_keys']]
+                train_keys_final = train_keys
+            else:
+                train_keys_final, val_keys = split_train_val(
+                    train_keys=train_keys,
+                    val_ratio=val_ratio,
+                    seed=seed + idx,
+                )
+
+            all_splits.append({
+                'train_keys': train_keys_final,
+                'val_keys': val_keys,
+                'test_keys': test_keys,
+            })
 
     if not all_splits:
         raise ValueError('No splits loaded.')
 
     return all_splits
+
+
+def split_train_val(train_keys: List[str], val_ratio: float, seed: int):
+    if not train_keys:
+        raise ValueError('Cannot split empty train_keys.')
+    if not (0.0 < val_ratio < 1.0):
+        raise ValueError(f'Invalid val_ratio={val_ratio}; expected 0 < val_ratio < 1.')
+
+    keys = list(train_keys)
+    rng = random.Random(seed)
+    rng.shuffle(keys)
+
+    val_count = max(1, int(round(len(keys) * val_ratio)))
+    if val_count >= len(keys):
+        raise ValueError(
+            f'val_ratio={val_ratio} leaves no training samples: train_count={len(keys)}, val_count={val_count}'
+        )
+
+    val_keys = sorted(keys[:val_count])
+    train_keys_final = sorted(keys[val_count:])
+    return train_keys_final, val_keys
 
 
 def normalize_split_key(key: str, split_root: Path) -> str:
@@ -161,14 +227,26 @@ def normalize_split_key(key: str, split_root: Path) -> str:
 def validate_splits(splits: List[Dict], expected_dataset: str) -> None:
     for split_idx, split in enumerate(splits):
         train_keys = split['train_keys']
+        val_keys = split['val_keys']
         test_keys = split['test_keys']
 
         if not train_keys:
             raise ValueError(f'Empty train_keys in split {split_idx}')
+        if not val_keys:
+            raise ValueError(f'Empty val_keys in split {split_idx}')
         if not test_keys:
             raise ValueError(f'Empty test_keys in split {split_idx}')
 
-        for key in train_keys + test_keys:
+        overlap_train_val = set(train_keys) & set(val_keys)
+        overlap_train_test = set(train_keys) & set(test_keys)
+        overlap_val_test = set(val_keys) & set(test_keys)
+        if overlap_train_val or overlap_train_test or overlap_val_test:
+            raise ValueError(
+                f'Split {split_idx} has overlapping train/val/test keys: '
+                f'train_val={len(overlap_train_val)}, train_test={len(overlap_train_test)}, val_test={len(overlap_val_test)}'
+            )
+
+        for key in train_keys + val_keys + test_keys:
             dataset_name = infer_dataset_name_from_key(key)
             if dataset_name != expected_dataset:
                 raise ValueError(
