@@ -5,19 +5,37 @@ from modules.models import build_base_model
 
 
 class DSNetAFMILCond(nn.Module):
+    """Conditioned MIL DSNet.
+
+    score_head='single':
+        Backward-compatible path. The softmax pooling weights are also used as
+        summary scores.
+
+    score_head='dual':
+        Decouples video-level MIL pooling from summary selection:
+            pool_weights      -> bag_logits / summary_feat
+            selection_scores  -> evaluation / rank or pseudo-summary losses
+    """
+
     def __init__(self,
                  base_model: str,
                  num_feature: int,
                  num_hidden: int,
                  num_head: int,
-                 num_classes: int):
+                 num_classes: int,
+                 score_head: str = 'single'):
         super().__init__()
+
+        if score_head not in ('single', 'dual'):
+            raise ValueError(f'Invalid score_head={score_head}; expected single or dual.')
+
         self.num_classes = num_classes
         self.num_feature = num_feature
+        self.score_head = score_head
 
         self.base_model = build_base_model(base_model, num_feature, num_head)
-        self.layer_norm = nn.LayerNorm(num_feature)
 
+        self.layer_norm = nn.LayerNorm(num_feature)
         self.cross_attn = nn.MultiheadAttention(
             embed_dim=num_feature,
             num_heads=num_head,
@@ -35,9 +53,12 @@ class DSNetAFMILCond(nn.Module):
         self.fc_cls = nn.Linear(num_hidden, num_classes)
         self.fc_attn = nn.Linear(num_hidden, 1)
 
-    def forward(self,
-                x: torch.Tensor,
-                text_cond: torch.Tensor):
+        if self.score_head == 'dual':
+            self.fc_select = nn.Linear(num_hidden, 1)
+        else:
+            self.fc_select = None
+
+    def forward(self, x: torch.Tensor, text_cond: torch.Tensor):
         if x.ndim != 3:
             raise ValueError(f'Expected x shape [B, T, D], got {tuple(x.shape)}')
         if x.shape[0] != 1:
@@ -56,12 +77,10 @@ class DSNetAFMILCond(nn.Module):
             raise ValueError(
                 f'DSNetAFMILCond expects text_cond batch size 1, got {text_cond.shape[0]}'
             )
-
         if x.shape[2] != self.num_feature:
             raise ValueError(
                 f'Input feature dim mismatch: got {x.shape[2]}, expected {self.num_feature}'
             )
-
         if text_cond.shape[2] != self.num_feature:
             raise ValueError(
                 f'Text feature dim mismatch: got {text_cond.shape[2]}, expected {self.num_feature}'
@@ -73,7 +92,7 @@ class DSNetAFMILCond(nn.Module):
         out = out + x
         out = self.layer_norm(out)
 
-        base_frame_repr = out.squeeze(0)
+        pre_cross_frame_repr = out.squeeze(0)
 
         cond_out, _ = self.cross_attn(
             query=out,
@@ -84,35 +103,39 @@ class DSNetAFMILCond(nn.Module):
         cond_out = self.cross_attn_layer_norm(cond_out + out)
 
         hidden = self.fc1(cond_out).squeeze(0)
-        base_frame_repr = cond_out.squeeze(0)
         raw_frame_features = raw_x.squeeze(0)
 
         instance_logits = self.fc_cls(hidden)
-        attn_logits = self.fc_attn(hidden).squeeze(-1)
-        attn_weights = torch.softmax(attn_logits, dim=0)
+
+        pool_logits = self.fc_attn(hidden).squeeze(-1)
+        pool_weights = torch.softmax(pool_logits, dim=0)
+
+        if self.score_head == 'dual':
+            selection_logits = self.fc_select(hidden).squeeze(-1)
+            summary_scores = torch.sigmoid(selection_logits)
+        else:
+            summary_scores = pool_weights
 
         bag_logits = torch.sum(
-            attn_weights.unsqueeze(-1) * instance_logits,
+            pool_weights.unsqueeze(-1) * instance_logits,
             dim=0,
         )
 
         summary_feat = torch.sum(
-            attn_weights.unsqueeze(-1) * raw_frame_features,
+            pool_weights.unsqueeze(-1) * raw_frame_features,
             dim=0,
         )
 
         return (
             instance_logits,
-            attn_logits,
-            attn_weights,
+            pool_logits,
+            summary_scores,
             bag_logits,
             summary_feat,
-            base_frame_repr,
+            pre_cross_frame_repr,
         )
 
     @torch.no_grad()
-    def predict_summary_scores(self,
-                               seq: torch.Tensor,
-                               text_cond: torch.Tensor) -> torch.Tensor:
-        _, _, attn_weights, _, _, _ = self(seq, text_cond)
-        return attn_weights
+    def predict_summary_scores(self, seq: torch.Tensor, text_cond: torch.Tensor) -> torch.Tensor:
+        _, _, summary_scores, _, _, _ = self(seq, text_cond)
+        return summary_scores

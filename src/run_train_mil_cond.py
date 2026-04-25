@@ -45,37 +45,69 @@ def get_parser() -> argparse.ArgumentParser:
         '--rank-loss',
         type=str,
         default='sparse_pair',
-        choices=('sparse_pair', 'listwise_utility', 'none'),
+        choices=('sparse_pair', 'listwise_utility', 'budgeted_pseudo_summary', 'none'),
         help=(
-            'Temporal ranking supervision branch. '
-            'sparse_pair keeps the current caption semantic-change pair baseline; '
-            'listwise_utility uses offline shot_utility.npy; '
-            'none disables temporal ranking supervision.'
+            'Temporal supervision branch. '
+            'sparse_pair keeps caption semantic-change pair baseline; '
+            'listwise_utility uses dense offline utility distribution; '
+            'budgeted_pseudo_summary uses 15%% budget pseudo-summary masks; '
+            'none disables temporal ranking/selection supervision.'
         ),
+    )
+    parser.add_argument(
+        '--score-head',
+        type=str,
+        default='single',
+        choices=('single', 'dual'),
+        help='single keeps backward-compatible attention scores; dual decouples pooling and selection.',
     )
     parser.add_argument(
         '--shot-utility-path',
         type=str,
         default=None,
-        help='Required for --rank-loss listwise_utility unless using the default pseudo_labels/{dataset}/shot_utility.npy path.',
+        help='Required for utility-based losses unless using pseudo_labels/{dataset}/shot_utility.npy.',
     )
     parser.add_argument(
         '--utility-formula',
         type=str,
         default='semantic_plus_distinct_minus_red',
-        help='Formula name used inside shot_utility.npy for listwise utility training.',
+        help='Formula name used inside shot_utility.npy.',
     )
     parser.add_argument(
         '--lambda-listwise',
         type=float,
         default=0.2,
-        help='Weight for listwise utility loss when --rank-loss listwise_utility.',
+        help='Weight for listwise utility loss.',
     )
     parser.add_argument(
         '--listwise-temperature',
         type=float,
         default=0.2,
-        help='Softmax temperature for teacher/student shot distributions.',
+        help='Softmax temperature for listwise utility distributions.',
+    )
+    parser.add_argument(
+        '--lambda-select',
+        type=float,
+        default=0.2,
+        help='Weight for confidence-gated pseudo-summary BCE.',
+    )
+    parser.add_argument(
+        '--lambda-budget',
+        type=float,
+        default=0.05,
+        help='Weight for selection budget regularizer.',
+    )
+    parser.add_argument(
+        '--summary-budget',
+        type=float,
+        default=0.15,
+        help='Summary budget ratio for pseudo-summary teacher and budget regularizer.',
+    )
+    parser.add_argument(
+        '--negative-quantile',
+        type=float,
+        default=0.25,
+        help='Low-utility quantile used as pseudo-negative shots.',
     )
 
     parser.add_argument('--text-cond-num', type=int, default=7)
@@ -109,8 +141,9 @@ def main() -> None:
 
     logger.info(
         'Run | dataset=%s | folds=%d | seed=%d | epochs=%d | lr=%.2e | wd=%.2e | '
-        'rank_loss=%s | lambda_pair=%.3g | pair_margin=%.3g | '
-        'lambda_listwise=%.3g | utility_formula=%s | tau=%.3g | '
+        'score_head=%s | rank_loss=%s | lambda_pair=%.3g | pair_margin=%.3g | '
+        'lambda_listwise=%.3g | lambda_select=%.3g | lambda_budget=%.3g | '
+        'utility_formula=%s | tau=%.3g | summary_budget=%.3g | neg_q=%.3g | '
         'lambda_align=%.3g | lambda_aux=%.3g | text_cond_num=%d',
         args.dataset,
         len(splits),
@@ -118,12 +151,17 @@ def main() -> None:
         args.max_epoch,
         args.lr,
         args.weight_decay,
+        args.score_head,
         args.rank_loss,
         args.lambda_pair,
         args.pair_margin,
         args.lambda_listwise,
+        args.lambda_select,
+        args.lambda_budget,
         args.utility_formula,
         args.listwise_temperature,
+        args.summary_budget,
+        args.negative_quantile,
         args.lambda_align,
         args.lambda_aux,
         args.text_cond_num,

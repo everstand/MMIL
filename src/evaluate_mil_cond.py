@@ -9,9 +9,7 @@ from helpers.eval_protocol_helper import (
 )
 
 
-def evaluate_mil_cond(model,
-                      val_loader,
-                      device: str):
+def evaluate_mil_cond(model, val_loader, device: str):
     model.eval()
 
     fscore_list = []
@@ -38,8 +36,10 @@ def evaluate_mil_cond(model,
             seq_tensor = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).to(device)
             text_cond_tensor = torch.tensor(text_cond, dtype=torch.float32).to(device)
 
-            _, _, attn_weights, _, _, _ = model(seq_tensor, text_cond_tensor)
-            summary_scores = attn_weights.detach().cpu().numpy().astype(np.float32)
+            summary_scores = model.predict_summary_scores(
+                seq_tensor,
+                text_cond_tensor,
+            ).detach().cpu().numpy().astype(np.float32)
 
             if not np.isfinite(summary_scores).all():
                 num_nan = int(np.isnan(summary_scores).sum())

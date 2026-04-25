@@ -18,14 +18,20 @@ logger = logging.getLogger(__name__)
 
 def train(args, split, save_path):
     logger.debug(
-        'Loss weights | rank_loss=%s | lambda_pair=%s | pair_margin=%s | '
-        'lambda_listwise=%s | listwise_temperature=%s | utility_formula=%s | '
-        'lambda_align=%s | lambda_aux=%s',
+        'Loss weights | score_head=%s | rank_loss=%s | lambda_pair=%s | pair_margin=%s | '
+        'lambda_listwise=%s | listwise_temperature=%s | '
+        'lambda_select=%s | lambda_budget=%s | summary_budget=%s | neg_q=%s | '
+        'utility_formula=%s | lambda_align=%s | lambda_aux=%s',
+        args.score_head,
         args.rank_loss,
         args.lambda_pair,
         args.pair_margin,
         args.lambda_listwise,
         args.listwise_temperature,
+        args.lambda_select,
+        args.lambda_budget,
+        args.summary_budget,
+        args.negative_quantile,
         args.utility_formula,
         args.lambda_align,
         args.lambda_aux,
@@ -56,18 +62,17 @@ def train(args, split, save_path):
     dataset_name = train_dataset_name
 
     shot_utility_store = None
-    if args.rank_loss == 'listwise_utility':
+    if args.rank_loss in ('listwise_utility', 'budgeted_pseudo_summary'):
         utility_path = resolve_shot_utility_path(
             dataset_name=dataset_name,
             explicit_path=args.shot_utility_path,
         )
         shot_utility_store = ShotUtilityStore(utility_path)
         logger.info(
-            'Using listwise utility rank loss | path=%s | formula=%s | lambda=%.4f | tau=%.4f',
+            'Using utility-based rank loss | rank_loss=%s | path=%s | formula=%s',
+            args.rank_loss,
             utility_path,
             args.utility_formula,
-            args.lambda_listwise,
-            args.listwise_temperature,
         )
 
     train_set = mil_data_helper_cond.VideoDatasetMILCond(
@@ -93,6 +98,7 @@ def train(args, split, save_path):
         num_hidden=args.num_hidden,
         num_head=args.num_head,
         num_classes=num_classes,
+        score_head=args.score_head,
     ).to(args.device)
 
     optimizer = torch.optim.Adam(
@@ -135,12 +141,19 @@ def train(args, split, save_path):
             'weighted_pair_loss',
             'listwise_loss',
             'weighted_listwise_loss',
+            'selection_loss',
+            'weighted_selection_loss',
+            'budget_loss',
+            'weighted_budget_loss',
             'align_loss',
             'weighted_align_loss',
             'bag_loss',
             'weighted_bag_loss',
             'num_aux_active',
             'num_aux_skipped',
+            'num_supervised_shots',
+            'num_positive_shots',
+            'num_negative_shots',
         )
 
         for (
@@ -173,7 +186,9 @@ def train(args, split, save_path):
             )
             soft_label_tensor = torch.tensor(soft_label, dtype=torch.float32).to(args.device)
 
-            cps_tensor = torch.tensor(cps, dtype=torch.long, device=args.device)
+            cps_np = np.asarray(cps, dtype=np.int32)
+            nfps_np = np.asarray(nfps, dtype=np.int32)
+            cps_tensor = torch.tensor(cps_np, dtype=torch.long, device=args.device)
             picks_tensor = torch.tensor(picks, dtype=torch.long, device=args.device)
             n_frames_int = int(np.asarray(n_frames).item())
 
@@ -186,8 +201,8 @@ def train(args, split, save_path):
 
             (
                 instance_logits,
-                attn_logits,
-                attn_weights,
+                pool_logits,
+                summary_scores,
                 bag_logits,
                 summary_feat,
                 _,
@@ -200,7 +215,13 @@ def train(args, split, save_path):
             )
 
             pred_shot_scores = aggregate_attn_to_shot_scores(
-                attn_weights=attn_weights,
+                attn_weights=summary_scores,
+                overlaps=overlaps,
+                shot_lengths=shot_lengths,
+            )
+
+            selection_shot_scores = aggregate_frame_scores_to_shot_scores(
+                frame_scores=summary_scores,
                 overlaps=overlaps,
                 shot_lengths=shot_lengths,
             )
@@ -209,6 +230,13 @@ def train(args, split, save_path):
             weighted_pair_loss = seq_tensor.new_zeros(())
             listwise_loss = seq_tensor.new_zeros(())
             weighted_listwise_loss = seq_tensor.new_zeros(())
+            selection_loss = seq_tensor.new_zeros(())
+            weighted_selection_loss = seq_tensor.new_zeros(())
+            budget_loss = seq_tensor.new_zeros(())
+            weighted_budget_loss = seq_tensor.new_zeros(())
+            num_supervised_shots = 0.0
+            num_positive_shots = 0.0
+            num_negative_shots = 0.0
 
             if args.rank_loss == 'sparse_pair':
                 shot_text_feat, shot_mass_density, valid_shots = build_shot_text_stats(
@@ -275,6 +303,55 @@ def train(args, split, save_path):
                 assert_finite_tensor('listwise_loss', listwise_loss.unsqueeze(0), key)
                 assert_finite_tensor('weighted_listwise_loss', weighted_listwise_loss.unsqueeze(0), key)
 
+            elif args.rank_loss == 'budgeted_pseudo_summary':
+                if shot_utility_store is None:
+                    raise RuntimeError('shot_utility_store is required for budgeted_pseudo_summary.')
+
+                h5_key = Path(str(key)).name
+                masks = shot_utility_store.get_budgeted_masks(
+                    h5_key=h5_key,
+                    formula_name=args.utility_formula,
+                    cps=cps_np,
+                    nfps=nfps_np,
+                    n_frames=n_frames_int,
+                    summary_budget=args.summary_budget,
+                    negative_quantile=args.negative_quantile,
+                )
+
+                target = torch.tensor(masks['target'], dtype=torch.float32, device=args.device)
+                supervised_mask = torch.tensor(masks['supervised_mask'], dtype=torch.bool, device=args.device)
+                selected_mask = torch.tensor(masks['selected_mask'], dtype=torch.bool, device=args.device)
+                negative_mask = torch.tensor(masks['negative_mask'], dtype=torch.bool, device=args.device)
+
+                if target.shape[0] != selection_shot_scores.shape[0]:
+                    raise ValueError(
+                        f'Pseudo-summary target length mismatch for sample {key}: '
+                        f'target={target.shape[0]} vs pred={selection_shot_scores.shape[0]}'
+                    )
+
+                selection_loss = compute_confidence_gated_bce_loss(
+                    pred_shot_scores=selection_shot_scores,
+                    target=target,
+                    supervised_mask=supervised_mask,
+                )
+                budget_loss = compute_budget_regularizer(
+                    selection_shot_scores=selection_shot_scores,
+                    shot_lengths=shot_lengths,
+                    n_frames=n_frames_int,
+                    summary_budget=args.summary_budget,
+                )
+
+                weighted_selection_loss = args.lambda_select * selection_loss
+                weighted_budget_loss = args.lambda_budget * budget_loss
+
+                num_supervised_shots = float(supervised_mask.sum().item())
+                num_positive_shots = float(selected_mask.sum().item())
+                num_negative_shots = float(negative_mask.sum().item())
+
+                assert_finite_tensor('selection_shot_scores', selection_shot_scores, key)
+                assert_finite_tensor('selection_loss', selection_loss.unsqueeze(0), key)
+                assert_finite_tensor('budget_loss', budget_loss.unsqueeze(0), key)
+
             elif args.rank_loss == 'none':
                 pass
             else:
@@ -283,7 +360,7 @@ def train(args, split, save_path):
             align_loss = compute_align_loss(summary_feat, text_target_tensor)
             weighted_align_loss = args.lambda_align * align_loss
 
-            assert_finite_tensor('attn_weights', attn_weights, key)
+            assert_finite_tensor('summary_scores', summary_scores, key)
             assert_finite_tensor('bag_logits', bag_logits, key)
             assert_finite_tensor('summary_feat', summary_feat, key)
             assert_finite_tensor('pred_shot_scores', pred_shot_scores, key)
@@ -308,8 +385,13 @@ def train(args, split, save_path):
                 num_aux_active = 0.0
                 num_aux_skipped = 1.0
 
-            weighted_rank_loss = weighted_pair_loss + weighted_listwise_loss
-            rank_loss_value = pair_loss + listwise_loss
+            weighted_rank_loss = (
+                weighted_pair_loss
+                + weighted_listwise_loss
+                + weighted_selection_loss
+                + weighted_budget_loss
+            )
+            rank_loss_value = pair_loss + listwise_loss + selection_loss + budget_loss
 
             loss = weighted_align_loss + weighted_bag_loss + weighted_rank_loss
 
@@ -326,12 +408,19 @@ def train(args, split, save_path):
                 weighted_pair_loss=float(weighted_pair_loss.item()),
                 listwise_loss=float(listwise_loss.item()),
                 weighted_listwise_loss=float(weighted_listwise_loss.item()),
+                selection_loss=float(selection_loss.item()),
+                weighted_selection_loss=float(weighted_selection_loss.item()),
+                budget_loss=float(budget_loss.item()),
+                weighted_budget_loss=float(weighted_budget_loss.item()),
                 align_loss=float(align_loss.item()),
                 weighted_align_loss=float(weighted_align_loss.item()),
                 bag_loss=float(bag_loss.item()),
                 weighted_bag_loss=float(weighted_bag_loss.item()),
                 num_aux_active=num_aux_active,
                 num_aux_skipped=num_aux_skipped,
+                num_supervised_shots=num_supervised_shots,
+                num_positive_shots=num_positive_shots,
+                num_negative_shots=num_negative_shots,
             )
 
         val_metrics = evaluate_mil_cond(
@@ -375,11 +464,11 @@ def train(args, split, save_path):
         )
 
         logger.debug(
-            'Epoch %03d/%03d detail | pair_loss=%.4f | weighted_pair_loss=%.4f | '
-            'listwise_loss=%.4f | weighted_listwise_loss=%.4f | '
-            'align_loss=%.4f | weighted_align_loss=%.4f | '
-            'bag_loss=%.4f | weighted_bag_loss=%.4f | '
+            'Epoch %03d/%03d detail | pair=%.4f/%.4f | listwise=%.4f/%.4f | '
+            'select=%.4f/%.4f | budget=%.4f/%.4f | '
+            'align=%.4f/%.4f | bag=%.4f/%.4f | '
             'aux_active=%.4f | aux_skipped=%.4f | '
+            'sup_shots=%.4f | pos=%.4f | neg=%.4f | '
             'val_max_Tau=%.4f | val_max_Rho=%.4f | '
             'Tau@best_F1=%.4f | Rho@best_F1=%.4f | F1@max_Tau=%.4f | F1@max_Rho=%.4f',
             epoch + 1,
@@ -388,12 +477,19 @@ def train(args, split, save_path):
             stats.weighted_pair_loss,
             stats.listwise_loss,
             stats.weighted_listwise_loss,
+            stats.selection_loss,
+            stats.weighted_selection_loss,
+            stats.budget_loss,
+            stats.weighted_budget_loss,
             stats.align_loss,
             stats.weighted_align_loss,
             stats.bag_loss,
             stats.weighted_bag_loss,
             stats.num_aux_active,
             stats.num_aux_skipped,
+            stats.num_supervised_shots,
+            stats.num_positive_shots,
+            stats.num_negative_shots,
             max_val_kendall,
             max_val_spearman,
             kendall_at_best_fscore,
@@ -429,6 +525,9 @@ def train(args, split, save_path):
 
 
 def validate_rank_loss_args(args) -> None:
+    if args.score_head not in ('single', 'dual'):
+        raise ValueError(f'Invalid score_head={args.score_head}; expected single or dual.')
+
     if args.rank_loss == 'sparse_pair':
         if args.lambda_pair < 0:
             raise ValueError(f'Invalid lambda_pair={args.lambda_pair}; expected >= 0.')
@@ -441,11 +540,25 @@ def validate_rank_loss_args(args) -> None:
             raise ValueError(
                 f'Invalid listwise_temperature={args.listwise_temperature}; expected > 0.'
             )
+    elif args.rank_loss == 'budgeted_pseudo_summary':
+        if args.score_head != 'dual':
+            raise ValueError(
+                '--rank-loss budgeted_pseudo_summary requires --score-head dual.'
+            )
+        if args.lambda_select < 0:
+            raise ValueError(f'Invalid lambda_select={args.lambda_select}; expected >= 0.')
+        if args.lambda_budget < 0:
+            raise ValueError(f'Invalid lambda_budget={args.lambda_budget}; expected >= 0.')
+        if not (0.0 < args.summary_budget < 1.0):
+            raise ValueError(f'Invalid summary_budget={args.summary_budget}; expected 0 < budget < 1.')
+        if not (0.0 < args.negative_quantile < 1.0):
+            raise ValueError(f'Invalid negative_quantile={args.negative_quantile}; expected 0 < q < 1.')
     elif args.rank_loss == 'none':
         pass
     else:
         raise ValueError(
-            f'Invalid rank_loss={args.rank_loss}; expected sparse_pair, listwise_utility, or none.'
+            f'Invalid rank_loss={args.rank_loss}; '
+            f'expected sparse_pair, listwise_utility, budgeted_pseudo_summary, or none.'
         )
 
 
@@ -485,9 +598,57 @@ def compute_listwise_utility_loss(pred_shot_scores: torch.Tensor,
 
     teacher_prob = torch.softmax(teacher_utility / temperature, dim=0).detach()
 
-    loss = F.kl_div(student_log_prob, teacher_prob, reduction='sum')
+    return F.kl_div(
+        student_log_prob,
+        teacher_prob,
+        reduction='sum',
+    )
 
-    return loss
+
+def compute_confidence_gated_bce_loss(pred_shot_scores: torch.Tensor,
+                                      target: torch.Tensor,
+                                      supervised_mask: torch.Tensor,
+                                      eps: float = 1e-6) -> torch.Tensor:
+    if pred_shot_scores.ndim != 1:
+        raise ValueError(f'Expected pred_shot_scores shape [S], got {tuple(pred_shot_scores.shape)}')
+    if target.ndim != 1:
+        raise ValueError(f'Expected target shape [S], got {tuple(target.shape)}')
+    if supervised_mask.ndim != 1:
+        raise ValueError(f'Expected supervised_mask shape [S], got {tuple(supervised_mask.shape)}')
+    if pred_shot_scores.shape[0] != target.shape[0] or pred_shot_scores.shape[0] != supervised_mask.shape[0]:
+        raise ValueError('Shot count mismatch in compute_confidence_gated_bce_loss.')
+    if not torch.isfinite(pred_shot_scores).all():
+        raise ValueError('Non-finite pred_shot_scores in compute_confidence_gated_bce_loss.')
+    if not torch.isfinite(target).all():
+        raise ValueError('Non-finite target in compute_confidence_gated_bce_loss.')
+
+    if int(supervised_mask.sum().item()) == 0:
+        return pred_shot_scores.new_zeros(())
+
+    pred = pred_shot_scores[supervised_mask].clamp(min=eps, max=1.0 - eps)
+    tgt = target[supervised_mask].clamp(min=0.0, max=1.0)
+
+    return F.binary_cross_entropy(pred, tgt)
+
+
+def compute_budget_regularizer(selection_shot_scores: torch.Tensor,
+                               shot_lengths: torch.Tensor,
+                               n_frames: int,
+                               summary_budget: float) -> torch.Tensor:
+    if selection_shot_scores.ndim != 1:
+        raise ValueError(
+            f'Expected selection_shot_scores shape [S], got {tuple(selection_shot_scores.shape)}'
+        )
+    if shot_lengths.ndim != 1:
+        raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
+    if selection_shot_scores.shape[0] != shot_lengths.shape[0]:
+        raise ValueError('Shot count mismatch in compute_budget_regularizer.')
+    if n_frames <= 0:
+        raise ValueError(f'Invalid n_frames={n_frames}')
+
+    predicted_budget_ratio = torch.sum(selection_shot_scores * shot_lengths) / float(n_frames)
+    target_budget = predicted_budget_ratio.new_tensor(float(summary_budget))
+    return F.smooth_l1_loss(predicted_budget_ratio, target_budget)
 
 
 def evaluate_checkpoint(model, ckpt_path, test_loader, device: str):
@@ -634,6 +795,24 @@ def aggregate_attn_to_shot_scores(attn_weights: torch.Tensor,
         raise ValueError('Predicted shot scores have non-positive sum.')
 
     return shot_scores / total
+
+
+def aggregate_frame_scores_to_shot_scores(frame_scores: torch.Tensor,
+                                          overlaps: torch.Tensor,
+                                          shot_lengths: torch.Tensor) -> torch.Tensor:
+    if frame_scores.ndim != 1:
+        raise ValueError(f'Expected frame_scores shape [T], got {tuple(frame_scores.shape)}')
+    if overlaps.ndim != 2:
+        raise ValueError(f'Expected overlaps shape [S, T], got {tuple(overlaps.shape)}')
+    if shot_lengths.ndim != 1:
+        raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
+    if overlaps.shape[1] != frame_scores.shape[0]:
+        raise ValueError(
+            f'Time-step mismatch in aggregate_frame_scores_to_shot_scores: '
+            f'overlaps={tuple(overlaps.shape)} vs frame_scores={tuple(frame_scores.shape)}'
+        )
+
+    return torch.matmul(overlaps, frame_scores) / shot_lengths.clamp_min(1.0)
 
 
 def build_shot_text_stats(caption_spans_idx: torch.Tensor,
