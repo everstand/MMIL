@@ -45,69 +45,40 @@ def get_parser() -> argparse.ArgumentParser:
         '--rank-loss',
         type=str,
         default='sparse_pair',
-        choices=('sparse_pair', 'listwise_utility', 'budgeted_pseudo_summary', 'none'),
-        help=(
-            'Temporal supervision branch. '
-            'sparse_pair keeps caption semantic-change pair baseline; '
-            'listwise_utility uses dense offline utility distribution; '
-            'budgeted_pseudo_summary uses 15%% budget pseudo-summary masks; '
-            'none disables temporal ranking/selection supervision.'
+        choices=(
+            'sparse_pair',
+            'listwise_utility',
+            'budgeted_pseudo_summary',
+            'hybrid_sparse_budget',
+            'none',
         ),
     )
     parser.add_argument(
         '--score-head',
         type=str,
         default='single',
-        choices=('single', 'dual'),
-        help='single keeps backward-compatible attention scores; dual decouples pooling and selection.',
+        choices=('single', 'dual', 'residual_dual'),
     )
+    parser.add_argument('--shot-utility-path', type=str, default=None)
+    parser.add_argument('--utility-formula', type=str, default='semantic_plus_distinct_minus_red')
+    parser.add_argument('--lambda-listwise', type=float, default=0.2)
+    parser.add_argument('--listwise-temperature', type=float, default=0.2)
+    parser.add_argument('--lambda-select', type=float, default=0.2)
+    parser.add_argument('--lambda-budget', type=float, default=0.05)
+    parser.add_argument('--summary-budget', type=float, default=0.15)
+    parser.add_argument('--negative-quantile', type=float, default=0.25)
     parser.add_argument(
-        '--shot-utility-path',
+        '--teacher-gate-mode',
         type=str,
-        default=None,
-        help='Required for utility-based losses unless using pseudo_labels/{dataset}/shot_utility.npy.',
+        default='none',
+        choices=('none', 'scale', 'skip'),
+        help='Confidence gate for budgeted pseudo-summary teacher.',
     )
     parser.add_argument(
-        '--utility-formula',
-        type=str,
-        default='semantic_plus_distinct_minus_red',
-        help='Formula name used inside shot_utility.npy.',
-    )
-    parser.add_argument(
-        '--lambda-listwise',
+        '--teacher-margin-threshold',
         type=float,
-        default=0.2,
-        help='Weight for listwise utility loss.',
-    )
-    parser.add_argument(
-        '--listwise-temperature',
-        type=float,
-        default=0.2,
-        help='Softmax temperature for listwise utility distributions.',
-    )
-    parser.add_argument(
-        '--lambda-select',
-        type=float,
-        default=0.2,
-        help='Weight for confidence-gated pseudo-summary BCE.',
-    )
-    parser.add_argument(
-        '--lambda-budget',
-        type=float,
-        default=0.05,
-        help='Weight for selection budget regularizer.',
-    )
-    parser.add_argument(
-        '--summary-budget',
-        type=float,
-        default=0.15,
-        help='Summary budget ratio for pseudo-summary teacher and budget regularizer.',
-    )
-    parser.add_argument(
-        '--negative-quantile',
-        type=float,
-        default=0.25,
-        help='Low-utility quantile used as pseudo-negative shots.',
+        default=0.0,
+        help='Minimum selected-vs-negative utility margin before applying teacher supervision.',
     )
 
     parser.add_argument('--text-cond-num', type=int, default=7)
@@ -117,12 +88,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--num-feature', type=int, default=768)
     parser.add_argument('--num-hidden', type=int, default=128)
 
-    parser.add_argument(
-        '--val-ratio',
-        type=float,
-        default=0.2,
-        help='If a split has no val_keys, deterministically carve this ratio from train_keys.',
-    )
+    parser.add_argument('--val-ratio', type=float, default=0.2)
 
     return parser
 
@@ -144,7 +110,7 @@ def main() -> None:
         'score_head=%s | rank_loss=%s | lambda_pair=%.3g | pair_margin=%.3g | '
         'lambda_listwise=%.3g | lambda_select=%.3g | lambda_budget=%.3g | '
         'utility_formula=%s | tau=%.3g | summary_budget=%.3g | neg_q=%.3g | '
-        'lambda_align=%.3g | lambda_aux=%.3g | text_cond_num=%d',
+        'gate=%s | margin_thr=%.3g | lambda_align=%.3g | lambda_aux=%.3g | text_cond_num=%d',
         args.dataset,
         len(splits),
         args.seed,
@@ -162,6 +128,8 @@ def main() -> None:
         args.listwise_temperature,
         args.summary_budget,
         args.negative_quantile,
+        args.teacher_gate_mode,
+        args.teacher_margin_threshold,
         args.lambda_align,
         args.lambda_aux,
         args.text_cond_num,
@@ -185,25 +153,11 @@ def main() -> None:
             metrics['test_kendall_at_best_fscore'],
             metrics['test_spearman_at_best_fscore'],
         )
-        logger.debug(
-            'Split %d/%d checkpoint=%s',
-            split_idx + 1,
-            len(splits),
-            str(save_path),
-        )
+        logger.debug('Split %d/%d checkpoint=%s', split_idx + 1, len(splits), str(save_path))
 
-    test_fscore_list = [
-        float(m['test_fscore_at_best_fscore'])
-        for m in split_metrics
-    ]
-    test_kendall_list = [
-        float(m['test_kendall_at_best_fscore'])
-        for m in split_metrics
-    ]
-    test_spearman_list = [
-        float(m['test_spearman_at_best_fscore'])
-        for m in split_metrics
-    ]
+    test_fscore_list = [float(m['test_fscore_at_best_fscore']) for m in split_metrics]
+    test_kendall_list = [float(m['test_kendall_at_best_fscore']) for m in split_metrics]
+    test_spearman_list = [float(m['test_spearman_at_best_fscore']) for m in split_metrics]
 
     mean_f1, std_f1 = mean_std(test_fscore_list)
     mean_tau, std_tau = mean_std(test_kendall_list)

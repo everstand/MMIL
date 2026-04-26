@@ -4,6 +4,14 @@ import torch
 from modules.models import build_base_model
 
 
+def minmax_normalize_torch(x: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
+    x_min = torch.min(x)
+    x_max = torch.max(x)
+    if float((x_max - x_min).item()) <= eps:
+        return torch.ones_like(x) * 0.5
+    return (x - x_min) / (x_max - x_min + eps)
+
+
 class DSNetAFMILCond(nn.Module):
     """Conditioned MIL DSNet.
 
@@ -12,9 +20,15 @@ class DSNetAFMILCond(nn.Module):
         summary scores.
 
     score_head='dual':
-        Decouples video-level MIL pooling from summary selection:
+        Decouples MIL pooling from summary selection:
             pool_weights      -> bag_logits / summary_feat
-            selection_scores  -> evaluation / rank or pseudo-summary losses
+            selection_scores  -> evaluation / selection losses
+
+    score_head='residual_dual':
+        Uses the normalized pooling score as a frozen anchor and learns a
+        residual selection correction. This is intended for small/unstable
+        datasets where a randomly initialized selection head may destroy a
+        stable single-head baseline.
     """
 
     def __init__(self,
@@ -26,8 +40,10 @@ class DSNetAFMILCond(nn.Module):
                  score_head: str = 'single'):
         super().__init__()
 
-        if score_head not in ('single', 'dual'):
-            raise ValueError(f'Invalid score_head={score_head}; expected single or dual.')
+        if score_head not in ('single', 'dual', 'residual_dual'):
+            raise ValueError(
+                f'Invalid score_head={score_head}; expected single, dual, or residual_dual.'
+            )
 
         self.num_classes = num_classes
         self.num_feature = num_feature
@@ -53,8 +69,11 @@ class DSNetAFMILCond(nn.Module):
         self.fc_cls = nn.Linear(num_hidden, num_classes)
         self.fc_attn = nn.Linear(num_hidden, 1)
 
-        if self.score_head == 'dual':
+        if self.score_head in ('dual', 'residual_dual'):
             self.fc_select = nn.Linear(num_hidden, 1)
+            if self.score_head == 'residual_dual':
+                nn.init.zeros_(self.fc_select.weight)
+                nn.init.zeros_(self.fc_select.bias)
         else:
             self.fc_select = None
 
@@ -113,6 +132,11 @@ class DSNetAFMILCond(nn.Module):
         if self.score_head == 'dual':
             selection_logits = self.fc_select(hidden).squeeze(-1)
             summary_scores = torch.sigmoid(selection_logits)
+        elif self.score_head == 'residual_dual':
+            residual_logits = self.fc_select(hidden).squeeze(-1)
+            anchor_scores = pool_weights.detach().clamp(1e-6, 1.0 - 1e-6)
+            anchor_logits = torch.logit(anchor_scores)
+            summary_scores = torch.sigmoid(anchor_logits + residual_logits)
         else:
             summary_scores = pool_weights
 

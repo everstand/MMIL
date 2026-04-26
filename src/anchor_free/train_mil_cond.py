@@ -21,7 +21,7 @@ def train(args, split, save_path):
         'Loss weights | score_head=%s | rank_loss=%s | lambda_pair=%s | pair_margin=%s | '
         'lambda_listwise=%s | listwise_temperature=%s | '
         'lambda_select=%s | lambda_budget=%s | summary_budget=%s | neg_q=%s | '
-        'utility_formula=%s | lambda_align=%s | lambda_aux=%s',
+        'gate=%s | margin_thr=%s | utility_formula=%s | lambda_align=%s | lambda_aux=%s',
         args.score_head,
         args.rank_loss,
         args.lambda_pair,
@@ -32,6 +32,8 @@ def train(args, split, save_path):
         args.lambda_budget,
         args.summary_budget,
         args.negative_quantile,
+        args.teacher_gate_mode,
+        args.teacher_margin_threshold,
         args.utility_formula,
         args.lambda_align,
         args.lambda_aux,
@@ -62,14 +64,14 @@ def train(args, split, save_path):
     dataset_name = train_dataset_name
 
     shot_utility_store = None
-    if args.rank_loss in ('listwise_utility', 'budgeted_pseudo_summary'):
+    if args.rank_loss in ('listwise_utility', 'budgeted_pseudo_summary', 'hybrid_sparse_budget'):
         utility_path = resolve_shot_utility_path(
             dataset_name=dataset_name,
             explicit_path=args.shot_utility_path,
         )
         shot_utility_store = ShotUtilityStore(utility_path)
         logger.info(
-            'Using utility-based rank loss | rank_loss=%s | path=%s | formula=%s',
+            'Using utility-based supervision | rank_loss=%s | path=%s | formula=%s',
             args.rank_loss,
             utility_path,
             args.utility_formula,
@@ -154,6 +156,8 @@ def train(args, split, save_path):
             'num_supervised_shots',
             'num_positive_shots',
             'num_negative_shots',
+            'teacher_gate_weight',
+            'teacher_margin',
         )
 
         for (
@@ -175,15 +179,9 @@ def train(args, split, save_path):
             seq_tensor = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).to(args.device)
             text_cond_tensor = torch.tensor(text_cond, dtype=torch.float32).to(args.device)
             text_target_tensor = torch.tensor(text_target, dtype=torch.float32).to(args.device)
-            all_text_features_tensor = torch.tensor(
-                all_text_features, dtype=torch.float32, device=args.device
-            )
-            caption_spans_idx_tensor = torch.tensor(
-                caption_spans_idx, dtype=torch.long, device=args.device
-            )
-            caption_valid_mask_tensor = torch.tensor(
-                caption_valid_mask, dtype=torch.float32, device=args.device
-            )
+            all_text_features_tensor = torch.tensor(all_text_features, dtype=torch.float32, device=args.device)
+            caption_spans_idx_tensor = torch.tensor(caption_spans_idx, dtype=torch.long, device=args.device)
+            caption_valid_mask_tensor = torch.tensor(caption_valid_mask, dtype=torch.float32, device=args.device)
             soft_label_tensor = torch.tensor(soft_label, dtype=torch.float32).to(args.device)
 
             cps_np = np.asarray(cps, dtype=np.int32)
@@ -208,6 +206,8 @@ def train(args, split, save_path):
                 _,
             ) = model(seq_tensor, text_cond_tensor)
 
+            pool_weights = torch.softmax(pool_logits, dim=0)
+
             overlaps, shot_lengths = build_sampled_to_shot_overlap(
                 picks=picks_tensor,
                 cps=cps_tensor,
@@ -219,7 +219,11 @@ def train(args, split, save_path):
                 overlaps=overlaps,
                 shot_lengths=shot_lengths,
             )
-
+            pool_shot_scores = aggregate_attn_to_shot_scores(
+                attn_weights=pool_weights,
+                overlaps=overlaps,
+                shot_lengths=shot_lengths,
+            )
             selection_shot_scores = aggregate_frame_scores_to_shot_scores(
                 frame_scores=summary_scores,
                 overlaps=overlaps,
@@ -237,8 +241,12 @@ def train(args, split, save_path):
             num_supervised_shots = 0.0
             num_positive_shots = 0.0
             num_negative_shots = 0.0
+            teacher_gate_weight = 1.0
+            teacher_margin = 0.0
 
-            if args.rank_loss == 'sparse_pair':
+            if args.rank_loss in ('sparse_pair', 'hybrid_sparse_budget'):
+                sparse_scores = pool_shot_scores if args.rank_loss == 'hybrid_sparse_budget' else pred_shot_scores
+
                 shot_text_feat, shot_mass_density, valid_shots = build_shot_text_stats(
                     caption_spans_idx=caption_spans_idx_tensor,
                     caption_valid_mask=caption_valid_mask_tensor,
@@ -260,7 +268,7 @@ def train(args, split, save_path):
                 )
 
                 pair_loss = compute_sparse_pair_rank_loss(
-                    pred_shot_scores=pred_shot_scores,
+                    pred_shot_scores=sparse_scores,
                     pos_idx=pos_idx,
                     neg_idx=neg_idx,
                     margin=args.pair_margin,
@@ -271,20 +279,13 @@ def train(args, split, save_path):
                 assert_finite_tensor('pair_loss', pair_loss.unsqueeze(0), key)
                 assert_finite_tensor('weighted_pair_loss', weighted_pair_loss.unsqueeze(0), key)
 
-            elif args.rank_loss == 'listwise_utility':
+            if args.rank_loss == 'listwise_utility':
                 if shot_utility_store is None:
                     raise RuntimeError('shot_utility_store is required for listwise_utility rank loss.')
 
                 h5_key = Path(str(key)).name
-                teacher_utility_np = shot_utility_store.get(
-                    h5_key=h5_key,
-                    formula_name=args.utility_formula,
-                )
-                teacher_utility = torch.tensor(
-                    teacher_utility_np,
-                    dtype=torch.float32,
-                    device=args.device,
-                )
+                teacher_utility_np = shot_utility_store.get(h5_key=h5_key, formula_name=args.utility_formula)
+                teacher_utility = torch.tensor(teacher_utility_np, dtype=torch.float32, device=args.device)
 
                 if teacher_utility.shape[0] != pred_shot_scores.shape[0]:
                     raise ValueError(
@@ -303,9 +304,9 @@ def train(args, split, save_path):
                 assert_finite_tensor('listwise_loss', listwise_loss.unsqueeze(0), key)
                 assert_finite_tensor('weighted_listwise_loss', weighted_listwise_loss.unsqueeze(0), key)
 
-            elif args.rank_loss == 'budgeted_pseudo_summary':
+            if args.rank_loss in ('budgeted_pseudo_summary', 'hybrid_sparse_budget'):
                 if shot_utility_store is None:
-                    raise RuntimeError('shot_utility_store is required for budgeted_pseudo_summary.')
+                    raise RuntimeError('shot_utility_store is required for budgeted pseudo-summary supervision.')
 
                 h5_key = Path(str(key)).name
                 masks = shot_utility_store.get_budgeted_masks(
@@ -318,6 +319,7 @@ def train(args, split, save_path):
                     negative_quantile=args.negative_quantile,
                 )
 
+                utility = torch.tensor(masks['utility'], dtype=torch.float32, device=args.device)
                 target = torch.tensor(masks['target'], dtype=torch.float32, device=args.device)
                 supervised_mask = torch.tensor(masks['supervised_mask'], dtype=torch.bool, device=args.device)
                 selected_mask = torch.tensor(masks['selected_mask'], dtype=torch.bool, device=args.device)
@@ -329,10 +331,22 @@ def train(args, split, save_path):
                         f'target={target.shape[0]} vs pred={selection_shot_scores.shape[0]}'
                     )
 
-                selection_loss = compute_confidence_gated_bce_loss(
+                teacher_margin_tensor = compute_teacher_margin(
+                    utility=utility,
+                    selected_mask=selected_mask,
+                    negative_mask=negative_mask,
+                )
+                gate_weight_tensor = compute_teacher_gate_weight(
+                    margin=teacher_margin_tensor,
+                    threshold=args.teacher_margin_threshold,
+                    mode=args.teacher_gate_mode,
+                )
+
+                raw_selection_loss = compute_confidence_gated_weighted_bce_loss(
                     pred_shot_scores=selection_shot_scores,
                     target=target,
                     supervised_mask=supervised_mask,
+                    shot_lengths=shot_lengths,
                 )
                 budget_loss = compute_budget_regularizer(
                     selection_shot_scores=selection_shot_scores,
@@ -341,12 +355,15 @@ def train(args, split, save_path):
                     summary_budget=args.summary_budget,
                 )
 
+                selection_loss = gate_weight_tensor * raw_selection_loss
                 weighted_selection_loss = args.lambda_select * selection_loss
                 weighted_budget_loss = args.lambda_budget * budget_loss
 
                 num_supervised_shots = float(supervised_mask.sum().item())
                 num_positive_shots = float(selected_mask.sum().item())
                 num_negative_shots = float(negative_mask.sum().item())
+                teacher_gate_weight = float(gate_weight_tensor.detach().item())
+                teacher_margin = float(teacher_margin_tensor.detach().item())
 
                 assert_finite_tensor('selection_shot_scores', selection_shot_scores, key)
                 assert_finite_tensor('selection_loss', selection_loss.unsqueeze(0), key)
@@ -354,7 +371,7 @@ def train(args, split, save_path):
 
             elif args.rank_loss == 'none':
                 pass
-            else:
+            elif args.rank_loss not in ('sparse_pair', 'listwise_utility', 'hybrid_sparse_budget'):
                 raise ValueError(f'Unknown rank_loss: {args.rank_loss}')
 
             align_loss = compute_align_loss(summary_feat, text_target_tensor)
@@ -421,13 +438,11 @@ def train(args, split, save_path):
                 num_supervised_shots=num_supervised_shots,
                 num_positive_shots=num_positive_shots,
                 num_negative_shots=num_negative_shots,
+                teacher_gate_weight=teacher_gate_weight,
+                teacher_margin=teacher_margin,
             )
 
-        val_metrics = evaluate_mil_cond(
-            model=model,
-            val_loader=val_loader,
-            device=args.device,
-        )
+        val_metrics = evaluate_mil_cond(model=model, val_loader=val_loader, device=args.device)
         val_fscore = float(val_metrics['fscore'])
         val_kendall = float(val_metrics['kendall'])
         val_spearman = float(val_metrics['spearman'])
@@ -467,8 +482,8 @@ def train(args, split, save_path):
             'Epoch %03d/%03d detail | pair=%.4f/%.4f | listwise=%.4f/%.4f | '
             'select=%.4f/%.4f | budget=%.4f/%.4f | '
             'align=%.4f/%.4f | bag=%.4f/%.4f | '
-            'aux_active=%.4f | aux_skipped=%.4f | '
-            'sup_shots=%.4f | pos=%.4f | neg=%.4f | '
+            'aux_active=%.4f | aux_skipped=%.4f | sup_shots=%.4f | '
+            'pos=%.4f | neg=%.4f | gate=%.4f | margin=%.4f | '
             'val_max_Tau=%.4f | val_max_Rho=%.4f | '
             'Tau@best_F1=%.4f | Rho@best_F1=%.4f | F1@max_Tau=%.4f | F1@max_Rho=%.4f',
             epoch + 1,
@@ -490,6 +505,8 @@ def train(args, split, save_path):
             stats.num_supervised_shots,
             stats.num_positive_shots,
             stats.num_negative_shots,
+            stats.teacher_gate_weight,
+            stats.teacher_margin,
             max_val_kendall,
             max_val_spearman,
             kendall_at_best_fscore,
@@ -525,8 +542,10 @@ def train(args, split, save_path):
 
 
 def validate_rank_loss_args(args) -> None:
-    if args.score_head not in ('single', 'dual'):
-        raise ValueError(f'Invalid score_head={args.score_head}; expected single or dual.')
+    if args.score_head not in ('single', 'dual', 'residual_dual'):
+        raise ValueError(
+            f'Invalid score_head={args.score_head}; expected single, dual, or residual_dual.'
+        )
 
     if args.rank_loss == 'sparse_pair':
         if args.lambda_pair < 0:
@@ -540,10 +559,10 @@ def validate_rank_loss_args(args) -> None:
             raise ValueError(
                 f'Invalid listwise_temperature={args.listwise_temperature}; expected > 0.'
             )
-    elif args.rank_loss == 'budgeted_pseudo_summary':
-        if args.score_head != 'dual':
+    elif args.rank_loss in ('budgeted_pseudo_summary', 'hybrid_sparse_budget'):
+        if args.score_head not in ('dual', 'residual_dual'):
             raise ValueError(
-                '--rank-loss budgeted_pseudo_summary requires --score-head dual.'
+                f'--rank-loss {args.rank_loss} requires --score-head dual or residual_dual.'
             )
         if args.lambda_select < 0:
             raise ValueError(f'Invalid lambda_select={args.lambda_select}; expected >= 0.')
@@ -553,12 +572,18 @@ def validate_rank_loss_args(args) -> None:
             raise ValueError(f'Invalid summary_budget={args.summary_budget}; expected 0 < budget < 1.')
         if not (0.0 < args.negative_quantile < 1.0):
             raise ValueError(f'Invalid negative_quantile={args.negative_quantile}; expected 0 < q < 1.')
+        if args.teacher_gate_mode not in ('none', 'scale', 'skip'):
+            raise ValueError(f'Invalid teacher_gate_mode={args.teacher_gate_mode}.')
+        if args.teacher_margin_threshold < 0:
+            raise ValueError(
+                f'Invalid teacher_margin_threshold={args.teacher_margin_threshold}; expected >= 0.'
+            )
     elif args.rank_loss == 'none':
         pass
     else:
         raise ValueError(
             f'Invalid rank_loss={args.rank_loss}; '
-            f'expected sparse_pair, listwise_utility, budgeted_pseudo_summary, or none.'
+            f'expected sparse_pair, listwise_utility, budgeted_pseudo_summary, hybrid_sparse_budget, or none.'
         )
 
 
@@ -598,37 +623,80 @@ def compute_listwise_utility_loss(pred_shot_scores: torch.Tensor,
 
     teacher_prob = torch.softmax(teacher_utility / temperature, dim=0).detach()
 
-    return F.kl_div(
-        student_log_prob,
-        teacher_prob,
-        reduction='sum',
-    )
+    return F.kl_div(student_log_prob, teacher_prob, reduction='sum')
 
 
-def compute_confidence_gated_bce_loss(pred_shot_scores: torch.Tensor,
-                                      target: torch.Tensor,
-                                      supervised_mask: torch.Tensor,
-                                      eps: float = 1e-6) -> torch.Tensor:
+def compute_confidence_gated_weighted_bce_loss(pred_shot_scores: torch.Tensor,
+                                               target: torch.Tensor,
+                                               supervised_mask: torch.Tensor,
+                                               shot_lengths: torch.Tensor,
+                                               eps: float = 1e-6) -> torch.Tensor:
     if pred_shot_scores.ndim != 1:
         raise ValueError(f'Expected pred_shot_scores shape [S], got {tuple(pred_shot_scores.shape)}')
     if target.ndim != 1:
         raise ValueError(f'Expected target shape [S], got {tuple(target.shape)}')
     if supervised_mask.ndim != 1:
         raise ValueError(f'Expected supervised_mask shape [S], got {tuple(supervised_mask.shape)}')
+    if shot_lengths.ndim != 1:
+        raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
     if pred_shot_scores.shape[0] != target.shape[0] or pred_shot_scores.shape[0] != supervised_mask.shape[0]:
-        raise ValueError('Shot count mismatch in compute_confidence_gated_bce_loss.')
+        raise ValueError('Shot count mismatch in compute_confidence_gated_weighted_bce_loss.')
+    if pred_shot_scores.shape[0] != shot_lengths.shape[0]:
+        raise ValueError('Shot length mismatch in compute_confidence_gated_weighted_bce_loss.')
     if not torch.isfinite(pred_shot_scores).all():
-        raise ValueError('Non-finite pred_shot_scores in compute_confidence_gated_bce_loss.')
+        raise ValueError('Non-finite pred_shot_scores in compute_confidence_gated_weighted_bce_loss.')
     if not torch.isfinite(target).all():
-        raise ValueError('Non-finite target in compute_confidence_gated_bce_loss.')
+        raise ValueError('Non-finite target in compute_confidence_gated_weighted_bce_loss.')
 
     if int(supervised_mask.sum().item()) == 0:
         return pred_shot_scores.new_zeros(())
 
-    pred = pred_shot_scores[supervised_mask].clamp(min=eps, max=1.0 - eps)
-    tgt = target[supervised_mask].clamp(min=0.0, max=1.0)
+    pred = pred_shot_scores.clamp(min=eps, max=1.0 - eps)
+    tgt = target.clamp(min=0.0, max=1.0)
+    per_shot = F.binary_cross_entropy(pred, tgt, reduction='none')
 
-    return F.binary_cross_entropy(pred, tgt)
+    pos_mask = supervised_mask & (target > 0.5)
+    neg_mask = supervised_mask & (target <= 0.5)
+
+    weights = torch.zeros_like(per_shot)
+
+    if int(pos_mask.sum().item()) > 0:
+        pos_lengths = shot_lengths[pos_mask].to(per_shot.dtype)
+        weights[pos_mask] = 0.5 * pos_lengths / pos_lengths.sum().clamp_min(eps)
+
+    if int(neg_mask.sum().item()) > 0:
+        neg_lengths = shot_lengths[neg_mask].to(per_shot.dtype)
+        weights[neg_mask] = 0.5 * neg_lengths / neg_lengths.sum().clamp_min(eps)
+
+    weight_sum = weights.sum()
+    if float(weight_sum.item()) <= eps:
+        return pred_shot_scores.new_zeros(())
+
+    weights = weights / weight_sum
+    return torch.sum(per_shot * weights)
+
+
+def compute_teacher_margin(utility: torch.Tensor,
+                           selected_mask: torch.Tensor,
+                           negative_mask: torch.Tensor) -> torch.Tensor:
+    if selected_mask.any() and negative_mask.any():
+        return utility[selected_mask].mean() - utility[negative_mask].mean()
+    return utility.new_tensor(0.0)
+
+
+def compute_teacher_gate_weight(margin: torch.Tensor,
+                                threshold: float,
+                                mode: str,
+                                eps: float = 1e-6) -> torch.Tensor:
+    if mode == 'none':
+        return margin.new_tensor(1.0)
+    if mode == 'skip':
+        return (margin >= threshold).to(margin.dtype)
+    if mode == 'scale':
+        if threshold <= 0:
+            return torch.clamp(margin, min=0.0, max=1.0)
+        return torch.clamp((margin - threshold) / (1.0 - threshold + eps), min=0.0, max=1.0)
+    raise ValueError(f'Invalid teacher gate mode: {mode}')
 
 
 def compute_budget_regularizer(selection_shot_scores: torch.Tensor,
@@ -718,12 +786,7 @@ def compute_align_loss(summary_feat: torch.Tensor,
             f'{summary_feat.shape[0]} vs {text_target.shape[0]}'
         )
 
-    cosine = F.cosine_similarity(
-        summary_feat.unsqueeze(0),
-        text_target.unsqueeze(0),
-        dim=-1,
-    ).squeeze(0)
-
+    cosine = F.cosine_similarity(summary_feat.unsqueeze(0), text_target.unsqueeze(0), dim=-1).squeeze(0)
     return 1.0 - cosine
 
 
@@ -749,16 +812,14 @@ def build_sampled_to_shot_overlap(picks: torch.Tensor,
     for s in range(cps.shape[0]):
         first = int(cps[s, 0].item())
         last_exclusive = int(cps[s, 1].item()) + 1
-
         first_t = lo.new_tensor(first)
         last_t = lo.new_tensor(last_exclusive)
-
         inter = torch.minimum(hi, last_t) - torch.maximum(lo, first_t)
         inter = torch.clamp(inter, min=0).to(torch.float32)
         overlaps.append(inter)
 
-    overlaps = torch.stack(overlaps, dim=0)  # [S, T]
-    shot_lengths = overlaps.sum(dim=1)       # [S]
+    overlaps = torch.stack(overlaps, dim=0)
+    shot_lengths = overlaps.sum(dim=1)
 
     if not torch.all(shot_lengths > 0):
         raise ValueError('Detected non-positive shot length in build_sampled_to_shot_overlap.')
@@ -777,23 +838,15 @@ def aggregate_attn_to_shot_scores(attn_weights: torch.Tensor,
     if shot_lengths.ndim != 1:
         raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
     if overlaps.shape[1] != attn_weights.shape[0]:
-        raise ValueError(
-            f'Time-step mismatch in aggregate_attn_to_shot_scores: '
-            f'overlaps={tuple(overlaps.shape)} vs attn_weights={tuple(attn_weights.shape)}'
-        )
+        raise ValueError('Time-step mismatch in aggregate_attn_to_shot_scores.')
     if overlaps.shape[0] != shot_lengths.shape[0]:
-        raise ValueError(
-            f'Shot count mismatch in aggregate_attn_to_shot_scores: '
-            f'overlaps={tuple(overlaps.shape)} vs shot_lengths={tuple(shot_lengths.shape)}'
-        )
+        raise ValueError('Shot count mismatch in aggregate_attn_to_shot_scores.')
 
     shot_scores = torch.matmul(overlaps, attn_weights) / shot_lengths.clamp_min(1.0)
     shot_scores = shot_scores.clamp_min(0.0)
-
     total = shot_scores.sum()
     if float(total.item()) <= eps:
         raise ValueError('Predicted shot scores have non-positive sum.')
-
     return shot_scores / total
 
 
@@ -807,11 +860,7 @@ def aggregate_frame_scores_to_shot_scores(frame_scores: torch.Tensor,
     if shot_lengths.ndim != 1:
         raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
     if overlaps.shape[1] != frame_scores.shape[0]:
-        raise ValueError(
-            f'Time-step mismatch in aggregate_frame_scores_to_shot_scores: '
-            f'overlaps={tuple(overlaps.shape)} vs frame_scores={tuple(frame_scores.shape)}'
-        )
-
+        raise ValueError('Time-step mismatch in aggregate_frame_scores_to_shot_scores.')
     return torch.matmul(overlaps, frame_scores) / shot_lengths.clamp_min(1.0)
 
 
@@ -821,72 +870,36 @@ def build_shot_text_stats(caption_spans_idx: torch.Tensor,
                           overlaps: torch.Tensor,
                           shot_lengths: torch.Tensor,
                           eps: float = 1e-8):
-    if caption_spans_idx.ndim != 2 or caption_spans_idx.shape[1] != 2:
-        raise ValueError(
-            f'Expected caption_spans_idx shape [K, 2], got {tuple(caption_spans_idx.shape)}'
-        )
-    if caption_valid_mask.ndim != 1:
-        raise ValueError(
-            f'Expected caption_valid_mask shape [K], got {tuple(caption_valid_mask.shape)}'
-        )
-    if all_text_features.ndim != 2:
-        raise ValueError(
-            f'Expected all_text_features shape [K, D], got {tuple(all_text_features.shape)}'
-        )
-    if overlaps.ndim != 2:
-        raise ValueError(f'Expected overlaps shape [S, T], got {tuple(overlaps.shape)}')
-    if shot_lengths.ndim != 1:
-        raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
-    if caption_spans_idx.shape[0] != caption_valid_mask.shape[0]:
-        raise ValueError('Caption count mismatch in build_shot_text_stats.')
-    if caption_spans_idx.shape[0] != all_text_features.shape[0]:
-        raise ValueError('Caption/text count mismatch in build_shot_text_stats.')
-
     num_shots, num_steps = overlaps.shape
     feat_dim = all_text_features.shape[1]
-
     shot_text_sum = overlaps.new_zeros((num_shots, feat_dim))
     shot_text_mass = overlaps.new_zeros(num_shots)
 
     for k in range(caption_spans_idx.shape[0]):
         if float(caption_valid_mask[k].item()) <= 0.5:
             continue
-
         start_idx = int(caption_spans_idx[k, 0].item())
         end_idx = int(caption_spans_idx[k, 1].item())
-
         start_idx = max(0, min(start_idx, num_steps - 1))
         end_idx = max(start_idx, min(end_idx, num_steps - 1))
-
         shot_overlap = overlaps[:, start_idx:end_idx + 1].sum(dim=1)
         overlap_sum = shot_overlap.sum()
         if float(overlap_sum.item()) <= eps:
             continue
-
         weights = shot_overlap / overlap_sum
         shot_text_sum = shot_text_sum + weights.unsqueeze(1) * all_text_features[k].unsqueeze(0)
         shot_text_mass = shot_text_mass + weights
 
     valid_shots = shot_text_mass > eps
     shot_text_feat = overlaps.new_zeros((num_shots, feat_dim))
-
     if valid_shots.any():
         shot_text_avg = shot_text_sum[valid_shots] / shot_text_mass[valid_shots].unsqueeze(1).clamp_min(eps)
         shot_text_feat[valid_shots] = F.normalize(shot_text_avg, p=2, dim=1)
-
     shot_mass_density = shot_text_mass / shot_lengths.clamp_min(1.0)
     return shot_text_feat, shot_mass_density, valid_shots
 
 
-def compute_shot_semantic_change(shot_text_feat: torch.Tensor,
-                                 valid_shots: torch.Tensor):
-    if shot_text_feat.ndim != 2:
-        raise ValueError(f'Expected shot_text_feat shape [S, D], got {tuple(shot_text_feat.shape)}')
-    if valid_shots.ndim != 1:
-        raise ValueError(f'Expected valid_shots shape [S], got {tuple(valid_shots.shape)}')
-    if shot_text_feat.shape[0] != valid_shots.shape[0]:
-        raise ValueError('Shot count mismatch in compute_shot_semantic_change.')
-
+def compute_shot_semantic_change(shot_text_feat: torch.Tensor, valid_shots: torch.Tensor):
     num_shots = shot_text_feat.shape[0]
     shot_change = shot_text_feat.new_zeros(num_shots)
     change_valid_mask = torch.zeros_like(valid_shots, dtype=torch.bool)
@@ -894,38 +907,25 @@ def compute_shot_semantic_change(shot_text_feat: torch.Tensor,
     for s in range(num_shots):
         if not bool(valid_shots[s].item()):
             continue
-
         diffs = []
-
         if s - 1 >= 0 and bool(valid_shots[s - 1].item()):
             cos_prev = torch.sum(shot_text_feat[s] * shot_text_feat[s - 1])
             diffs.append(1.0 - cos_prev)
-
         if s + 1 < num_shots and bool(valid_shots[s + 1].item()):
             cos_next = torch.sum(shot_text_feat[s] * shot_text_feat[s + 1])
             diffs.append(1.0 - cos_next)
-
         if diffs:
             shot_change[s] = torch.stack(diffs).mean()
             change_valid_mask[s] = True
-
     return shot_change, change_valid_mask
 
 
-def remove_indices(candidates: torch.Tensor,
-                   exclude: torch.Tensor) -> torch.Tensor:
-    if candidates.ndim != 1:
-        raise ValueError(f'Expected candidates shape [N], got {tuple(candidates.shape)}')
-    if exclude.ndim != 1:
-        raise ValueError(f'Expected exclude shape [M], got {tuple(exclude.shape)}')
-
+def remove_indices(candidates: torch.Tensor, exclude: torch.Tensor) -> torch.Tensor:
     if exclude.numel() == 0:
         return candidates
-
     keep = torch.ones(candidates.shape[0], dtype=torch.bool, device=candidates.device)
     for idx in exclude:
         keep = keep & (candidates != idx)
-
     return candidates[keep]
 
 
@@ -933,25 +933,14 @@ def mine_sparse_shot_pairs(shot_change: torch.Tensor,
                            shot_mass_density: torch.Tensor,
                            change_valid_mask: torch.Tensor,
                            top_ratio: float = 0.2):
-    if shot_change.ndim != 1:
-        raise ValueError(f'Expected shot_change shape [S], got {tuple(shot_change.shape)}')
-    if shot_mass_density.ndim != 1:
-        raise ValueError(f'Expected shot_mass_density shape [S], got {tuple(shot_mass_density.shape)}')
-    if change_valid_mask.ndim != 1:
-        raise ValueError(f'Expected change_valid_mask shape [S], got {tuple(change_valid_mask.shape)}')
-    if shot_change.shape[0] != shot_mass_density.shape[0] or shot_change.shape[0] != change_valid_mask.shape[0]:
-        raise ValueError('Shot count mismatch in mine_sparse_shot_pairs.')
-
     candidate_mask = change_valid_mask & (shot_mass_density > 0)
     candidate_idx = torch.where(candidate_mask)[0]
-
     if candidate_idx.numel() < 2:
         empty = torch.empty(0, dtype=torch.long, device=shot_change.device)
         return empty, empty
 
     k = max(1, int(round(candidate_idx.numel() * top_ratio)))
     k = min(k, candidate_idx.numel())
-
     candidate_change = shot_change[candidate_idx]
     pos_local = torch.topk(candidate_change, k=k, largest=True).indices
     pos_idx = candidate_idx[pos_local]
@@ -959,10 +948,8 @@ def mine_sparse_shot_pairs(shot_change: torch.Tensor,
     mass_thr = torch.median(shot_mass_density[candidate_idx])
     neg_candidate = candidate_idx[shot_mass_density[candidate_idx] >= mass_thr]
     neg_candidate = remove_indices(neg_candidate, pos_idx)
-
     if neg_candidate.numel() == 0:
         neg_candidate = remove_indices(candidate_idx, pos_idx)
-
     if neg_candidate.numel() == 0:
         empty = torch.empty(0, dtype=torch.long, device=shot_change.device)
         return empty, empty
@@ -971,7 +958,6 @@ def mine_sparse_shot_pairs(shot_change: torch.Tensor,
     neg_change = shot_change[neg_candidate]
     neg_local = torch.topk(neg_change, k=neg_k, largest=False).indices
     neg_idx = neg_candidate[neg_local]
-
     return pos_idx, neg_idx
 
 
@@ -979,19 +965,8 @@ def compute_sparse_pair_rank_loss(pred_shot_scores: torch.Tensor,
                                   pos_idx: torch.Tensor,
                                   neg_idx: torch.Tensor,
                                   margin: float) -> torch.Tensor:
-    if pred_shot_scores.ndim != 1:
-        raise ValueError(
-            f'Expected pred_shot_scores shape [S], got {tuple(pred_shot_scores.shape)}'
-        )
-    if pos_idx.ndim != 1:
-        raise ValueError(f'Expected pos_idx shape [P], got {tuple(pos_idx.shape)}')
-    if neg_idx.ndim != 1:
-        raise ValueError(f'Expected neg_idx shape [N], got {tuple(neg_idx.shape)}')
-
     if pos_idx.numel() == 0 or neg_idx.numel() == 0:
         return pred_shot_scores.new_zeros(())
-
     pos_scores = pred_shot_scores[pos_idx].unsqueeze(1)
     neg_scores = pred_shot_scores[neg_idx].unsqueeze(0)
-
     return F.relu(margin - pos_scores + neg_scores).mean()
