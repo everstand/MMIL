@@ -21,7 +21,8 @@ def train(args, split, save_path):
         'Loss weights | score_head=%s | rank_loss=%s | lambda_pair=%s | pair_margin=%s | '
         'lambda_listwise=%s | listwise_temperature=%s | '
         'lambda_select=%s | lambda_budget=%s | summary_budget=%s | neg_q=%s | '
-        'gate=%s | margin_thr=%s | utility_formula=%s | lambda_align=%s | lambda_aux=%s',
+        'gate=%s | margin_thr=%s | utility_formula=%s | lambda_align=%s | lambda_aux=%s | '
+        'coverage_aware=%s | coverage_min=%s',
         args.score_head,
         args.rank_loss,
         args.lambda_pair,
@@ -37,6 +38,8 @@ def train(args, split, save_path):
         args.utility_formula,
         args.lambda_align,
         args.lambda_aux,
+        args.caption_coverage_aware,
+        args.coverage_loss_min_weight,
     )
 
     if 'val_keys' not in split:
@@ -81,16 +84,19 @@ def train(args, split, save_path):
         train_keys,
         text_cond_num=args.text_cond_num,
         random_text_sampling=True,
+        caption_coverage_aware=args.caption_coverage_aware,
     )
     val_set = mil_data_helper_cond.VideoDatasetMILCond(
         val_keys,
         text_cond_num=args.text_cond_num,
         random_text_sampling=False,
+        caption_coverage_aware=args.caption_coverage_aware,
     )
     test_set = mil_data_helper_cond.VideoDatasetMILCond(
         test_keys,
         text_cond_num=args.text_cond_num,
         random_text_sampling=False,
+        caption_coverage_aware=args.caption_coverage_aware,
     )
 
     num_classes = infer_num_classes(train_set)
@@ -158,6 +164,9 @@ def train(args, split, save_path):
             'num_negative_shots',
             'teacher_gate_weight',
             'teacher_margin',
+            'caption_coverage_ratio',
+            'coverage_loss_weight',
+            'num_valid_text_cond',
         )
 
         for (
@@ -175,9 +184,12 @@ def train(args, split, save_path):
             n_frames,
             nfps,
             picks,
+            text_cond_mask,
+            caption_coverage_ratio,
         ) in train_loader:
             seq_tensor = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).to(args.device)
             text_cond_tensor = torch.tensor(text_cond, dtype=torch.float32).to(args.device)
+            text_cond_mask_tensor = torch.tensor(text_cond_mask, dtype=torch.float32, device=args.device)
             text_target_tensor = torch.tensor(text_target, dtype=torch.float32).to(args.device)
             all_text_features_tensor = torch.tensor(all_text_features, dtype=torch.float32, device=args.device)
             caption_spans_idx_tensor = torch.tensor(caption_spans_idx, dtype=torch.long, device=args.device)
@@ -192,8 +204,18 @@ def train(args, split, save_path):
 
             assert_finite_tensor('seq_tensor', seq_tensor, key)
             assert_finite_tensor('text_cond_tensor', text_cond_tensor, key)
+            assert_finite_tensor('text_cond_mask_tensor', text_cond_mask_tensor, key)
             assert_finite_tensor('text_target_tensor', text_target_tensor, key)
             assert_finite_tensor('all_text_features_tensor', all_text_features_tensor, key)
+
+            caption_coverage_ratio_value = float(np.asarray(caption_coverage_ratio).item())
+            coverage_loss_weight = compute_coverage_loss_weight(
+                seq_tensor=seq_tensor,
+                coverage_ratio=caption_coverage_ratio_value,
+                enabled=args.caption_coverage_aware,
+                min_weight=args.coverage_loss_min_weight,
+            )
+            num_valid_text_cond = float((text_cond_mask_tensor > 0.5).sum().item())
 
             normalized_target, is_effective = normalize_soft_label(soft_label_tensor)
 
@@ -204,7 +226,11 @@ def train(args, split, save_path):
                 bag_logits,
                 summary_feat,
                 _,
-            ) = model(seq_tensor, text_cond_tensor)
+            ) = model(
+                seq_tensor,
+                text_cond_tensor,
+                text_cond_mask_tensor if args.caption_coverage_aware else None,
+            )
 
             pool_weights = torch.softmax(pool_logits, dim=0)
 
@@ -273,7 +299,7 @@ def train(args, split, save_path):
                     neg_idx=neg_idx,
                     margin=args.pair_margin,
                 )
-                weighted_pair_loss = args.lambda_pair * pair_loss
+                weighted_pair_loss = args.lambda_pair * coverage_loss_weight * pair_loss
 
                 assert_finite_tensor('shot_change', shot_change, key)
                 assert_finite_tensor('pair_loss', pair_loss.unsqueeze(0), key)
@@ -298,7 +324,7 @@ def train(args, split, save_path):
                     teacher_utility=teacher_utility,
                     temperature=args.listwise_temperature,
                 )
-                weighted_listwise_loss = args.lambda_listwise * listwise_loss
+                weighted_listwise_loss = args.lambda_listwise * coverage_loss_weight * listwise_loss
 
                 assert_finite_tensor('teacher_utility', teacher_utility, key)
                 assert_finite_tensor('listwise_loss', listwise_loss.unsqueeze(0), key)
@@ -355,7 +381,7 @@ def train(args, split, save_path):
                     summary_budget=args.summary_budget,
                 )
 
-                selection_loss = gate_weight_tensor * raw_selection_loss
+                selection_loss = gate_weight_tensor * coverage_loss_weight * raw_selection_loss
                 weighted_selection_loss = args.lambda_select * selection_loss
                 weighted_budget_loss = args.lambda_budget * budget_loss
 
@@ -375,7 +401,7 @@ def train(args, split, save_path):
                 raise ValueError(f'Unknown rank_loss: {args.rank_loss}')
 
             align_loss = compute_align_loss(summary_feat, text_target_tensor)
-            weighted_align_loss = args.lambda_align * align_loss
+            weighted_align_loss = args.lambda_align * coverage_loss_weight * align_loss
 
             assert_finite_tensor('summary_scores', summary_scores, key)
             assert_finite_tensor('bag_logits', bag_logits, key)
@@ -440,12 +466,16 @@ def train(args, split, save_path):
                 num_negative_shots=num_negative_shots,
                 teacher_gate_weight=teacher_gate_weight,
                 teacher_margin=teacher_margin,
+                caption_coverage_ratio=caption_coverage_ratio_value,
+                coverage_loss_weight=float(coverage_loss_weight.detach().item()),
+                num_valid_text_cond=num_valid_text_cond,
             )
 
         val_metrics = evaluate_mil_cond(model=model, val_loader=val_loader, device=args.device)
         val_fscore = float(val_metrics['fscore'])
         val_kendall = float(val_metrics['kendall'])
         val_spearman = float(val_metrics['spearman'])
+        val_caption_coverage = float(val_metrics['caption_coverage'])
 
         if val_kendall > max_val_kendall:
             max_val_kendall = val_kendall
@@ -467,7 +497,7 @@ def train(args, split, save_path):
 
         logger.info(
             'Epoch %03d/%03d | loss=%.4f | rank=%.4f | val_F1=%.4f | '
-            'val_Tau=%.4f | val_Rho=%.4f | best_val_F1=%.4f',
+            'val_Tau=%.4f | val_Rho=%.4f | val_cov=%.4f | best_val_F1=%.4f',
             epoch + 1,
             args.max_epoch,
             stats.loss,
@@ -475,6 +505,7 @@ def train(args, split, save_path):
             val_fscore,
             val_kendall,
             val_spearman,
+            val_caption_coverage,
             best_val_fscore,
         )
 
@@ -484,6 +515,7 @@ def train(args, split, save_path):
             'align=%.4f/%.4f | bag=%.4f/%.4f | '
             'aux_active=%.4f | aux_skipped=%.4f | sup_shots=%.4f | '
             'pos=%.4f | neg=%.4f | gate=%.4f | margin=%.4f | '
+            'cap_cov=%.4f | cov_w=%.4f | valid_text=%.4f | '
             'val_max_Tau=%.4f | val_max_Rho=%.4f | '
             'Tau@best_F1=%.4f | Rho@best_F1=%.4f | F1@max_Tau=%.4f | F1@max_Rho=%.4f',
             epoch + 1,
@@ -507,6 +539,9 @@ def train(args, split, save_path):
             stats.num_negative_shots,
             stats.teacher_gate_weight,
             stats.teacher_margin,
+            stats.caption_coverage_ratio,
+            stats.coverage_loss_weight,
+            stats.num_valid_text_cond,
             max_val_kendall,
             max_val_spearman,
             kendall_at_best_fscore,
@@ -532,6 +567,7 @@ def train(args, split, save_path):
         'test_fscore_at_best_fscore': float(test_at_best_fscore['fscore']),
         'test_kendall_at_best_fscore': float(test_at_best_fscore['kendall']),
         'test_spearman_at_best_fscore': float(test_at_best_fscore['spearman']),
+        'test_caption_coverage_at_best_fscore': float(test_at_best_fscore['caption_coverage']),
         'test_fscore_at_max_kendall': float(test_at_max_kendall['fscore']),
         'test_kendall_at_max_kendall': float(test_at_max_kendall['kendall']),
         'test_spearman_at_max_kendall': float(test_at_max_kendall['spearman']),
@@ -545,6 +581,11 @@ def validate_rank_loss_args(args) -> None:
     if args.score_head not in ('single', 'dual', 'residual_dual'):
         raise ValueError(
             f'Invalid score_head={args.score_head}; expected single, dual, or residual_dual.'
+        )
+    if not (0.0 <= args.coverage_loss_min_weight <= 1.0):
+        raise ValueError(
+            f'Invalid coverage_loss_min_weight={args.coverage_loss_min_weight}; '
+            'expected 0 <= weight <= 1.'
         )
 
     if args.rank_loss == 'sparse_pair':
@@ -772,6 +813,20 @@ def assert_finite_tensor(name: str, x: torch.Tensor, key: str) -> None:
             f'Non-finite tensor detected: {name} | sample={key} | '
             f'nan={num_nan} | inf={num_inf} | shape={tuple(x.shape)}'
         )
+
+
+def compute_coverage_loss_weight(seq_tensor: torch.Tensor,
+                                 coverage_ratio: float,
+                                 enabled: bool,
+                                 min_weight: float) -> torch.Tensor:
+    if not np.isfinite(coverage_ratio):
+        raise ValueError(f'Non-finite caption coverage ratio: {coverage_ratio}')
+    if not (0.0 <= min_weight <= 1.0):
+        raise ValueError(f'Invalid coverage min_weight={min_weight}; expected 0 <= weight <= 1.')
+    if not enabled:
+        return seq_tensor.new_tensor(1.0)
+    coverage_ratio = max(0.0, min(float(coverage_ratio), 1.0))
+    return seq_tensor.new_tensor(min_weight + (1.0 - min_weight) * coverage_ratio)
 
 
 def compute_align_loss(summary_feat: torch.Tensor,

@@ -82,6 +82,17 @@ def get_parser() -> argparse.ArgumentParser:
     )
 
     parser.add_argument('--text-cond-num', type=int, default=7)
+    parser.add_argument(
+        '--caption-coverage-aware',
+        action='store_true',
+        help='Enable text condition mask, caption coverage weighting, and coverage diagnostics.',
+    )
+    parser.add_argument(
+        '--coverage-loss-min-weight',
+        type=float,
+        default=0.5,
+        help='Minimum multiplier for coverage-aware caption-derived losses.',
+    )
 
     parser.add_argument('--base-model', type=str, default='attention', choices=['attention'])
     parser.add_argument('--num-head', type=int, default=8)
@@ -89,6 +100,12 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--num-hidden', type=int, default=128)
 
     parser.add_argument('--val-ratio', type=float, default=0.2)
+    parser.add_argument(
+        '--max-splits',
+        type=int,
+        default=None,
+        help='Optional smoke-test limit on the number of loaded folds. Default uses all folds.',
+    )
 
     return parser
 
@@ -103,6 +120,10 @@ def main() -> None:
     init_logger(str(model_dir), args.log_file)
 
     splits = load_all_splits(args.splits, val_ratio=args.val_ratio, seed=args.seed)
+    if args.max_splits is not None:
+        if args.max_splits <= 0:
+            raise ValueError(f'Invalid max_splits={args.max_splits}; expected > 0.')
+        splits = splits[:args.max_splits]
     validate_splits(splits, args.dataset)
 
     logger.info(
@@ -110,7 +131,8 @@ def main() -> None:
         'score_head=%s | rank_loss=%s | lambda_pair=%.3g | pair_margin=%.3g | '
         'lambda_listwise=%.3g | lambda_select=%.3g | lambda_budget=%.3g | '
         'utility_formula=%s | tau=%.3g | summary_budget=%.3g | neg_q=%.3g | '
-        'gate=%s | margin_thr=%.3g | lambda_align=%.3g | lambda_aux=%.3g | text_cond_num=%d',
+        'gate=%s | margin_thr=%.3g | lambda_align=%.3g | lambda_aux=%.3g | '
+        'text_cond_num=%d | coverage_aware=%s | coverage_min=%.3g',
         args.dataset,
         len(splits),
         args.seed,
@@ -133,6 +155,8 @@ def main() -> None:
         args.lambda_align,
         args.lambda_aux,
         args.text_cond_num,
+        args.caption_coverage_aware,
+        args.coverage_loss_min_weight,
     )
     logger.debug('Arguments: %s', vars(args))
 
@@ -145,23 +169,29 @@ def main() -> None:
         split_metrics.append(metrics)
 
         logger.info(
-            'Split %d/%d | val_F1=%.4f | test_F1=%.4f | test_Tau=%.4f | test_Rho=%.4f',
+            'Split %d/%d | val_F1=%.4f | test_F1=%.4f | test_Tau=%.4f | '
+            'test_Rho=%.4f | test_cov=%.4f',
             split_idx + 1,
             len(splits),
             metrics['val_best_fscore'],
             metrics['test_fscore_at_best_fscore'],
             metrics['test_kendall_at_best_fscore'],
             metrics['test_spearman_at_best_fscore'],
+            metrics['test_caption_coverage_at_best_fscore'],
         )
         logger.debug('Split %d/%d checkpoint=%s', split_idx + 1, len(splits), str(save_path))
 
     test_fscore_list = [float(m['test_fscore_at_best_fscore']) for m in split_metrics]
     test_kendall_list = [float(m['test_kendall_at_best_fscore']) for m in split_metrics]
     test_spearman_list = [float(m['test_spearman_at_best_fscore']) for m in split_metrics]
+    test_caption_coverage_list = [
+        float(m['test_caption_coverage_at_best_fscore']) for m in split_metrics
+    ]
 
     mean_f1, std_f1 = mean_std(test_fscore_list)
     mean_tau, std_tau = mean_std(test_kendall_list)
     mean_rho, std_rho = mean_std(test_spearman_list)
+    mean_cov, std_cov = mean_std(test_caption_coverage_list)
 
     logger.info(
         'Final | test_F1=%.4f±%.4f | test_Tau=%.4f±%.4f | test_Rho=%.4f±%.4f',
@@ -171,6 +201,11 @@ def main() -> None:
         std_tau,
         mean_rho,
         std_rho,
+    )
+    logger.info(
+        'Final diagnostic | test_caption_coverage=%.4f±%.4f',
+        mean_cov,
+        std_cov,
     )
 
 

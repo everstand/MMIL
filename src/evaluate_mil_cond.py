@@ -15,6 +15,7 @@ def evaluate_mil_cond(model, val_loader, device: str):
     fscore_list = []
     kendall_list = []
     spearman_list = []
+    caption_coverage_list = []
 
     with torch.no_grad():
         for (
@@ -32,13 +33,22 @@ def evaluate_mil_cond(model, val_loader, device: str):
             n_frames,
             nfps,
             picks,
+            text_cond_mask,
+            caption_coverage_ratio,
         ) in val_loader:
             seq_tensor = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).to(device)
             text_cond_tensor = torch.tensor(text_cond, dtype=torch.float32).to(device)
+            text_cond_mask_tensor = torch.tensor(
+                text_cond_mask,
+                dtype=torch.float32,
+                device=device,
+            )
+            caption_coverage_list.append(float(np.asarray(caption_coverage_ratio).item()))
 
             summary_scores = model.predict_summary_scores(
                 seq_tensor,
                 text_cond_tensor,
+                text_cond_mask_tensor,
             ).detach().cpu().numpy().astype(np.float32)
 
             if not np.isfinite(summary_scores).all():
@@ -93,4 +103,5 @@ def evaluate_mil_cond(model, val_loader, device: str):
         'spearman': safe_nanmean(spearman_list),
         'num_videos': int(len(fscore_list)),
         'num_rank_videos': int(sum(np.isfinite(v) for v in kendall_list)),
+        'caption_coverage': float(np.mean(caption_coverage_list)) if caption_coverage_list else 0.0,
     }

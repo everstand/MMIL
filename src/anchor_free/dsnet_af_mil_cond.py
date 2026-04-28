@@ -77,7 +77,10 @@ class DSNetAFMILCond(nn.Module):
         else:
             self.fc_select = None
 
-    def forward(self, x: torch.Tensor, text_cond: torch.Tensor):
+    def forward(self,
+                x: torch.Tensor,
+                text_cond: torch.Tensor,
+                text_cond_mask: torch.Tensor = None):
         if x.ndim != 3:
             raise ValueError(f'Expected x shape [B, T, D], got {tuple(x.shape)}')
         if x.shape[0] != 1:
@@ -105,6 +108,11 @@ class DSNetAFMILCond(nn.Module):
                 f'Text feature dim mismatch: got {text_cond.shape[2]}, expected {self.num_feature}'
             )
 
+        key_padding_mask = self.build_text_key_padding_mask(
+            text_cond=text_cond,
+            text_cond_mask=text_cond_mask,
+        )
+
         raw_x = x
 
         out = self.base_model(x)
@@ -117,6 +125,7 @@ class DSNetAFMILCond(nn.Module):
             query=out,
             key=text_cond,
             value=text_cond,
+            key_padding_mask=key_padding_mask,
             need_weights=False,
         )
         cond_out = self.cross_attn_layer_norm(cond_out + out)
@@ -160,6 +169,39 @@ class DSNetAFMILCond(nn.Module):
         )
 
     @torch.no_grad()
-    def predict_summary_scores(self, seq: torch.Tensor, text_cond: torch.Tensor) -> torch.Tensor:
-        _, _, summary_scores, _, _, _ = self(seq, text_cond)
+    def build_text_key_padding_mask(self,
+                                    text_cond: torch.Tensor,
+                                    text_cond_mask: torch.Tensor = None):
+        if text_cond_mask is None:
+            return None
+
+        if text_cond_mask.ndim == 1:
+            text_cond_mask = text_cond_mask.unsqueeze(0)
+        elif text_cond_mask.ndim != 2:
+            raise ValueError(
+                f'Expected text_cond_mask shape [M] or [B, M], got {tuple(text_cond_mask.shape)}'
+            )
+
+        if text_cond_mask.shape[0] != text_cond.shape[0]:
+            raise ValueError(
+                f'text_cond/text_cond_mask batch mismatch: '
+                f'{text_cond.shape[0]} vs {text_cond_mask.shape[0]}'
+            )
+        if text_cond_mask.shape[1] != text_cond.shape[1]:
+            raise ValueError(
+                f'text_cond/text_cond_mask length mismatch: '
+                f'{text_cond.shape[1]} vs {text_cond_mask.shape[1]}'
+            )
+
+        valid_mask = text_cond_mask.to(device=text_cond.device) > 0.5
+        if not bool(valid_mask.any().item()):
+            raise ValueError('text_cond_mask masks out all text condition tokens.')
+        return ~valid_mask
+
+    @torch.no_grad()
+    def predict_summary_scores(self,
+                               seq: torch.Tensor,
+                               text_cond: torch.Tensor,
+                               text_cond_mask: torch.Tensor = None) -> torch.Tensor:
+        _, _, summary_scores, _, _, _ = self(seq, text_cond, text_cond_mask)
         return summary_scores

@@ -22,7 +22,8 @@ class VideoDatasetMILCond(object):
     def __init__(self,
                  keys: List[str],
                  text_cond_num: int = 7,
-                 random_text_sampling: bool = True):
+                 random_text_sampling: bool = True,
+                 caption_coverage_aware: bool = False):
         if not keys:
             raise ValueError('VideoDatasetMILCond received empty keys.')
         if text_cond_num <= 0:
@@ -31,6 +32,7 @@ class VideoDatasetMILCond(object):
         self.original_keys = list(keys)
         self.text_cond_num = int(text_cond_num)
         self.random_text_sampling = bool(random_text_sampling)
+        self.caption_coverage_aware = bool(caption_coverage_aware)
 
         self.h5_datasets = self.get_h5_datasets(self.original_keys)
 
@@ -118,7 +120,9 @@ class VideoDatasetMILCond(object):
 
         fps = extract_video_fps(structured_entry, h5_key)
 
-        text_cond = self.sample_text_cond(all_text_features)
+        text_cond, text_cond_mask, caption_coverage_ratio = self.sample_text_cond(
+            all_text_features
+        )
 
         soft_label = self.soft_labels_by_dataset[dataset_name][h5_key].astype(np.float32)
 
@@ -163,16 +167,31 @@ class VideoDatasetMILCond(object):
             n_frames,
             nfps,
             picks,
+            text_cond_mask,
+            caption_coverage_ratio,
         )
 
     def __len__(self) -> int:
         return len(self.keys)
 
-    def sample_text_cond(self, all_text_features: np.ndarray) -> np.ndarray:
+    def sample_text_cond(self, all_text_features: np.ndarray):
         num_captions = int(all_text_features.shape[0])
 
         if num_captions <= 0:
             raise ValueError('Cannot sample text_cond from empty all_text_features.')
+
+        caption_coverage_ratio = min(
+            float(num_captions) / float(self.text_cond_num),
+            1.0,
+        )
+
+        if self.caption_coverage_aware and num_captions < self.text_cond_num:
+            feat_dim = int(all_text_features.shape[1])
+            text_cond = np.zeros((self.text_cond_num, feat_dim), dtype=np.float32)
+            text_cond[:num_captions] = all_text_features.astype(np.float32)
+            text_cond_mask = np.zeros((self.text_cond_num,), dtype=np.float32)
+            text_cond_mask[:num_captions] = 1.0
+            return text_cond, text_cond_mask, np.asarray(caption_coverage_ratio, dtype=np.float32)
 
         if num_captions >= self.text_cond_num:
             if self.random_text_sampling:
@@ -203,7 +222,8 @@ class VideoDatasetMILCond(object):
             raise ValueError(
                 f'Invalid text_cond shape after sampling: {text_cond.shape}'
             )
-        return text_cond
+        text_cond_mask = np.ones((self.text_cond_num,), dtype=np.float32)
+        return text_cond, text_cond_mask, np.asarray(caption_coverage_ratio, dtype=np.float32)
 
     @staticmethod
     def get_h5_datasets(keys: List[str]) -> Dict[str, h5py.File]:
