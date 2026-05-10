@@ -318,21 +318,41 @@ def train(args, split, save_path):
                 overlaps=overlaps,
                 shot_lengths=shot_lengths,
             )
-            needs_shot_text_stats = (
-                args.rank_loss in ('sparse_pair', 'hybrid_sparse_budget')
-                or (args.selection_score_source == 'shot_head' and args.shot_head_mode == 'context')
+            needs_sparse_pair_stats = args.rank_loss in ('sparse_pair', 'hybrid_sparse_budget')
+            needs_context_stats = (
+                args.selection_score_source == 'shot_head'
+                and args.shot_head_mode == 'context'
             )
+
             shot_text_feat = None
             shot_mass_density = None
             valid_shots = None
-            if needs_shot_text_stats:
-                shot_text_feat, shot_mass_density, valid_shots = build_shot_text_stats(
+
+            if needs_sparse_pair_stats:
+                # Keep the existing sparse-pair text statistics path isolated from
+                # context shot-token construction.
+                shot_text_feat_sparse, shot_mass_density, valid_shots = build_shot_text_stats(
                     caption_spans_idx=caption_spans_idx_tensor,
                     caption_valid_mask=caption_valid_mask_tensor,
                     all_text_features=all_text_features_tensor,
                     overlaps=overlaps,
                     shot_lengths=shot_lengths,
                 )
+            else:
+                shot_text_feat_sparse = None
+
+            if needs_context_stats:
+                # Context shot-head must use the same shot-token text aggregation as
+                # evaluation and transfer diagnostics.
+                shot_text_feat, _context_mass_density, _context_valid_shots = build_context_shot_text_stats(
+                    caption_spans_idx=caption_spans_idx_tensor,
+                    caption_valid_mask=caption_valid_mask_tensor,
+                    all_text_features=all_text_features_tensor,
+                    overlaps=overlaps,
+                    shot_lengths=shot_lengths,
+                )
+            elif shot_text_feat_sparse is not None:
+                shot_text_feat = shot_text_feat_sparse
 
             nfps_tensor = torch.tensor(nfps_np, dtype=torch.float32, device=args.device)
             shot_time_feat = None
@@ -388,11 +408,11 @@ def train(args, split, save_path):
                 else:
                     sparse_scores = pool_shot_scores if args.rank_loss == 'hybrid_sparse_budget' else pred_shot_scores
 
-                if shot_text_feat is None or shot_mass_density is None or valid_shots is None:
-                    raise RuntimeError('shot text stats were not built for sparse-pair supervision.')
+                if shot_text_feat_sparse is None or shot_mass_density is None or valid_shots is None:
+                    raise RuntimeError('Sparse-pair supervision requires sparse shot text stats.')
 
                 shot_change, change_valid_mask = compute_shot_semantic_change(
-                    shot_text_feat=shot_text_feat,
+                    shot_text_feat=shot_text_feat_sparse,
                     valid_shots=valid_shots,
                 )
 
@@ -898,6 +918,11 @@ def validate_rank_loss_args(args) -> None:
         )
     if args.selection_score_source == 'shot_head' and args.shot_eval_head == 'rank' and args.shot_head_mode not in ('dual', 'context'):
         raise ValueError('--shot-eval-head rank requires --shot-head-mode dual or context.')
+    if args.selection_score_source == 'shot_head' and args.rank_loss in ('listwise_utility',):
+        raise NotImplementedError(
+            'shot_head + listwise_utility is not yet protocol-clean; '
+            'use preference_distill or budgeted_pseudo_summary first.'
+        )
     if args.use_diff_budget_selector:
         if args.selection_score_source != 'shot_head':
             raise ValueError('--use-diff-budget-selector requires --selection-score-source shot_head.')

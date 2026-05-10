@@ -26,6 +26,19 @@ SHOT_HEAD_MODE="${SHOT_HEAD_MODE:-single}"
 SHOT_EVAL_HEAD="${SHOT_EVAL_HEAD:-selection}"
 UTILITY_FORMULA="${UTILITY_FORMULA:-semantic_plus_rep}"
 
+SHOT_UTILITY_PATH="${SHOT_UTILITY_PATH:-pseudo_labels/tvsum/shot_utility.npy}"
+TEXT_FEATURE_PATH="${TEXT_FEATURE_PATH:-features/text_tvsum.h5}"
+STRUCTURED_CAPTION_PATH="${STRUCTURED_CAPTION_PATH:-captions_raw/tvsum_dense_captions_structured.json}"
+PREFERENCE_TEACHER_PATH="${PREFERENCE_TEACHER_PATH:-}"
+
+LAMBDA_PREF_PAIR="${LAMBDA_PREF_PAIR:-0.2}"
+LAMBDA_PREF_LIST="${LAMBDA_PREF_LIST:-0.1}"
+LAMBDA_PREF_INCLUSION="${LAMBDA_PREF_INCLUSION:-0.05}"
+LAMBDA_PREF_BUDGET="${LAMBDA_PREF_BUDGET:-0.02}"
+PREF_CONFIDENCE_THRESHOLD="${PREF_CONFIDENCE_THRESHOLD:-0.6}"
+PREF_PAIR_MARGIN="${PREF_PAIR_MARGIN:-0.05}"
+PREF_LIST_TEMPERATURE="${PREF_LIST_TEMPERATURE:-0.2}"
+
 LAMBDA_LISTWISE="${LAMBDA_LISTWISE:-0.2}"
 LISTWISE_TEMPERATURE="${LISTWISE_TEMPERATURE:-0.2}"
 LAMBDA_SELECT="${LAMBDA_SELECT:-0.2}"
@@ -64,6 +77,18 @@ fi
 if [[ "${USE_DIFF_BUDGET_SELECTOR}" == "1" ]]; then
   EXTRA_ARGS+=("--use-diff-budget-selector")
 fi
+if [[ -n "${SHOT_UTILITY_PATH:-}" ]]; then
+  EXTRA_ARGS+=("--shot-utility-path" "${SHOT_UTILITY_PATH}")
+fi
+if [[ -n "${TEXT_FEATURE_PATH:-}" ]]; then
+  EXTRA_ARGS+=("--text-feature-path" "${TEXT_FEATURE_PATH}")
+fi
+if [[ -n "${STRUCTURED_CAPTION_PATH:-}" ]]; then
+  EXTRA_ARGS+=("--structured-caption-path" "${STRUCTURED_CAPTION_PATH}")
+fi
+if [[ -n "${PREFERENCE_TEACHER_PATH:-}" ]]; then
+  EXTRA_ARGS+=("--preference-teacher-path" "${PREFERENCE_TEACHER_PATH}")
+fi
 
 PYTHONPATH="${PYTHONPATH}" "${PYTHON_BIN}" src/run_train_mil_cond.py \
   --dataset "${DATASET}" \
@@ -91,6 +116,13 @@ PYTHONPATH="${PYTHONPATH}" "${PYTHON_BIN}" src/run_train_mil_cond.py \
   --lambda-budget "${LAMBDA_BUDGET}" \
   --diff-budget-tau "${DIFF_BUDGET_TAU}" \
   --lambda-delta "${LAMBDA_DELTA}" \
+  --lambda-pref-pair "${LAMBDA_PREF_PAIR}" \
+  --lambda-pref-list "${LAMBDA_PREF_LIST}" \
+  --lambda-pref-inclusion "${LAMBDA_PREF_INCLUSION}" \
+  --lambda-pref-budget "${LAMBDA_PREF_BUDGET}" \
+  --pref-confidence-threshold "${PREF_CONFIDENCE_THRESHOLD}" \
+  --pref-pair-margin "${PREF_PAIR_MARGIN}" \
+  --pref-list-temperature "${PREF_LIST_TEMPERATURE}" \
   --summary-budget "${SUMMARY_BUDGET}" \
   --negative-quantile "${NEGATIVE_QUANTILE}" \
   --teacher-gate-mode "${TEACHER_GATE_MODE}" \

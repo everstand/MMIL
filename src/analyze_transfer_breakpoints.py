@@ -572,13 +572,12 @@ def analyze_sample(pred, args) -> Dict[str, float]:
         picks=pred['picks'],
         key=pred['key'],
     )
-    teacher_summary = vsumm_helper.get_keyshot_summ(
-        teacher_sample_scores,
-        pred['cps'],
-        pred['n_frames'],
-        pred['nfps'],
-        pred['picks'],
-        proportion=args.summary_budget,
+    teacher_summary = get_keyshot_summ_from_shot_scores(
+        shot_scores=teacher_scores,
+        cps=pred['cps'],
+        nfps=pred['nfps'],
+        n_frames=pred['n_frames'],
+        summary_budget=args.summary_budget,
     )
 
     student_rank = compute_rank_metrics_from_gtscore(
