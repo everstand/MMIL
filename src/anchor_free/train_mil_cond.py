@@ -318,41 +318,21 @@ def train(args, split, save_path):
                 overlaps=overlaps,
                 shot_lengths=shot_lengths,
             )
-            needs_sparse_pair_stats = args.rank_loss in ('sparse_pair', 'hybrid_sparse_budget')
-            needs_context_stats = (
-                args.selection_score_source == 'shot_head'
-                and args.shot_head_mode == 'context'
+            needs_shot_text_stats = (
+                args.rank_loss in ('sparse_pair', 'hybrid_sparse_budget')
+                or (args.selection_score_source == 'shot_head' and args.shot_head_mode == 'context')
             )
-
             shot_text_feat = None
             shot_mass_density = None
             valid_shots = None
-
-            if needs_sparse_pair_stats:
-                # Keep the existing sparse-pair text statistics path isolated from
-                # context shot-token construction.
-                shot_text_feat_sparse, shot_mass_density, valid_shots = build_shot_text_stats(
+            if needs_shot_text_stats:
+                shot_text_feat, shot_mass_density, valid_shots = build_context_shot_text_stats(
                     caption_spans_idx=caption_spans_idx_tensor,
                     caption_valid_mask=caption_valid_mask_tensor,
                     all_text_features=all_text_features_tensor,
                     overlaps=overlaps,
                     shot_lengths=shot_lengths,
                 )
-            else:
-                shot_text_feat_sparse = None
-
-            if needs_context_stats:
-                # Context shot-head must use the same shot-token text aggregation as
-                # evaluation and transfer diagnostics.
-                shot_text_feat, _context_mass_density, _context_valid_shots = build_context_shot_text_stats(
-                    caption_spans_idx=caption_spans_idx_tensor,
-                    caption_valid_mask=caption_valid_mask_tensor,
-                    all_text_features=all_text_features_tensor,
-                    overlaps=overlaps,
-                    shot_lengths=shot_lengths,
-                )
-            elif shot_text_feat_sparse is not None:
-                shot_text_feat = shot_text_feat_sparse
 
             nfps_tensor = torch.tensor(nfps_np, dtype=torch.float32, device=args.device)
             shot_time_feat = None
@@ -419,11 +399,11 @@ def train(args, split, save_path):
                         else pred_shot_scores
                     )
 
-                if shot_text_feat_sparse is None or shot_mass_density is None or valid_shots is None:
-                    raise RuntimeError('Sparse-pair supervision requires sparse shot text stats.')
+                if shot_text_feat is None or shot_mass_density is None or valid_shots is None:
+                    raise RuntimeError('Sparse-pair supervision requires shot text stats.')
 
                 shot_change, change_valid_mask = compute_shot_semantic_change(
-                    shot_text_feat=shot_text_feat_sparse,
+                    shot_text_feat=shot_text_feat,
                     valid_shots=valid_shots,
                 )
 
@@ -549,10 +529,12 @@ def train(args, split, save_path):
                         summary_budget=args.summary_budget,
                     )
 
-                # Context shot-head + budgeted pseudo-summary often transfers selected-set
-                # overlap without transferring dense teacher ordering. Add a weak
-                # utility-listwise term on ranking logits to stabilize order transfer.
-                if args.selection_score_source == 'shot_head' and args.lambda_listwise > 0.0:
+                # New: weak dense-order distill for shot-head under budgeted teacher.
+                if (
+                    args.rank_loss == 'budgeted_pseudo_summary'
+                    and args.selection_score_source == 'shot_head'
+                    and args.lambda_listwise > 0.0
+                ):
                     listwise_loss = compute_listwise_utility_loss(
                         pred_shot_scores=rank_supervision_scores,
                         teacher_utility=utility,
@@ -820,11 +802,33 @@ def train(args, split, save_path):
             kendall_at_max_spearman = val_kendall
             torch.save(model.state_dict(), spearman_save_path)
 
-        if val_fscore > best_val_fscore:
+        f1_tie_tol = 1e-8
+        better_best_f1_ckpt = (
+            val_fscore > best_val_fscore + f1_tie_tol
+            or (
+                abs(val_fscore - best_val_fscore) <= f1_tie_tol
+                and (
+                    val_kendall > kendall_at_best_fscore + f1_tie_tol
+                    or (
+                        abs(val_kendall - kendall_at_best_fscore) <= f1_tie_tol
+                        and val_spearman > spearman_at_best_fscore + f1_tie_tol
+                    )
+                )
+            )
+        )
+
+        if better_best_f1_ckpt:
             best_val_fscore = val_fscore
             kendall_at_best_fscore = val_kendall
             spearman_at_best_fscore = val_spearman
             torch.save(model.state_dict(), save_path)
+            logger.info(
+                'Update best-F1 checkpoint | epoch=%03d | val_F1=%.4f | val_Tau=%.4f | val_Rho=%.4f',
+                epoch + 1,
+                val_fscore,
+                val_kendall,
+                val_spearman,
+            )
 
         logger.info(
             'Epoch %03d/%03d | loss=%.4f | rank=%.4f | val_F1=%.4f | '
