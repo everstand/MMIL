@@ -2,6 +2,7 @@ from torch import nn
 import torch
 
 from modules.models import build_base_model
+from modules.shot_context_encoder import ShotContextEncoder
 
 
 def minmax_normalize_torch(x: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
@@ -37,17 +38,25 @@ class DSNetAFMILCond(nn.Module):
                  num_hidden: int,
                  num_head: int,
                  num_classes: int,
-                 score_head: str = 'single'):
+                 score_head: str = 'single',
+                 use_shot_head: bool = False,
+                 shot_head_mode: str = 'single'):
         super().__init__()
 
         if score_head not in ('single', 'dual', 'residual_dual'):
             raise ValueError(
                 f'Invalid score_head={score_head}; expected single, dual, or residual_dual.'
             )
+        if shot_head_mode not in ('single', 'dual', 'context'):
+            raise ValueError(
+                f'Invalid shot_head_mode={shot_head_mode}; expected single, dual, or context.'
+            )
 
         self.num_classes = num_classes
         self.num_feature = num_feature
         self.score_head = score_head
+        self.use_shot_head = bool(use_shot_head)
+        self.shot_head_mode = shot_head_mode
 
         self.base_model = build_base_model(base_model, num_feature, num_head)
 
@@ -76,6 +85,36 @@ class DSNetAFMILCond(nn.Module):
                 nn.init.zeros_(self.fc_select.bias)
         else:
             self.fc_select = None
+
+        self.shot_context_encoder = None
+        if self.use_shot_head:
+            if self.shot_head_mode == 'context':
+                self.shot_score_head = None
+                self.shot_rank_head = None
+                self.shot_context_encoder = ShotContextEncoder(
+                    num_feature=num_feature,
+                    num_hidden=num_hidden,
+                    num_head=num_head,
+                )
+            else:
+                self.shot_score_head = nn.Sequential(
+                    nn.LayerNorm(num_feature),
+                    nn.Linear(num_feature, num_hidden),
+                    nn.ReLU(inplace=True),
+                    nn.Linear(num_hidden, 1),
+                )
+                if self.shot_head_mode == 'dual':
+                    self.shot_rank_head = nn.Sequential(
+                        nn.LayerNorm(num_feature),
+                        nn.Linear(num_feature, num_hidden),
+                        nn.ReLU(inplace=True),
+                        nn.Linear(num_hidden, 1),
+                    )
+                else:
+                    self.shot_rank_head = None
+        else:
+            self.shot_score_head = None
+            self.shot_rank_head = None
 
     def forward(self,
                 x: torch.Tensor,
@@ -129,8 +168,10 @@ class DSNetAFMILCond(nn.Module):
             need_weights=False,
         )
         cond_out = self.cross_attn_layer_norm(cond_out + out)
+        cond_frame_repr = cond_out.squeeze(0)
 
         hidden = self.fc1(cond_out).squeeze(0)
+        hidden_frame_repr = hidden
         raw_frame_features = raw_x.squeeze(0)
 
         instance_logits = self.fc_cls(hidden)
@@ -166,6 +207,8 @@ class DSNetAFMILCond(nn.Module):
             bag_logits,
             summary_feat,
             pre_cross_frame_repr,
+            cond_frame_repr,
+            hidden_frame_repr,
         )
 
     @torch.no_grad()
@@ -203,5 +246,144 @@ class DSNetAFMILCond(nn.Module):
                                seq: torch.Tensor,
                                text_cond: torch.Tensor,
                                text_cond_mask: torch.Tensor = None) -> torch.Tensor:
-        _, _, summary_scores, _, _, _ = self(seq, text_cond, text_cond_mask)
+        _, _, summary_scores, _, _, _, _, _ = self(seq, text_cond, text_cond_mask)
         return summary_scores
+
+    def predict_shot_scores(self,
+                            frame_repr: torch.Tensor,
+                            overlaps: torch.Tensor,
+                            shot_lengths: torch.Tensor,
+                            head: str = 'selection',
+                            shot_text_feat: torch.Tensor = None,
+                            shot_time_feat: torch.Tensor = None) -> torch.Tensor:
+        """Predict direct shot scores from frame representations.
+
+        By default callers should pass the text-conditioned frame representation
+        returned by `forward` as `cond_frame_repr`, not the pre-cross-attention
+        representation.
+
+        Shape contract:
+            frame_repr: [T, D]
+            overlaps: [S, T]
+            shot_lengths: [S]
+            return: [S]
+        """
+        if not self.use_shot_head:
+            raise RuntimeError('Shot score head is disabled for this model.')
+        if head not in ('selection', 'rank'):
+            raise ValueError(f'Invalid shot score head={head}; expected selection or rank.')
+        if frame_repr.ndim != 2:
+            raise ValueError(f'Expected frame_repr shape [T, D], got {tuple(frame_repr.shape)}')
+        if overlaps.ndim != 2:
+            raise ValueError(f'Expected overlaps shape [S, T], got {tuple(overlaps.shape)}')
+        if shot_lengths.ndim != 1:
+            raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
+        if frame_repr.shape[1] != self.num_feature:
+            raise ValueError(
+                f'frame_repr feature dim mismatch: got {frame_repr.shape[1]}, expected {self.num_feature}'
+            )
+        if overlaps.shape[1] != frame_repr.shape[0]:
+            raise ValueError(
+                f'overlaps/frame_repr time mismatch: {overlaps.shape[1]} vs {frame_repr.shape[0]}'
+            )
+        if overlaps.shape[0] != shot_lengths.shape[0]:
+            raise ValueError(
+                f'overlaps/shot_lengths shot mismatch: {overlaps.shape[0]} vs {shot_lengths.shape[0]}'
+            )
+
+        if self.shot_head_mode == 'context':
+            selection_scores, rank_scores = self.predict_shot_score_pair(
+                frame_repr=frame_repr,
+                overlaps=overlaps,
+                shot_lengths=shot_lengths,
+                shot_text_feat=shot_text_feat,
+                shot_time_feat=shot_time_feat,
+            )
+            return rank_scores if head == 'rank' else selection_scores
+
+        shot_repr = torch.matmul(overlaps, frame_repr) / shot_lengths.clamp_min(1.0).unsqueeze(1)
+        if head == 'rank':
+            if self.shot_rank_head is None:
+                raise RuntimeError('Shot rank head is disabled; use shot_head_mode=dual or context.')
+            shot_logits = self.shot_rank_head(shot_repr).squeeze(-1)
+        else:
+            shot_logits = self.shot_score_head(shot_repr).squeeze(-1)
+        return torch.sigmoid(shot_logits)
+
+    def predict_shot_logit_pair(self,
+                                frame_repr: torch.Tensor,
+                                overlaps: torch.Tensor,
+                                shot_lengths: torch.Tensor,
+                                shot_text_feat: torch.Tensor = None,
+                                shot_time_feat: torch.Tensor = None):
+        if not self.use_shot_head:
+            raise RuntimeError('Shot score head is disabled for this model.')
+        if frame_repr.ndim != 2:
+            raise ValueError(f'Expected frame_repr shape [T, D], got {tuple(frame_repr.shape)}')
+        if overlaps.ndim != 2:
+            raise ValueError(f'Expected overlaps shape [S, T], got {tuple(overlaps.shape)}')
+        if shot_lengths.ndim != 1:
+            raise ValueError(f'Expected shot_lengths shape [S], got {tuple(shot_lengths.shape)}')
+        if overlaps.shape[1] != frame_repr.shape[0]:
+            raise ValueError(
+                f'overlaps/frame_repr time mismatch: {overlaps.shape[1]} vs {frame_repr.shape[0]}'
+            )
+        if overlaps.shape[0] != shot_lengths.shape[0]:
+            raise ValueError(
+                f'overlaps/shot_lengths shot mismatch: {overlaps.shape[0]} vs {shot_lengths.shape[0]}'
+            )
+        if self.shot_head_mode == 'context':
+            if self.shot_context_encoder is None:
+                raise RuntimeError('Shot context encoder is disabled.')
+            if shot_text_feat is None or shot_time_feat is None:
+                raise ValueError('shot_head_mode=context requires shot_text_feat and shot_time_feat.')
+            return self.shot_context_encoder.forward_logits(
+                cond_frame_repr=frame_repr,
+                overlaps=overlaps,
+                shot_lengths=shot_lengths,
+                shot_text_feat=shot_text_feat,
+                shot_time_feat=shot_time_feat,
+            )
+
+        shot_repr = torch.matmul(overlaps, frame_repr) / shot_lengths.clamp_min(1.0).unsqueeze(1)
+        selection_logit = self.shot_score_head(shot_repr).squeeze(-1)
+        if self.shot_head_mode == 'dual':
+            rank_logit = self.shot_rank_head(shot_repr).squeeze(-1)
+            delta_select = selection_logit - rank_logit
+        else:
+            rank_logit = selection_logit
+            delta_select = torch.zeros_like(selection_logit)
+        return selection_logit, rank_logit, delta_select
+
+    def predict_shot_score_pair(self,
+                                frame_repr: torch.Tensor,
+                                overlaps: torch.Tensor,
+                                shot_lengths: torch.Tensor,
+                                shot_text_feat: torch.Tensor = None,
+                                shot_time_feat: torch.Tensor = None):
+        if self.shot_head_mode == 'context':
+            select_logit, rank_logit, _delta_select = self.predict_shot_logit_pair(
+                frame_repr=frame_repr,
+                overlaps=overlaps,
+                shot_lengths=shot_lengths,
+                shot_text_feat=shot_text_feat,
+                shot_time_feat=shot_time_feat,
+            )
+            return torch.sigmoid(select_logit), torch.sigmoid(rank_logit)
+
+        selection_scores = self.predict_shot_scores(
+            frame_repr=frame_repr,
+            overlaps=overlaps,
+            shot_lengths=shot_lengths,
+            head='selection',
+        )
+        if self.shot_head_mode == 'dual':
+            rank_scores = self.predict_shot_scores(
+                frame_repr=frame_repr,
+                overlaps=overlaps,
+                shot_lengths=shot_lengths,
+                head='rank',
+            )
+        else:
+            rank_scores = selection_scores
+        return selection_scores, rank_scores

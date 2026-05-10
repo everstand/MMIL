@@ -23,7 +23,9 @@ class VideoDatasetMILCond(object):
                  keys: List[str],
                  text_cond_num: int = 7,
                  random_text_sampling: bool = True,
-                 caption_coverage_aware: bool = False):
+                 caption_coverage_aware: bool = False,
+                 text_feature_path: Optional[str] = None,
+                 structured_caption_path: Optional[str] = None):
         if not keys:
             raise ValueError('VideoDatasetMILCond received empty keys.')
         if text_cond_num <= 0:
@@ -33,6 +35,8 @@ class VideoDatasetMILCond(object):
         self.text_cond_num = int(text_cond_num)
         self.random_text_sampling = bool(random_text_sampling)
         self.caption_coverage_aware = bool(caption_coverage_aware)
+        self.text_feature_path = text_feature_path
+        self.structured_caption_path = structured_caption_path
 
         self.h5_datasets = self.get_h5_datasets(self.original_keys)
 
@@ -51,10 +55,12 @@ class VideoDatasetMILCond(object):
             self.dataset_names_by_key.values()
         )
         self.text_feature_stores = self.load_text_feature_stores(
-            self.dataset_names_by_key.values()
+            self.dataset_names_by_key.values(),
+            explicit_path=self.text_feature_path,
         )
         self.structured_captions_by_dataset = self.load_structured_captions_by_dataset(
-            self.dataset_names_by_key.values()
+            self.dataset_names_by_key.values(),
+            explicit_path=self.structured_caption_path,
         )
 
         self.keys = self.validate_and_filter_keys(
@@ -327,12 +333,30 @@ class VideoDatasetMILCond(object):
         return visual_stores
 
     @staticmethod
-    def load_text_feature_stores(dataset_names) -> Dict[str, h5py.File]:
+    def resolve_dataset_asset_paths(dataset_names, explicit_path: Optional[str], default_getter, asset_name: str):
         unique_names = sorted(set(dataset_names))
-        text_stores: Dict[str, h5py.File] = {}
 
-        for dataset_name in unique_names:
-            store_path = get_text_feature_store_path(dataset_name)
+        if explicit_path is None:
+            return {dataset_name: default_getter(dataset_name) for dataset_name in unique_names}
+
+        if len(unique_names) != 1:
+            raise ValueError(
+                f'Explicit {asset_name} path can only be used with one dataset, got {unique_names}.'
+            )
+
+        return {unique_names[0]: Path(explicit_path)}
+
+    @staticmethod
+    def load_text_feature_stores(dataset_names, explicit_path: Optional[str] = None) -> Dict[str, h5py.File]:
+        text_stores: Dict[str, h5py.File] = {}
+        paths_by_dataset = VideoDatasetMILCond.resolve_dataset_asset_paths(
+            dataset_names=dataset_names,
+            explicit_path=explicit_path,
+            default_getter=get_text_feature_store_path,
+            asset_name='text feature',
+        )
+
+        for dataset_name, store_path in paths_by_dataset.items():
             if not store_path.exists():
                 raise FileNotFoundError(
                     f'Text feature store not found for dataset "{dataset_name}": {store_path}'
@@ -342,12 +366,17 @@ class VideoDatasetMILCond(object):
         return text_stores
 
     @staticmethod
-    def load_structured_captions_by_dataset(dataset_names) -> Dict[str, Dict]:
-        unique_names = sorted(set(dataset_names))
+    def load_structured_captions_by_dataset(dataset_names,
+                                            explicit_path: Optional[str] = None) -> Dict[str, Dict]:
         structured_by_dataset: Dict[str, Dict] = {}
+        paths_by_dataset = VideoDatasetMILCond.resolve_dataset_asset_paths(
+            dataset_names=dataset_names,
+            explicit_path=explicit_path,
+            default_getter=get_structured_caption_json_path,
+            asset_name='structured caption',
+        )
 
-        for dataset_name in unique_names:
-            json_path = get_structured_caption_json_path(dataset_name)
+        for dataset_name, json_path in paths_by_dataset.items():
             if not json_path.exists():
                 raise FileNotFoundError(
                     f'Structured caption json not found for dataset "{dataset_name}": {json_path}'

@@ -7,13 +7,7 @@ from torch.nn import functional as F
 
 from anchor_free.dsnet_af_mil_cond import DSNetAFMILCond
 from evaluate_mil_cond import evaluate_mil_cond
-from modules.diff_budget import BudgetedSigmoid
-from modules.shot_context_encoder import (
-    build_context_shot_text_stats,
-    build_shot_time_features,
-)
 from helpers import data_helper, mil_data_helper_cond
-from helpers.preference_teacher_helper import PreferenceTeacherStore
 from helpers.shot_utility_helper import (
     ShotUtilityStore,
     resolve_shot_utility_path,
@@ -24,18 +18,12 @@ logger = logging.getLogger(__name__)
 
 def train(args, split, save_path):
     logger.debug(
-        'Loss weights | score_head=%s | selection_score_source=%s | '
-        'shot_head_mode=%s | shot_eval_head=%s | rank_loss=%s | '
-        'lambda_pair=%s | pair_margin=%s | '
+        'Loss weights | score_head=%s | rank_loss=%s | lambda_pair=%s | pair_margin=%s | '
         'lambda_listwise=%s | listwise_temperature=%s | '
         'lambda_select=%s | lambda_budget=%s | summary_budget=%s | neg_q=%s | '
         'gate=%s | margin_thr=%s | utility_formula=%s | lambda_align=%s | lambda_aux=%s | '
-        'coverage_aware=%s | coverage_min=%s | text_feature_path=%s | '
-        'structured_caption_path=%s | shot_utility_path=%s | diff_budget=%s | diff_tau=%s | lambda_delta=%s',
+        'coverage_aware=%s | coverage_min=%s',
         args.score_head,
-        args.selection_score_source,
-        args.shot_head_mode,
-        args.shot_eval_head,
         args.rank_loss,
         args.lambda_pair,
         args.pair_margin,
@@ -52,24 +40,6 @@ def train(args, split, save_path):
         args.lambda_aux,
         args.caption_coverage_aware,
         args.coverage_loss_min_weight,
-        args.text_feature_path,
-        args.structured_caption_path,
-        args.shot_utility_path,
-        args.use_diff_budget_selector,
-        args.diff_budget_tau,
-        args.lambda_delta,
-    )
-    logger.debug(
-        'Preference distill config | path=%s | lambda_pair=%s | lambda_list=%s | '
-        'lambda_inclusion=%s | lambda_budget=%s | conf_thr=%s | margin=%s | tau=%s',
-        args.preference_teacher_path,
-        args.lambda_pref_pair,
-        args.lambda_pref_list,
-        args.lambda_pref_inclusion,
-        args.lambda_pref_budget,
-        args.pref_confidence_threshold,
-        args.pref_pair_margin,
-        args.pref_list_temperature,
     )
 
     if 'val_keys' not in split:
@@ -110,43 +80,23 @@ def train(args, split, save_path):
             args.utility_formula,
         )
 
-    preference_teacher_store = None
-    if args.rank_loss == 'preference_distill':
-        if not args.preference_teacher_path:
-            raise ValueError('--rank-loss preference_distill requires --preference-teacher-path.')
-        preference_teacher_store = PreferenceTeacherStore(Path(args.preference_teacher_path))
-        logger.info(
-            'Using preference-distilled supervision | path=%s | pair=%.3g | list=%.3g | inclusion=%.3g | budget=%.3g',
-            args.preference_teacher_path,
-            args.lambda_pref_pair,
-            args.lambda_pref_list,
-            args.lambda_pref_inclusion,
-            args.lambda_pref_budget,
-        )
-
     train_set = mil_data_helper_cond.VideoDatasetMILCond(
         train_keys,
         text_cond_num=args.text_cond_num,
         random_text_sampling=True,
         caption_coverage_aware=args.caption_coverage_aware,
-        text_feature_path=args.text_feature_path,
-        structured_caption_path=args.structured_caption_path,
     )
     val_set = mil_data_helper_cond.VideoDatasetMILCond(
         val_keys,
         text_cond_num=args.text_cond_num,
         random_text_sampling=False,
         caption_coverage_aware=args.caption_coverage_aware,
-        text_feature_path=args.text_feature_path,
-        structured_caption_path=args.structured_caption_path,
     )
     test_set = mil_data_helper_cond.VideoDatasetMILCond(
         test_keys,
         text_cond_num=args.text_cond_num,
         random_text_sampling=False,
         caption_coverage_aware=args.caption_coverage_aware,
-        text_feature_path=args.text_feature_path,
-        structured_caption_path=args.structured_caption_path,
     )
 
     num_classes = infer_num_classes(train_set)
@@ -157,15 +107,7 @@ def train(args, split, save_path):
         num_head=args.num_head,
         num_classes=num_classes,
         score_head=args.score_head,
-        use_shot_head=args.selection_score_source == 'shot_head',
-        shot_head_mode=args.shot_head_mode,
     ).to(args.device)
-
-    budget_selector = (
-        BudgetedSigmoid(tau=args.diff_budget_tau).to(args.device)
-        if args.use_diff_budget_selector
-        else None
-    )
 
     optimizer = torch.optim.Adam(
         [p for p in model.parameters() if p.requires_grad],
@@ -211,8 +153,6 @@ def train(args, split, save_path):
             'weighted_selection_loss',
             'budget_loss',
             'weighted_budget_loss',
-            'delta_loss',
-            'weighted_delta_loss',
             'align_loss',
             'weighted_align_loss',
             'bag_loss',
@@ -224,7 +164,6 @@ def train(args, split, save_path):
             'num_negative_shots',
             'teacher_gate_weight',
             'teacher_margin',
-            'teacher_student_shot_tau',
             'caption_coverage_ratio',
             'coverage_loss_weight',
             'num_valid_text_cond',
@@ -286,9 +225,7 @@ def train(args, split, save_path):
                 summary_scores,
                 bag_logits,
                 summary_feat,
-                pre_cross_frame_repr,
-                cond_frame_repr,
-                hidden_frame_repr,
+                _,
             ) = model(
                 seq_tensor,
                 text_cond_tensor,
@@ -313,57 +250,11 @@ def train(args, split, save_path):
                 overlaps=overlaps,
                 shot_lengths=shot_lengths,
             )
-            frame_selection_shot_scores = aggregate_frame_scores_to_shot_scores(
+            selection_shot_scores = aggregate_frame_scores_to_shot_scores(
                 frame_scores=summary_scores,
                 overlaps=overlaps,
                 shot_lengths=shot_lengths,
             )
-            needs_shot_text_stats = (
-                args.rank_loss in ('sparse_pair', 'hybrid_sparse_budget')
-                or (args.selection_score_source == 'shot_head' and args.shot_head_mode == 'context')
-            )
-            shot_text_feat = None
-            shot_mass_density = None
-            valid_shots = None
-            if needs_shot_text_stats:
-                shot_text_feat, shot_mass_density, valid_shots = build_shot_text_stats(
-                    caption_spans_idx=caption_spans_idx_tensor,
-                    caption_valid_mask=caption_valid_mask_tensor,
-                    all_text_features=all_text_features_tensor,
-                    overlaps=overlaps,
-                    shot_lengths=shot_lengths,
-                )
-
-            nfps_tensor = torch.tensor(nfps_np, dtype=torch.float32, device=args.device)
-            shot_time_feat = None
-            if args.selection_score_source == 'shot_head':
-                if args.shot_head_mode == 'context':
-                    shot_time_feat = build_shot_time_features(
-                        cps=cps_tensor,
-                        nfps=nfps_tensor,
-                        n_frames=n_frames_int,
-                    )
-                    selection_shot_logits, ranking_shot_logits, delta_select = model.predict_shot_logit_pair(
-                        frame_repr=cond_frame_repr,
-                        overlaps=overlaps,
-                        shot_lengths=shot_lengths,
-                        shot_text_feat=shot_text_feat,
-                        shot_time_feat=shot_time_feat,
-                    )
-                else:
-                    selection_shot_logits, ranking_shot_logits, delta_select = model.predict_shot_logit_pair(
-                        frame_repr=cond_frame_repr,
-                        overlaps=overlaps,
-                        shot_lengths=shot_lengths,
-                    )
-                selection_shot_scores = torch.sigmoid(selection_shot_logits)
-                ranking_shot_scores = torch.sigmoid(ranking_shot_logits)
-            else:
-                selection_shot_scores = frame_selection_shot_scores
-                ranking_shot_scores = selection_shot_scores
-                selection_shot_logits = torch.logit(selection_shot_scores.clamp(1e-6, 1.0 - 1e-6))
-                ranking_shot_logits = selection_shot_logits
-                delta_select = torch.zeros_like(selection_shot_scores)
 
             pair_loss = seq_tensor.new_zeros(())
             weighted_pair_loss = seq_tensor.new_zeros(())
@@ -373,23 +264,22 @@ def train(args, split, save_path):
             weighted_selection_loss = seq_tensor.new_zeros(())
             budget_loss = seq_tensor.new_zeros(())
             weighted_budget_loss = seq_tensor.new_zeros(())
-            delta_loss = seq_tensor.new_zeros(())
-            weighted_delta_loss = seq_tensor.new_zeros(())
             num_supervised_shots = 0.0
             num_positive_shots = 0.0
             num_negative_shots = 0.0
             teacher_gate_weight = 1.0
             teacher_margin = 0.0
-            teacher_student_shot_tau = 0.0
 
             if args.rank_loss in ('sparse_pair', 'hybrid_sparse_budget'):
-                if args.use_diff_budget_selector and args.selection_score_source == 'shot_head':
-                    sparse_scores = ranking_shot_logits
-                else:
-                    sparse_scores = pool_shot_scores if args.rank_loss == 'hybrid_sparse_budget' else pred_shot_scores
+                sparse_scores = pool_shot_scores if args.rank_loss == 'hybrid_sparse_budget' else pred_shot_scores
 
-                if shot_text_feat is None or shot_mass_density is None or valid_shots is None:
-                    raise RuntimeError('shot text stats were not built for sparse-pair supervision.')
+                shot_text_feat, shot_mass_density, valid_shots = build_shot_text_stats(
+                    caption_spans_idx=caption_spans_idx_tensor,
+                    caption_valid_mask=caption_valid_mask_tensor,
+                    all_text_features=all_text_features_tensor,
+                    overlaps=overlaps,
+                    shot_lengths=shot_lengths,
+                )
 
                 shot_change, change_valid_mask = compute_shot_semantic_change(
                     shot_text_feat=shot_text_feat,
@@ -430,11 +320,7 @@ def train(args, split, save_path):
                     )
 
                 listwise_loss = compute_listwise_utility_loss(
-                    pred_shot_scores=(
-                        ranking_shot_logits
-                        if args.use_diff_budget_selector and args.selection_score_source == 'shot_head'
-                        else pred_shot_scores
-                    ),
+                    pred_shot_scores=pred_shot_scores,
                     teacher_utility=teacher_utility,
                     temperature=args.listwise_temperature,
                 )
@@ -482,46 +368,22 @@ def train(args, split, save_path):
                     mode=args.teacher_gate_mode,
                 )
 
-                if args.use_diff_budget_selector:
-                    if budget_selector is None:
-                        raise RuntimeError('budget_selector is not initialized.')
-                    soft_selected_mask, _budget_lambda = budget_selector(
-                        select_logits=selection_shot_logits,
-                        lengths=nfps_tensor,
-                        budget_frames=float(n_frames_int) * float(args.summary_budget),
-                    )
-                    raw_selection_loss = compute_confidence_gated_weighted_bce_loss(
-                        pred_shot_scores=soft_selected_mask,
-                        target=target,
-                        supervised_mask=supervised_mask,
-                        shot_lengths=nfps_tensor,
-                    )
-                    budget_loss = compute_budget_regularizer(
-                        selection_shot_scores=soft_selected_mask,
-                        shot_lengths=nfps_tensor,
-                        n_frames=n_frames_int,
-                        summary_budget=args.summary_budget,
-                    )
-                    delta_loss = compute_delta_regularizer(delta_select)
-                    assert_finite_tensor('diff_budget_soft_mask', soft_selected_mask, key)
-                else:
-                    raw_selection_loss = compute_confidence_gated_weighted_bce_loss(
-                        pred_shot_scores=selection_shot_scores,
-                        target=target,
-                        supervised_mask=supervised_mask,
-                        shot_lengths=shot_lengths,
-                    )
-                    budget_loss = compute_budget_regularizer(
-                        selection_shot_scores=selection_shot_scores,
-                        shot_lengths=shot_lengths,
-                        n_frames=n_frames_int,
-                        summary_budget=args.summary_budget,
-                    )
+                raw_selection_loss = compute_confidence_gated_weighted_bce_loss(
+                    pred_shot_scores=selection_shot_scores,
+                    target=target,
+                    supervised_mask=supervised_mask,
+                    shot_lengths=shot_lengths,
+                )
+                budget_loss = compute_budget_regularizer(
+                    selection_shot_scores=selection_shot_scores,
+                    shot_lengths=shot_lengths,
+                    n_frames=n_frames_int,
+                    summary_budget=args.summary_budget,
+                )
 
                 selection_loss = gate_weight_tensor * coverage_loss_weight * raw_selection_loss
                 weighted_selection_loss = args.lambda_select * selection_loss
                 weighted_budget_loss = args.lambda_budget * budget_loss
-                weighted_delta_loss = args.lambda_delta * delta_loss
 
                 num_supervised_shots = float(supervised_mask.sum().item())
                 num_positive_shots = float(selected_mask.sum().item())
@@ -532,129 +394,6 @@ def train(args, split, save_path):
                 assert_finite_tensor('selection_shot_scores', selection_shot_scores, key)
                 assert_finite_tensor('selection_loss', selection_loss.unsqueeze(0), key)
                 assert_finite_tensor('budget_loss', budget_loss.unsqueeze(0), key)
-
-            elif args.rank_loss == 'preference_distill':
-                if preference_teacher_store is None:
-                    raise RuntimeError('preference_teacher_store is required for preference_distill rank loss.')
-
-                h5_key = Path(str(key)).name
-                pref_record = preference_teacher_store.get(h5_key=h5_key)
-                teacher_scores = torch.tensor(
-                    pref_record['shot_scores'], dtype=torch.float32, device=args.device
-                )
-                inclusion_prob = torch.tensor(
-                    pref_record['inclusion_prob'], dtype=torch.float32, device=args.device
-                )
-                teacher_confidence_tensor = torch.tensor(
-                    pref_record['teacher_confidence'], dtype=torch.float32, device=args.device
-                )
-                pair_i = torch.tensor(pref_record['pair_i'], dtype=torch.long, device=args.device)
-                pair_j = torch.tensor(pref_record['pair_j'], dtype=torch.long, device=args.device)
-                pair_label = torch.tensor(
-                    pref_record['pair_label'], dtype=torch.float32, device=args.device
-                )
-                pair_confidence = torch.tensor(
-                    pref_record['pair_confidence'], dtype=torch.float32, device=args.device
-                )
-
-                if teacher_scores.shape[0] != ranking_shot_scores.shape[0]:
-                    raise ValueError(
-                        f'Preference teacher length mismatch for sample {key}: '
-                        f'teacher={teacher_scores.shape[0]} vs pred={ranking_shot_scores.shape[0]}'
-                    )
-                if inclusion_prob.shape[0] != selection_shot_scores.shape[0]:
-                    raise ValueError(
-                        f'Preference inclusion length mismatch for sample {key}: '
-                        f'inclusion={inclusion_prob.shape[0]} vs pred={selection_shot_scores.shape[0]}'
-                    )
-                if teacher_confidence_tensor.shape[0] != selection_shot_scores.shape[0]:
-                    raise ValueError(
-                        f'Preference confidence length mismatch for sample {key}: '
-                        f'confidence={teacher_confidence_tensor.shape[0]} vs pred={selection_shot_scores.shape[0]}'
-                    )
-
-                pair_loss = compute_preference_pair_rank_loss(
-                    selection_shot_scores=(
-                        ranking_shot_logits
-                        if args.use_diff_budget_selector and args.selection_score_source == 'shot_head'
-                        else ranking_shot_scores
-                    ),
-                    pair_i=pair_i,
-                    pair_j=pair_j,
-                    pair_label=pair_label,
-                    pair_confidence=pair_confidence,
-                    margin=args.pref_pair_margin,
-                )
-                listwise_loss = compute_preference_listwise_loss(
-                    selection_shot_scores=(
-                        ranking_shot_logits
-                        if args.use_diff_budget_selector and args.selection_score_source == 'shot_head'
-                        else ranking_shot_scores
-                    ),
-                    teacher_scores=teacher_scores,
-                    temperature=args.pref_list_temperature,
-                )
-                if args.use_diff_budget_selector:
-                    if budget_selector is None:
-                        raise RuntimeError('budget_selector is not initialized.')
-                    soft_selected_mask, _budget_lambda = budget_selector(
-                        select_logits=selection_shot_logits,
-                        lengths=nfps_tensor,
-                        budget_frames=float(n_frames_int) * float(args.summary_budget),
-                    )
-                    selection_loss = compute_preference_inclusion_loss(
-                        selection_shot_scores=soft_selected_mask,
-                        inclusion_prob=inclusion_prob,
-                        teacher_confidence=teacher_confidence_tensor,
-                        confidence_threshold=args.pref_confidence_threshold,
-                    )
-                    budget_loss = compute_budget_regularizer(
-                        selection_shot_scores=soft_selected_mask,
-                        shot_lengths=nfps_tensor,
-                        n_frames=n_frames_int,
-                        summary_budget=args.summary_budget,
-                    )
-                    delta_loss = compute_delta_regularizer(delta_select)
-                    assert_finite_tensor('diff_budget_soft_mask', soft_selected_mask, key)
-                else:
-                    selection_loss = compute_preference_inclusion_loss(
-                        selection_shot_scores=selection_shot_scores,
-                        inclusion_prob=inclusion_prob,
-                        teacher_confidence=teacher_confidence_tensor,
-                        confidence_threshold=args.pref_confidence_threshold,
-                    )
-                    budget_loss = compute_budget_regularizer(
-                        selection_shot_scores=selection_shot_scores,
-                        shot_lengths=shot_lengths,
-                        n_frames=n_frames_int,
-                        summary_budget=args.summary_budget,
-                    )
-
-                weighted_pair_loss = args.lambda_pref_pair * coverage_loss_weight * pair_loss
-                weighted_listwise_loss = args.lambda_pref_list * coverage_loss_weight * listwise_loss
-                weighted_selection_loss = args.lambda_pref_inclusion * coverage_loss_weight * selection_loss
-                weighted_budget_loss = args.lambda_pref_budget * budget_loss
-                weighted_delta_loss = args.lambda_delta * delta_loss
-
-                supervised_pref_mask = teacher_confidence_tensor >= args.pref_confidence_threshold
-                num_supervised_shots = float(supervised_pref_mask.sum().item())
-                num_positive_shots = float((inclusion_prob >= 0.60).sum().item())
-                num_negative_shots = float((inclusion_prob <= 0.20).sum().item())
-                teacher_gate_weight = float(teacher_confidence_tensor.mean().detach().item())
-                teacher_margin = float(pair_confidence.mean().detach().item()) if pair_confidence.numel() > 0 else 0.0
-                teacher_student_shot_tau = compute_teacher_student_shot_tau(
-                    student_scores=ranking_shot_scores,
-                    teacher_scores=teacher_scores,
-                )
-
-                assert_finite_tensor('selection_shot_scores', selection_shot_scores, key)
-                assert_finite_tensor('ranking_shot_scores', ranking_shot_scores, key)
-                assert_finite_tensor('preference_teacher_scores', teacher_scores, key)
-                assert_finite_tensor('preference_inclusion_prob', inclusion_prob, key)
-                assert_finite_tensor('preference_pair_loss', pair_loss.unsqueeze(0), key)
-                assert_finite_tensor('preference_listwise_loss', listwise_loss.unsqueeze(0), key)
-                assert_finite_tensor('preference_inclusion_loss', selection_loss.unsqueeze(0), key)
-                assert_finite_tensor('preference_budget_loss', budget_loss.unsqueeze(0), key)
 
             elif args.rank_loss == 'none':
                 pass
@@ -694,9 +433,8 @@ def train(args, split, save_path):
                 + weighted_listwise_loss
                 + weighted_selection_loss
                 + weighted_budget_loss
-                + weighted_delta_loss
             )
-            rank_loss_value = pair_loss + listwise_loss + selection_loss + budget_loss + delta_loss
+            rank_loss_value = pair_loss + listwise_loss + selection_loss + budget_loss
 
             loss = weighted_align_loss + weighted_bag_loss + weighted_rank_loss
 
@@ -717,8 +455,6 @@ def train(args, split, save_path):
                 weighted_selection_loss=float(weighted_selection_loss.item()),
                 budget_loss=float(budget_loss.item()),
                 weighted_budget_loss=float(weighted_budget_loss.item()),
-                delta_loss=float(delta_loss.item()),
-                weighted_delta_loss=float(weighted_delta_loss.item()),
                 align_loss=float(align_loss.item()),
                 weighted_align_loss=float(weighted_align_loss.item()),
                 bag_loss=float(bag_loss.item()),
@@ -730,25 +466,17 @@ def train(args, split, save_path):
                 num_negative_shots=num_negative_shots,
                 teacher_gate_weight=teacher_gate_weight,
                 teacher_margin=teacher_margin,
-                teacher_student_shot_tau=teacher_student_shot_tau,
                 caption_coverage_ratio=caption_coverage_ratio_value,
                 coverage_loss_weight=float(coverage_loss_weight.detach().item()),
                 num_valid_text_cond=num_valid_text_cond,
             )
 
-        val_metrics = evaluate_mil_cond(
-            model=model,
-            val_loader=val_loader,
-            device=args.device,
-            selection_score_source=args.selection_score_source,
-            shot_eval_head=args.shot_eval_head,
-            shot_head_mode=args.shot_head_mode,
-            summary_budget=args.summary_budget,
-        )
+        val_metrics = evaluate_mil_cond(model=model, val_loader=val_loader, device=args.device)
         val_fscore = float(val_metrics['fscore'])
         val_kendall = float(val_metrics['kendall'])
         val_spearman = float(val_metrics['spearman'])
         val_caption_coverage = float(val_metrics['caption_coverage'])
+
         if val_kendall > max_val_kendall:
             max_val_kendall = val_kendall
             fscore_at_max_kendall = val_fscore
@@ -769,8 +497,7 @@ def train(args, split, save_path):
 
         logger.info(
             'Epoch %03d/%03d | loss=%.4f | rank=%.4f | val_F1=%.4f | '
-            'val_Tau=%.4f | val_Rho=%.4f | val_cov=%.4f | best_val_F1=%.4f | '
-            'ts_shot_Tau=%.4f',
+            'val_Tau=%.4f | val_Rho=%.4f | val_cov=%.4f | best_val_F1=%.4f',
             epoch + 1,
             args.max_epoch,
             stats.loss,
@@ -780,7 +507,6 @@ def train(args, split, save_path):
             val_spearman,
             val_caption_coverage,
             best_val_fscore,
-            stats.teacher_student_shot_tau,
         )
 
         logger.debug(
@@ -788,7 +514,7 @@ def train(args, split, save_path):
             'select=%.4f/%.4f | budget=%.4f/%.4f | '
             'align=%.4f/%.4f | bag=%.4f/%.4f | '
             'aux_active=%.4f | aux_skipped=%.4f | sup_shots=%.4f | '
-            'pos=%.4f | neg=%.4f | gate=%.4f | margin=%.4f | ts_tau=%.4f | '
+            'pos=%.4f | neg=%.4f | gate=%.4f | margin=%.4f | '
             'cap_cov=%.4f | cov_w=%.4f | valid_text=%.4f | '
             'val_max_Tau=%.4f | val_max_Rho=%.4f | '
             'Tau@best_F1=%.4f | Rho@best_F1=%.4f | F1@max_Tau=%.4f | F1@max_Rho=%.4f',
@@ -813,7 +539,6 @@ def train(args, split, save_path):
             stats.num_negative_shots,
             stats.teacher_gate_weight,
             stats.teacher_margin,
-            stats.teacher_student_shot_tau,
             stats.caption_coverage_ratio,
             stats.coverage_loss_weight,
             stats.num_valid_text_cond,
@@ -825,36 +550,9 @@ def train(args, split, save_path):
             fscore_at_max_spearman,
         )
 
-    test_at_best_fscore = evaluate_checkpoint(
-        model,
-        save_path,
-        test_loader,
-        args.device,
-        args.selection_score_source,
-        args.shot_eval_head,
-        args.shot_head_mode,
-        args.summary_budget,
-    )
-    test_at_max_kendall = evaluate_checkpoint(
-        model,
-        kendall_save_path,
-        test_loader,
-        args.device,
-        args.selection_score_source,
-        args.shot_eval_head,
-        args.shot_head_mode,
-        args.summary_budget,
-    )
-    test_at_max_spearman = evaluate_checkpoint(
-        model,
-        spearman_save_path,
-        test_loader,
-        args.device,
-        args.selection_score_source,
-        args.shot_eval_head,
-        args.shot_head_mode,
-        args.summary_budget,
-    )
+    test_at_best_fscore = evaluate_checkpoint(model, save_path, test_loader, args.device)
+    test_at_max_kendall = evaluate_checkpoint(model, kendall_save_path, test_loader, args.device)
+    test_at_max_spearman = evaluate_checkpoint(model, spearman_save_path, test_loader, args.device)
 
     return {
         'val_best_fscore': float(best_val_fscore),
@@ -884,27 +582,6 @@ def validate_rank_loss_args(args) -> None:
         raise ValueError(
             f'Invalid score_head={args.score_head}; expected single, dual, or residual_dual.'
         )
-    if args.selection_score_source not in ('frame', 'shot_head'):
-        raise ValueError(
-            f'Invalid selection_score_source={args.selection_score_source}; expected frame or shot_head.'
-        )
-    if args.shot_head_mode not in ('single', 'dual', 'context'):
-        raise ValueError(
-            f'Invalid shot_head_mode={args.shot_head_mode}; expected single, dual, or context.'
-        )
-    if args.shot_eval_head not in ('selection', 'rank'):
-        raise ValueError(
-            f'Invalid shot_eval_head={args.shot_eval_head}; expected selection or rank.'
-        )
-    if args.selection_score_source == 'shot_head' and args.shot_eval_head == 'rank' and args.shot_head_mode not in ('dual', 'context'):
-        raise ValueError('--shot-eval-head rank requires --shot-head-mode dual or context.')
-    if args.use_diff_budget_selector:
-        if args.selection_score_source != 'shot_head':
-            raise ValueError('--use-diff-budget-selector requires --selection-score-source shot_head.')
-        if args.diff_budget_tau <= 0:
-            raise ValueError(f'Invalid diff_budget_tau={args.diff_budget_tau}; expected > 0.')
-        if args.lambda_delta < 0:
-            raise ValueError(f'Invalid lambda_delta={args.lambda_delta}; expected >= 0.')
     if not (0.0 <= args.coverage_loss_min_weight <= 1.0):
         raise ValueError(
             f'Invalid coverage_loss_min_weight={args.coverage_loss_min_weight}; '
@@ -942,40 +619,14 @@ def validate_rank_loss_args(args) -> None:
             raise ValueError(
                 f'Invalid teacher_margin_threshold={args.teacher_margin_threshold}; expected >= 0.'
             )
-    elif args.rank_loss == 'preference_distill':
-        if args.score_head not in ('dual', 'residual_dual'):
-            raise ValueError(
-                '--rank-loss preference_distill requires --score-head dual or residual_dual.'
-            )
-        if not args.preference_teacher_path:
-            raise ValueError('--rank-loss preference_distill requires --preference-teacher-path.')
-        if args.lambda_pref_pair < 0:
-            raise ValueError(f'Invalid lambda_pref_pair={args.lambda_pref_pair}; expected >= 0.')
-        if args.lambda_pref_list < 0:
-            raise ValueError(f'Invalid lambda_pref_list={args.lambda_pref_list}; expected >= 0.')
-        if args.lambda_pref_inclusion < 0:
-            raise ValueError(f'Invalid lambda_pref_inclusion={args.lambda_pref_inclusion}; expected >= 0.')
-        if args.lambda_pref_budget < 0:
-            raise ValueError(f'Invalid lambda_pref_budget={args.lambda_pref_budget}; expected >= 0.')
-        if not (0.0 <= args.pref_confidence_threshold <= 1.0):
-            raise ValueError(
-                f'Invalid pref_confidence_threshold={args.pref_confidence_threshold}; expected 0 <= thr <= 1.'
-            )
-        if args.pref_pair_margin <= 0:
-            raise ValueError(f'Invalid pref_pair_margin={args.pref_pair_margin}; expected > 0.')
-        if args.pref_list_temperature <= 0:
-            raise ValueError(
-                f'Invalid pref_list_temperature={args.pref_list_temperature}; expected > 0.'
-            )
-        if not (0.0 < args.summary_budget < 1.0):
-            raise ValueError(f'Invalid summary_budget={args.summary_budget}; expected 0 < budget < 1.')
     elif args.rank_loss == 'none':
         pass
     else:
         raise ValueError(
             f'Invalid rank_loss={args.rank_loss}; '
-            f'expected sparse_pair, listwise_utility, budgeted_pseudo_summary, hybrid_sparse_budget, preference_distill, or none.'
+            f'expected sparse_pair, listwise_utility, budgeted_pseudo_summary, hybrid_sparse_budget, or none.'
         )
+
 
 def compute_listwise_utility_loss(pred_shot_scores: torch.Tensor,
                                   teacher_utility: torch.Tensor,
@@ -1014,105 +665,6 @@ def compute_listwise_utility_loss(pred_shot_scores: torch.Tensor,
     teacher_prob = torch.softmax(teacher_utility / temperature, dim=0).detach()
 
     return F.kl_div(student_log_prob, teacher_prob, reduction='sum')
-
-
-
-def compute_preference_pair_rank_loss(selection_shot_scores: torch.Tensor,
-                                      pair_i: torch.Tensor,
-                                      pair_j: torch.Tensor,
-                                      pair_label: torch.Tensor,
-                                      pair_confidence: torch.Tensor,
-                                      margin: float,
-                                      eps: float = 1e-8) -> torch.Tensor:
-    if selection_shot_scores.ndim != 1:
-        raise ValueError(
-            f'Expected selection_shot_scores shape [S], got {tuple(selection_shot_scores.shape)}'
-        )
-    if pair_i.ndim != 1 or pair_j.ndim != 1:
-        raise ValueError('pair_i and pair_j must be 1D tensors.')
-    if pair_i.shape[0] != pair_j.shape[0]:
-        raise ValueError('pair_i/pair_j length mismatch in preference pair loss.')
-    if pair_label.shape[0] != pair_i.shape[0] or pair_confidence.shape[0] != pair_i.shape[0]:
-        raise ValueError('Preference pair metadata length mismatch.')
-    if margin <= 0:
-        raise ValueError(f'Invalid preference pair margin={margin}; expected > 0.')
-    if pair_i.numel() == 0:
-        return selection_shot_scores.new_zeros(())
-    if int(pair_i.min().item()) < 0 or int(pair_i.max().item()) >= selection_shot_scores.shape[0]:
-        raise ValueError('pair_i index out of range in preference pair loss.')
-    if int(pair_j.min().item()) < 0 or int(pair_j.max().item()) >= selection_shot_scores.shape[0]:
-        raise ValueError('pair_j index out of range in preference pair loss.')
-
-    score_i = selection_shot_scores[pair_i]
-    score_j = selection_shot_scores[pair_j]
-    i_preferred = pair_label > 0.5
-    preferred = torch.where(i_preferred, score_i, score_j)
-    other = torch.where(i_preferred, score_j, score_i)
-    confidence = pair_confidence.to(selection_shot_scores.dtype).clamp(min=0.0, max=1.0)
-    conf_sum = confidence.sum()
-    if float(conf_sum.item()) <= eps:
-        return selection_shot_scores.new_zeros(())
-    per_pair = F.relu(float(margin) - preferred + other)
-    return torch.sum(per_pair * confidence) / conf_sum.clamp_min(eps)
-
-
-def compute_preference_listwise_loss(selection_shot_scores: torch.Tensor,
-                                     teacher_scores: torch.Tensor,
-                                     temperature: float,
-                                     eps: float = 1e-8) -> torch.Tensor:
-    if selection_shot_scores.ndim != 1:
-        raise ValueError(
-            f'Expected selection_shot_scores shape [S], got {tuple(selection_shot_scores.shape)}'
-        )
-    if teacher_scores.ndim != 1:
-        raise ValueError(f'Expected teacher_scores shape [S], got {tuple(teacher_scores.shape)}')
-    if selection_shot_scores.shape[0] != teacher_scores.shape[0]:
-        raise ValueError('Shot count mismatch in compute_preference_listwise_loss.')
-    if selection_shot_scores.shape[0] < 2:
-        return selection_shot_scores.new_zeros(())
-    if temperature <= 0:
-        raise ValueError(f'Invalid preference list temperature={temperature}; expected > 0.')
-    if not torch.isfinite(selection_shot_scores).all():
-        raise ValueError('Non-finite selection_shot_scores in preference listwise loss.')
-    if not torch.isfinite(teacher_scores).all():
-        raise ValueError('Non-finite teacher_scores in preference listwise loss.')
-    teacher_range = torch.max(teacher_scores) - torch.min(teacher_scores)
-    if float(teacher_range.item()) <= eps:
-        return selection_shot_scores.new_zeros(())
-    student_log_prob = F.log_softmax(selection_shot_scores / float(temperature), dim=0)
-    teacher_prob = F.softmax(teacher_scores / float(temperature), dim=0).detach()
-    return F.kl_div(student_log_prob, teacher_prob, reduction='sum')
-
-
-def compute_preference_inclusion_loss(selection_shot_scores: torch.Tensor,
-                                      inclusion_prob: torch.Tensor,
-                                      teacher_confidence: torch.Tensor,
-                                      confidence_threshold: float,
-                                      eps: float = 1e-6) -> torch.Tensor:
-    if selection_shot_scores.ndim != 1:
-        raise ValueError(
-            f'Expected selection_shot_scores shape [S], got {tuple(selection_shot_scores.shape)}'
-        )
-    if inclusion_prob.ndim != 1 or teacher_confidence.ndim != 1:
-        raise ValueError('inclusion_prob and teacher_confidence must be 1D tensors.')
-    if selection_shot_scores.shape[0] != inclusion_prob.shape[0]:
-        raise ValueError('Shot count mismatch in preference inclusion loss.')
-    if selection_shot_scores.shape[0] != teacher_confidence.shape[0]:
-        raise ValueError('Confidence length mismatch in preference inclusion loss.')
-    if not (0.0 <= confidence_threshold <= 1.0):
-        raise ValueError(f'Invalid confidence_threshold={confidence_threshold}; expected 0..1.')
-
-    mask = teacher_confidence >= float(confidence_threshold)
-    if int(mask.sum().item()) == 0:
-        return selection_shot_scores.new_zeros(())
-    pred = selection_shot_scores[mask].clamp(min=eps, max=1.0 - eps)
-    target = inclusion_prob[mask].clamp(min=0.0, max=1.0)
-    weight = teacher_confidence[mask].to(pred.dtype).clamp(min=0.0, max=1.0)
-    weight_sum = weight.sum()
-    if float(weight_sum.item()) <= eps:
-        return selection_shot_scores.new_zeros(())
-    per_shot = F.binary_cross_entropy(pred, target, reduction='none')
-    return torch.sum(per_shot * weight) / weight_sum.clamp_min(eps)
 
 
 def compute_confidence_gated_weighted_bce_loss(pred_shot_scores: torch.Tensor,
@@ -1188,16 +740,6 @@ def compute_teacher_gate_weight(margin: torch.Tensor,
     raise ValueError(f'Invalid teacher gate mode: {mode}')
 
 
-def compute_delta_regularizer(delta_select: torch.Tensor) -> torch.Tensor:
-    if delta_select.ndim != 1:
-        raise ValueError(f'Expected delta_select shape [S], got {tuple(delta_select.shape)}')
-    if not torch.isfinite(delta_select).all():
-        raise ValueError('Non-finite delta_select in delta regularizer.')
-    if delta_select.numel() == 0:
-        return delta_select.new_zeros(())
-    return torch.mean(delta_select ** 2)
-
-
 def compute_budget_regularizer(selection_shot_scores: torch.Tensor,
                                shot_lengths: torch.Tensor,
                                n_frames: int,
@@ -1218,54 +760,10 @@ def compute_budget_regularizer(selection_shot_scores: torch.Tensor,
     return F.smooth_l1_loss(predicted_budget_ratio, target_budget)
 
 
-def compute_teacher_student_shot_tau(student_scores: torch.Tensor,
-                                     teacher_scores: torch.Tensor,
-                                     eps: float = 1e-8) -> float:
-    """Pairwise Kendall-style monitor between predicted and teacher shot scores."""
-    if student_scores.ndim != 1 or teacher_scores.ndim != 1:
-        raise ValueError('student_scores and teacher_scores must be 1D tensors.')
-    if student_scores.shape[0] != teacher_scores.shape[0]:
-        raise ValueError('Shot count mismatch in compute_teacher_student_shot_tau.')
-    if student_scores.shape[0] < 2:
-        return 0.0
-
-    student_detached = student_scores.detach()
-    teacher_detached = teacher_scores.detach()
-    diff_student = student_detached.unsqueeze(0) - student_detached.unsqueeze(1)
-    diff_teacher = teacher_detached.unsqueeze(0) - teacher_detached.unsqueeze(1)
-    upper = torch.triu(
-        torch.ones_like(diff_student, dtype=torch.bool),
-        diagonal=1,
-    )
-    valid = upper & (diff_student.abs() > eps) & (diff_teacher.abs() > eps)
-    num_valid = int(valid.sum().item())
-    if num_valid == 0:
-        return 0.0
-
-    agreement = torch.sign(diff_student[valid] * diff_teacher[valid])
-    tau = agreement.mean()
-    return float(tau.item())
-
-
-def evaluate_checkpoint(model,
-                        ckpt_path,
-                        test_loader,
-                        device: str,
-                        selection_score_source: str = 'frame',
-                        shot_eval_head: str = 'selection',
-                        shot_head_mode: str = 'single',
-                        summary_budget: float = 0.15):
+def evaluate_checkpoint(model, ckpt_path, test_loader, device: str):
     state_dict = torch.load(str(ckpt_path), map_location=device)
     model.load_state_dict(state_dict)
-    return evaluate_mil_cond(
-        model=model,
-        val_loader=test_loader,
-        device=device,
-        selection_score_source=selection_score_source,
-        shot_eval_head=shot_eval_head,
-        shot_head_mode=shot_head_mode,
-        summary_budget=summary_budget,
-    )
+    return evaluate_mil_cond(model=model, val_loader=test_loader, device=device)
 
 
 def infer_single_dataset_name(keys):
@@ -1426,15 +924,35 @@ def build_shot_text_stats(caption_spans_idx: torch.Tensor,
                           all_text_features: torch.Tensor,
                           overlaps: torch.Tensor,
                           shot_lengths: torch.Tensor,
-                          eps: float = 1e-6):
-    return build_context_shot_text_stats(
-        caption_spans_idx=caption_spans_idx,
-        caption_valid_mask=caption_valid_mask,
-        all_text_features=all_text_features,
-        overlaps=overlaps,
-        shot_lengths=shot_lengths,
-        eps=eps,
-    )
+                          eps: float = 1e-8):
+    num_shots, num_steps = overlaps.shape
+    feat_dim = all_text_features.shape[1]
+    shot_text_sum = overlaps.new_zeros((num_shots, feat_dim))
+    shot_text_mass = overlaps.new_zeros(num_shots)
+
+    for k in range(caption_spans_idx.shape[0]):
+        if float(caption_valid_mask[k].item()) <= 0.5:
+            continue
+        start_idx = int(caption_spans_idx[k, 0].item())
+        end_idx = int(caption_spans_idx[k, 1].item())
+        start_idx = max(0, min(start_idx, num_steps - 1))
+        end_idx = max(start_idx, min(end_idx, num_steps - 1))
+        shot_overlap = overlaps[:, start_idx:end_idx + 1].sum(dim=1)
+        overlap_sum = shot_overlap.sum()
+        if float(overlap_sum.item()) <= eps:
+            continue
+        weights = shot_overlap / overlap_sum
+        shot_text_sum = shot_text_sum + weights.unsqueeze(1) * all_text_features[k].unsqueeze(0)
+        shot_text_mass = shot_text_mass + weights
+
+    valid_shots = shot_text_mass > eps
+    shot_text_feat = overlaps.new_zeros((num_shots, feat_dim))
+    if valid_shots.any():
+        shot_text_avg = shot_text_sum[valid_shots] / shot_text_mass[valid_shots].unsqueeze(1).clamp_min(eps)
+        shot_text_feat[valid_shots] = F.normalize(shot_text_avg, p=2, dim=1)
+    shot_mass_density = shot_text_mass / shot_lengths.clamp_min(1.0)
+    return shot_text_feat, shot_mass_density, valid_shots
+
 
 def compute_shot_semantic_change(shot_text_feat: torch.Tensor, valid_shots: torch.Tensor):
     num_shots = shot_text_feat.shape[0]

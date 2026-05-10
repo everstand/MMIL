@@ -48,7 +48,19 @@ def get_component(record: Dict, name: str) -> np.ndarray:
     return arr
 
 
-def build_components(record: Dict) -> Dict[str, np.ndarray]:
+def get_optional_component(record: Dict, name: str, length: int) -> Tuple[np.ndarray, bool]:
+    if name not in record:
+        return np.zeros((length,), dtype=np.float32), False
+    arr = get_component(record, name)
+    if arr.shape[0] != length:
+        raise ValueError(
+            f'Shot-utility optional component length mismatch for {name}: '
+            f'{arr.shape[0]} vs expected {length}'
+        )
+    return arr, True
+
+
+def build_components(record: Dict) -> Dict:
     semantic = get_component(record, 'semantic_coverage')
     representativeness = get_component(record, 'visual_representativeness')
     redundancy = get_component(record, 'redundancy_penalty')
@@ -70,8 +82,27 @@ def build_components(record: Dict) -> Dict[str, np.ndarray]:
             f'phase1_default={phase1_default.shape}'
         )
 
+    length = int(phase1_default.shape[0])
+    local_caption, has_local_caption = get_optional_component(
+        record, 'local_caption_similarity_raw', length
+    )
+    global_caption, has_global_caption = get_optional_component(
+        record, 'global_caption_similarity_raw', length
+    )
+    caption_change, has_caption_change = get_optional_component(
+        record, 'caption_change_raw', length
+    )
+    visual_change, has_visual_change = get_optional_component(
+        record, 'visual_change_raw', length
+    )
+
     rep_n = normalize_01(representativeness)
     red_n = normalize_01(redundancy)
+    local_caption_n = normalize_01(local_caption)
+    global_caption_n = normalize_01(global_caption)
+    caption_change_n = normalize_01(caption_change)
+    visual_change_n = normalize_01(visual_change)
+    caption_mgs = normalize_01(0.7 * local_caption_n + 0.3 * global_caption_n)
 
     return {
         'phase1_default': normalize_01(phase1_default),
@@ -81,15 +112,30 @@ def build_components(record: Dict) -> Dict[str, np.ndarray]:
         'redundancy': red_n,
         'anti_redundancy': normalize_01(1.0 - red_n),
         'eventiveness': normalize_01(eventiveness),
+        'caption_local': local_caption_n,
+        'caption_global': global_caption_n,
+        'caption_mgs': caption_mgs,
+        'caption_change': caption_change_n,
+        'visual_change': visual_change_n,
+        'caption_prior_available': has_local_caption and has_global_caption,
+        'change_prior_available': has_caption_change or has_visual_change,
     }
 
 
-FormulaFn = Callable[[Dict[str, np.ndarray]], np.ndarray]
+FormulaFn = Callable[[Dict], np.ndarray]
 
 
 def formula_definitions() -> Dict[str, FormulaFn]:
     def n(x):
         return normalize_01(x)
+
+    def require(c: Dict, name: str, available_flag: str) -> np.ndarray:
+        if not bool(c.get(available_flag, False)):
+            raise KeyError(
+                f'Formula requires unavailable shot-utility component group: '
+                f'{available_flag}'
+            )
+        return c[name]
 
     return {
         'phase1_default': lambda c: c['phase1_default'],
@@ -99,6 +145,33 @@ def formula_definitions() -> Dict[str, FormulaFn]:
         'distinctiveness': lambda c: c['distinctiveness'],
         'anti_redundancy': lambda c: c['anti_redundancy'],
         'eventiveness': lambda c: c['eventiveness'],
+
+        # Caption-summary-prior candidates from multi-grained saliency scoring.
+        'caption_mgs': lambda c: require(
+            c, 'caption_mgs', 'caption_prior_available'
+        ),
+        'caption_mgs_plus_change': lambda c: n(
+            require(c, 'caption_mgs', 'caption_prior_available')
+            + 0.2 * require(c, 'caption_change', 'change_prior_available')
+            + 0.1 * require(c, 'visual_change', 'change_prior_available')
+        ),
+        'caption_mgs_plus_event': lambda c: n(
+            require(c, 'caption_mgs', 'caption_prior_available')
+            + 0.25 * c['eventiveness']
+        ),
+        'caption_mgs_plus_distinct': lambda c: n(
+            require(c, 'caption_mgs', 'caption_prior_available')
+            + 0.25 * c['distinctiveness']
+        ),
+        'caption_mgs_plus_event_minus_red': lambda c: n(
+            require(c, 'caption_mgs', 'caption_prior_available')
+            + 0.25 * c['eventiveness'] - 0.2 * c['redundancy']
+        ),
+        'caption_mgs_rank_safe': lambda c: n(
+            require(c, 'caption_mgs', 'caption_prior_available')
+            + 0.25 * c['distinctiveness']
+            + 0.15 * c['eventiveness'] - 0.1 * c['redundancy']
+        ),
 
         'semantic_plus_rep': lambda c: n(c['semantic'] + c['representativeness']),
         'semantic_plus_distinct': lambda c: n(c['semantic'] + c['distinctiveness']),

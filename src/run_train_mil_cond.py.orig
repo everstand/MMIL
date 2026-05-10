@@ -50,7 +50,6 @@ def get_parser() -> argparse.ArgumentParser:
             'listwise_utility',
             'budgeted_pseudo_summary',
             'hybrid_sparse_budget',
-            'preference_distill',
             'none',
         ),
     )
@@ -60,50 +59,12 @@ def get_parser() -> argparse.ArgumentParser:
         default='single',
         choices=('single', 'dual', 'residual_dual'),
     )
-    parser.add_argument(
-        '--selection-score-source',
-        type=str,
-        default='frame',
-        choices=('frame', 'shot_head'),
-        help='Use sampled-frame selection scores or the explicit shot-level selection head.',
-    )
-    parser.add_argument(
-        '--shot-head-mode',
-        type=str,
-        default='single',
-        choices=('single', 'dual', 'context'),
-        help='Use one shot head, separate selection/rank heads, or the context encoder shot head.',
-    )
-    parser.add_argument(
-        '--shot-eval-head',
-        type=str,
-        default='selection',
-        choices=('selection', 'rank'),
-        help='When using shot_head scoring, choose which shot head is projected to summary_scores.',
-    )
     parser.add_argument('--shot-utility-path', type=str, default=None)
-    parser.add_argument('--text-feature-path', type=str, default=None)
-    parser.add_argument('--structured-caption-path', type=str, default=None)
-    parser.add_argument('--preference-teacher-path', type=str, default=None)
-    parser.add_argument('--lambda-pref-pair', type=float, default=0.2)
-    parser.add_argument('--lambda-pref-list', type=float, default=0.1)
-    parser.add_argument('--lambda-pref-inclusion', type=float, default=0.05)
-    parser.add_argument('--lambda-pref-budget', type=float, default=0.02)
-    parser.add_argument('--pref-confidence-threshold', type=float, default=0.6)
-    parser.add_argument('--pref-pair-margin', type=float, default=0.05)
-    parser.add_argument('--pref-list-temperature', type=float, default=0.2)
     parser.add_argument('--utility-formula', type=str, default='semantic_plus_distinct_minus_red')
     parser.add_argument('--lambda-listwise', type=float, default=0.2)
     parser.add_argument('--listwise-temperature', type=float, default=0.2)
     parser.add_argument('--lambda-select', type=float, default=0.2)
     parser.add_argument('--lambda-budget', type=float, default=0.05)
-    parser.add_argument(
-        '--use-diff-budget-selector',
-        action='store_true',
-        help='Use length-aware differentiable budgeted sigmoid for shot selection supervision.',
-    )
-    parser.add_argument('--diff-budget-tau', type=float, default=0.2)
-    parser.add_argument('--lambda-delta', type=float, default=0.01)
     parser.add_argument('--summary-budget', type=float, default=0.15)
     parser.add_argument('--negative-quantile', type=float, default=0.25)
     parser.add_argument(
@@ -167,15 +128,11 @@ def main() -> None:
 
     logger.info(
         'Run | dataset=%s | folds=%d | seed=%d | epochs=%d | lr=%.2e | wd=%.2e | '
-        'score_head=%s | selection_score_source=%s | shot_head_mode=%s | '
-        'shot_eval_head=%s | rank_loss=%s | '
-        'lambda_pair=%.3g | pair_margin=%.3g | '
+        'score_head=%s | rank_loss=%s | lambda_pair=%.3g | pair_margin=%.3g | '
         'lambda_listwise=%.3g | lambda_select=%.3g | lambda_budget=%.3g | '
-        'diff_budget=%s | diff_tau=%.3g | lambda_delta=%.3g | '
         'utility_formula=%s | tau=%.3g | summary_budget=%.3g | neg_q=%.3g | '
         'gate=%s | margin_thr=%.3g | lambda_align=%.3g | lambda_aux=%.3g | '
-        'text_cond_num=%d | coverage_aware=%s | coverage_min=%.3g | '
-        'text_feature_path=%s | structured_caption_path=%s | shot_utility_path=%s',
+        'text_cond_num=%d | coverage_aware=%s | coverage_min=%.3g',
         args.dataset,
         len(splits),
         args.seed,
@@ -183,18 +140,12 @@ def main() -> None:
         args.lr,
         args.weight_decay,
         args.score_head,
-        args.selection_score_source,
-        args.shot_head_mode,
-        args.shot_eval_head,
         args.rank_loss,
         args.lambda_pair,
         args.pair_margin,
         args.lambda_listwise,
         args.lambda_select,
         args.lambda_budget,
-        args.use_diff_budget_selector,
-        args.diff_budget_tau,
-        args.lambda_delta,
         args.utility_formula,
         args.listwise_temperature,
         args.summary_budget,
@@ -206,22 +157,6 @@ def main() -> None:
         args.text_cond_num,
         args.caption_coverage_aware,
         args.coverage_loss_min_weight,
-        args.text_feature_path,
-        args.structured_caption_path,
-        args.shot_utility_path,
-    )
-    logger.info(
-        'Preference distill | path=%s | lambda_pair=%.3g | lambda_list=%.3g | '
-        'lambda_inclusion=%.3g | lambda_budget=%.3g | conf_thr=%.3g | '
-        'margin=%.3g | tau=%.3g',
-        args.preference_teacher_path,
-        args.lambda_pref_pair,
-        args.lambda_pref_list,
-        args.lambda_pref_inclusion,
-        args.lambda_pref_budget,
-        args.pref_confidence_threshold,
-        args.pref_pair_margin,
-        args.pref_list_temperature,
     )
     logger.debug('Arguments: %s', vars(args))
 
@@ -234,13 +169,11 @@ def main() -> None:
         split_metrics.append(metrics)
 
         logger.info(
-            'Split %d/%d | val_F1=%.4f | val_Tau=%.4f | val_Rho=%.4f | '
-            'test_F1=%.4f | test_Tau=%.4f | test_Rho=%.4f | test_cov=%.4f',
+            'Split %d/%d | val_F1=%.4f | test_F1=%.4f | test_Tau=%.4f | '
+            'test_Rho=%.4f | test_cov=%.4f',
             split_idx + 1,
             len(splits),
             metrics['val_best_fscore'],
-            metrics['val_kendall_at_best_fscore'],
-            metrics['val_spearman_at_best_fscore'],
             metrics['test_fscore_at_best_fscore'],
             metrics['test_kendall_at_best_fscore'],
             metrics['test_spearman_at_best_fscore'],

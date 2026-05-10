@@ -98,6 +98,8 @@ def get_parser() -> argparse.ArgumentParser:
         default=None,
         help='Formula names to evaluate. Default: all formulas defined by shot_utility_helper.',
     )
+    parser.add_argument('--text-feature-path', type=str, default=None)
+    parser.add_argument('--structured-caption-path', type=str, default=None)
     parser.add_argument(
         '--summary-budget',
         type=float,
@@ -305,6 +307,7 @@ def evaluate_one_video_formulas(
         n_frames,
         nfps,
         picks,
+        *_,
     ) = dataset[index]
 
     h5_key = Path(key).name
@@ -554,6 +557,8 @@ def main() -> None:
         keys=selected_keys,
         text_cond_num=args.text_cond_num,
         random_text_sampling=False,
+        text_feature_path=args.text_feature_path,
+        structured_caption_path=args.structured_caption_path,
     )
 
     rows: List[Dict] = []
@@ -588,6 +593,8 @@ def main() -> None:
             'summary_budget': args.summary_budget,
             'negative_quantile': args.negative_quantile,
             'shot_utility_path': str(utility_path),
+            'text_feature_path': args.text_feature_path,
+            'structured_caption_path': args.structured_caption_path,
             'formulas': formulas,
             'num_selected_keys': len(selected_keys),
             'num_recommendation_keys': len(recommendation_keys),

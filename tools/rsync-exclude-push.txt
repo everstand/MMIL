@@ -1,0 +1,9 @@
+.git/
+.codex/
+github/
+custom_data/
+docs/
+models/
+splits/
+__pycache__/
+*.pyc

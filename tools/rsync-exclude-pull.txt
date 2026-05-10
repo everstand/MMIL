@@ -1,0 +1,7 @@
+.git/
+custom_data/
+docs/
+models/
+splits/
+__pycache__/
+*.pyc
