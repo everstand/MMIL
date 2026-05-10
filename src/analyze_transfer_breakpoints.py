@@ -648,6 +648,7 @@ def analyze_sample(pred, args) -> Dict[str, float]:
         'student_minus_teacher_Tau_frame': float(student_rank['kendall'] - teacher_rank['kendall']),
         'student_minus_teacher_Rho_frame': float(student_rank['spearman'] - teacher_rank['spearman']),
         'teacher_num_pairs': int(teacher_meta['teacher_num_pairs']),
+        'teacher_pair_available': int(teacher_meta['teacher_num_pairs'] > 0),
         'teacher_num_positive': int(teacher_meta['teacher_num_positive']),
         'teacher_num_negative': int(teacher_meta['teacher_num_negative']),
         'teacher_pair_accuracy': (
@@ -669,7 +670,7 @@ def analyze_sample(pred, args) -> Dict[str, float]:
 def mean_std(values: Iterable[float]) -> Tuple[float, float]:
     vals = [float(v) for v in values if np.isfinite(float(v))]
     if not vals:
-        return 0.0, 0.0
+        return float('nan'), float('nan')
     arr = np.asarray(vals, dtype=np.float64)
     return float(arr.mean()), float(arr.std())
 

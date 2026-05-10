@@ -385,6 +385,13 @@ def train(args, split, save_path):
                 ranking_shot_logits = selection_shot_logits
                 delta_select = torch.zeros_like(selection_shot_scores)
 
+            # Ranking supervision should always use raw logits when shot_head is enabled.
+            rank_supervision_scores = (
+                ranking_shot_logits
+                if args.selection_score_source == 'shot_head'
+                else ranking_shot_scores
+            )
+
             pair_loss = seq_tensor.new_zeros(())
             weighted_pair_loss = seq_tensor.new_zeros(())
             listwise_loss = seq_tensor.new_zeros(())
@@ -403,10 +410,14 @@ def train(args, split, save_path):
             teacher_student_shot_tau = 0.0
 
             if args.rank_loss in ('sparse_pair', 'hybrid_sparse_budget'):
-                if args.use_diff_budget_selector and args.selection_score_source == 'shot_head':
-                    sparse_scores = ranking_shot_logits
+                if args.selection_score_source == 'shot_head':
+                    sparse_scores = rank_supervision_scores
                 else:
-                    sparse_scores = pool_shot_scores if args.rank_loss == 'hybrid_sparse_budget' else pred_shot_scores
+                    sparse_scores = (
+                        pool_shot_scores
+                        if args.rank_loss == 'hybrid_sparse_budget'
+                        else pred_shot_scores
+                    )
 
                 if shot_text_feat_sparse is None or shot_mass_density is None or valid_shots is None:
                     raise RuntimeError('Sparse-pair supervision requires sparse shot text stats.')
@@ -451,8 +462,8 @@ def train(args, split, save_path):
 
                 listwise_loss = compute_listwise_utility_loss(
                     pred_shot_scores=(
-                        ranking_shot_logits
-                        if args.use_diff_budget_selector and args.selection_score_source == 'shot_head'
+                        rank_supervision_scores
+                        if args.selection_score_source == 'shot_head'
                         else pred_shot_scores
                     ),
                     teacher_utility=teacher_utility,
@@ -538,6 +549,34 @@ def train(args, split, save_path):
                         summary_budget=args.summary_budget,
                     )
 
+                # Context shot-head + budgeted pseudo-summary often transfers selected-set
+                # overlap without transferring dense teacher ordering. Add a weak
+                # utility-listwise term on ranking logits to stabilize order transfer.
+                if args.selection_score_source == 'shot_head' and args.lambda_listwise > 0.0:
+                    listwise_loss = compute_listwise_utility_loss(
+                        pred_shot_scores=rank_supervision_scores,
+                        teacher_utility=utility,
+                        temperature=args.listwise_temperature,
+                    )
+                    weighted_listwise_loss = (
+                        args.lambda_listwise * coverage_loss_weight * listwise_loss
+                    )
+                    teacher_student_shot_tau = compute_teacher_student_shot_tau(
+                        student_scores=rank_supervision_scores,
+                        teacher_scores=utility,
+                    )
+                    assert_finite_tensor('utility_listwise_loss', listwise_loss.unsqueeze(0), key)
+                    assert_finite_tensor(
+                        'weighted_utility_listwise_loss',
+                        weighted_listwise_loss.unsqueeze(0),
+                        key,
+                    )
+                elif args.selection_score_source == 'shot_head':
+                    teacher_student_shot_tau = compute_teacher_student_shot_tau(
+                        student_scores=rank_supervision_scores,
+                        teacher_scores=utility,
+                    )
+
                 selection_loss = gate_weight_tensor * coverage_loss_weight * raw_selection_loss
                 weighted_selection_loss = args.lambda_select * selection_loss
                 weighted_budget_loss = args.lambda_budget * budget_loss
@@ -595,8 +634,8 @@ def train(args, split, save_path):
 
                 pair_loss = compute_preference_pair_rank_loss(
                     selection_shot_scores=(
-                        ranking_shot_logits
-                        if args.use_diff_budget_selector and args.selection_score_source == 'shot_head'
+                        rank_supervision_scores
+                        if args.selection_score_source == 'shot_head'
                         else ranking_shot_scores
                     ),
                     pair_i=pair_i,
@@ -607,8 +646,8 @@ def train(args, split, save_path):
                 )
                 listwise_loss = compute_preference_listwise_loss(
                     selection_shot_scores=(
-                        ranking_shot_logits
-                        if args.use_diff_budget_selector and args.selection_score_source == 'shot_head'
+                        rank_supervision_scores
+                        if args.selection_score_source == 'shot_head'
                         else ranking_shot_scores
                     ),
                     teacher_scores=teacher_scores,
@@ -663,7 +702,7 @@ def train(args, split, save_path):
                 teacher_gate_weight = float(teacher_confidence_tensor.mean().detach().item())
                 teacher_margin = float(pair_confidence.mean().detach().item()) if pair_confidence.numel() > 0 else 0.0
                 teacher_student_shot_tau = compute_teacher_student_shot_tau(
-                    student_scores=ranking_shot_scores,
+                    student_scores=rank_supervision_scores,
                     teacher_scores=teacher_scores,
                 )
 
